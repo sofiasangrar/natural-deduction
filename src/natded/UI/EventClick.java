@@ -2,18 +2,18 @@ package natded.UI;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import natded.UI.logic.ControlLogic;
 import natded.problemDomain.StepNode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EventClick implements EventHandler<MouseEvent> {
 
 
     HashMap<Integer, StepTextField> fieldMap;
-    IUserInterface.EventListener listener;
+    ControlLogic listener;
 
-    public EventClick(HashMap<Integer, StepTextField> fields, IUserInterface.EventListener listener) {
+    public EventClick(HashMap<Integer, StepTextField> fields, ControlLogic listener) {
         this.fieldMap = fields;
         this.listener = listener;
     }

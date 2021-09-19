@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -16,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import natded.UI.logic.ControlLogic;
 import natded.computationLogic.NatDedUtilities;
 import natded.constants.SpaceState;
 import natded.problemDomain.NatDedSpace;
@@ -23,19 +25,13 @@ import natded.problemDomain.StepNode;
 
 import java.util.HashMap;
 
-public class UserInterfaceImpl implements  IUserInterface.View, EventHandler<KeyEvent> {
+public class UserInterface implements EventHandler<KeyEvent> {
     private final Stage stage;
     private final Group root;
 
-    //This HashMap stores the Hash Values (a unique identifier which is automatically generated;
-    // see java.lang.object in the documentation) of each TextField by their Coordinates. When a SudokuGame
-    //is given to the updateUI method, we iterate through it by X and Y coordinates and assign the values to the
-    //appropriate TextField therein. This means we don't need to hold a reference variable for every god damn
-    //text field in this app; which would be awful.
-    //The Key (<Key, Value> -> <Coordinates, Integer>) will be the HashCode of a given InputField for ease of lookup
-    private HashMap<Integer, StepTextField> indexes;
+     private HashMap<Integer, StepTextField> indexes;
 
-    private IUserInterface.EventListener listener;
+    private ControlLogic listener;
 
     //Size of the window
     private static final double WINDOW_Y = 650;
@@ -58,7 +54,7 @@ public class UserInterfaceImpl implements  IUserInterface.View, EventHandler<Key
      *
      * @param stage
      */
-    public UserInterfaceImpl(Stage stage) {
+    public UserInterface(Stage stage) {
             this.stage = stage;
             this.root = new Group();
             this.indexes = new HashMap<>();
@@ -66,22 +62,18 @@ public class UserInterfaceImpl implements  IUserInterface.View, EventHandler<Key
             }
 
 
-    @Override
-    public void setListener(IUserInterface.EventListener listener) {
+    public void setListener(ControlLogic listener) {
             this.listener = listener;
             }
 
-    @Override
     public void updateField(int index, String input) {
         StepTextField field = indexes.get(index);
         field.textProperty().setValue(input);
     }
 
-    @Override
     public void addChild(int rootIndex) {
     }
 
-    @Override
     public void updateView(StepNode root) {
         double width = WINDOW_X;
         addField(root, width, 0);
@@ -125,8 +117,8 @@ public class UserInterfaceImpl implements  IUserInterface.View, EventHandler<Key
         //encapsulated style information
         styleField(field, startX, startY - BOARD_PADDING/2, width - 2*BOARD_PADDING, Y_DELTA);
 
-        //Note: Note that UserInterfaceImpl implements EventHandler<ActionEvent> in the class declaration.
-        //By passing "this" (which means the current instance of UserInterfaceImpl), when an action occurs,
+        //Note: Note that UserInterface implements EventHandler<ActionEvent> in the class declaration.
+        //By passing "this" (which means the current instance of UserInterface), when an action occurs,
         //it will jump straight to "handle(ActionEvent actionEvent)" down below.
         field.setOnKeyPressed(this);
 
@@ -157,7 +149,6 @@ public class UserInterfaceImpl implements  IUserInterface.View, EventHandler<Key
 
     }
 
-    @Override
     public void showDialog(String message) {
 
     }
@@ -257,7 +248,6 @@ public class UserInterfaceImpl implements  IUserInterface.View, EventHandler<Key
             }
 
 
-    @Override
     public void showError(String message) {
             Alert dialog = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
             dialog.showAndWait();

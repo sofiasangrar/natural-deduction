@@ -1,30 +1,27 @@
 package natded.UI.logic;
 
-import natded.UI.IUserInterface;
-import natded.UI.UserInterfaceImpl;
+import natded.UI.UserInterface;
 import natded.computationLogic.Logic;
 import natded.constants.Messages;
 import natded.constants.SpaceState;
-import natded.problemDomain.IStorage;
 import natded.problemDomain.NatDedSpace;
 import natded.problemDomain.StepNode;
 
-import java.io.IOException;
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 
-public class ControlLogic implements IUserInterface.EventListener {
+public class ControlLogic {
 
-    //Remember, this could be the real UserInterfaceImpl, or it could be a test class
+    //Remember, this could be the real UserInterface, or it could be a test class
     //which implements the same interface!
-    private IUserInterface.View view;
+    private UserInterface view;
     private NatDedSpace space;
 
-    public ControlLogic(NatDedSpace space, IUserInterface.View view) {
+    public ControlLogic(NatDedSpace space, UserInterface view) {
         this.space = space;
         this.view = view;
     }
 
-    @Override
     public void onAddChildClick(StepNode node) {
         //try {
             node.addChild(new StepNode(node, "", null, new ArrayList<>()));
@@ -47,7 +44,6 @@ public class ControlLogic implements IUserInterface.EventListener {
 
     }
 
-    @Override
     public void onTextInput(StepNode node, String input) {
         //try {
             //NatDedSpace spaceData = storage.getSpaceData();
@@ -70,11 +66,10 @@ public class ControlLogic implements IUserInterface.EventListener {
         //}
     }
 
-    @Override
     public void onFinishedClick() {
       //  try {
            // NatDedSpace spaceData = storage.getSpaceData();
-            SpaceState s = Logic.checkForCompletion(space.getCopyOfTreeData());
+            SpaceState s = Logic.checkForCompletion(space.getRoot());
             if (s==SpaceState.VALID) {
                 view.showDialog(Messages.COMPLETE);
             } else {
