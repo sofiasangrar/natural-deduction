@@ -3,7 +3,10 @@ package natded.UI;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Rectangle;
+import natded.UI.logic.ControlLogic;
 import natded.problemDomain.StepNode;
+
+import java.util.HashMap;
 
 public class StepTextField extends TextField {
     private AddButton addButton;

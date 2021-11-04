@@ -11,5 +11,6 @@ public class AddButton extends Button {
         this.setWidth(20);
         this.setHeight(20);
         this.setText("+");
+
     }
 }

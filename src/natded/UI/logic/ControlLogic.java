@@ -1,11 +1,13 @@
 package natded.UI.logic;
 
+import lexer.Lexer;
 import natded.UI.UserInterface;
 import natded.computationLogic.Logic;
-import natded.constants.Messages;
 import natded.constants.SpaceState;
 import natded.problemDomain.NatDedSpace;
 import natded.problemDomain.StepNode;
+import parser.Clause;
+import parser.Parser;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
@@ -69,15 +71,26 @@ public class ControlLogic {
     public void onFinishedClick() {
       //  try {
            // NatDedSpace spaceData = storage.getSpaceData();
-            SpaceState s = Logic.checkForCompletion(space.getRoot());
+            StepNode root = space.getRoot();
+            parseTree(root);
+            SpaceState s = Logic.checkForCompletion(root);
             if (s==SpaceState.VALID) {
-                view.showDialog(Messages.COMPLETE);
+                view.showDialog("complete");
             } else {
-                view.showDialog(Messages.INVALID);
+                view.showDialog("invalid");
             }
         //} catch (IOException e) {
         //e.printStackTrace();
         //view.showError(Messages.ERROR);
     //}
+    }
+
+    public void parseTree(StepNode node){
+        Lexer.setLexString(node.getInput());
+        Parser.t = Lexer.lex();
+        Clause.parse(node.getIndex());
+        for (int i = 0; i < node.getChildren().size(); i++) {
+            parseTree(node.getChildren().get(i));
+        }
     }
 }

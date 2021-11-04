@@ -156,6 +156,7 @@ public class UserInterface implements EventHandler<KeyEvent> {
     public void initializeUserInterface() {
             drawBackground(root);
             drawSpace(root);
+            drawDoneButton(root);
             //drawTextFields(root);
             drawTitle(root);
             stage.show();
@@ -247,6 +248,12 @@ public class UserInterface implements EventHandler<KeyEvent> {
             root.getChildren().add(title);
             }
 
+    private void drawDoneButton(Group root) {
+        DoneButton button = new DoneButton();
+        button.setLayoutX(WINDOW_X-BOARD_PADDING);
+        button.setLayoutY(BOARD_PADDING);
+        root.getChildren().add(button);
+    }
 
     public void showError(String message) {
             Alert dialog = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);

@@ -2,6 +2,7 @@ package natded.problemDomain;
 
 import natded.computationLogic.NatDedUtilities;
 import natded.constants.Step;
+import parser.Clause;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public class StepNode {
     StepNode parent;
     String input;
-    TokenNode parsedInput;
+    Clause parsedInput;
     List<StepNode> children;
     int index;
     Step step;
@@ -21,7 +22,7 @@ public class StepNode {
     public StepNode() {
     }
 
-    public StepNode(StepNode parent, String input, TokenNode parsedInput, List<StepNode> children) {
+    public StepNode(StepNode parent, String input, Clause parsedInput, List<StepNode> children) {
         this.parent = parent;
         this.input = input;
         this.parsedInput = parsedInput;
@@ -46,16 +47,24 @@ public class StepNode {
         this.input = input;
     }
 
-    public TokenNode getParsedInput() {
+    public Clause getParsedInput() {
         return parsedInput;
     }
 
-    public void setParsedInput(TokenNode parsedInput) {
+    public void setParsedInput(Clause parsedInput) {
         this.parsedInput = parsedInput;
     }
 
     public List<StepNode> getChildren(){
         return children;
+    }
+
+    public ArrayList<Clause> getPremisses(){
+        ArrayList<Clause> clauses = new ArrayList<>();
+        for (StepNode node : children) {
+            clauses.add(node.parsedInput);
+        }
+        return clauses;
     }
 
     public void addChild(StepNode child) {
