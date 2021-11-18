@@ -5,7 +5,9 @@ import lexer.tokens.CommaToken;
 import lexer.tokens.EmptyToken;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Assumptions {
 
@@ -62,7 +64,7 @@ public class Assumptions {
 		for (int i = 0; i < list1.size(); i++) {
 			boolean found = false;
 			for (int j = 0; j < list2.size(); j++) {
-				if (list1.get(i).toString().equals(list2.get(j).toString())){
+				if (list1.get(i).equals(list2.get(j))){
 					found = true;
 					break;
 				}

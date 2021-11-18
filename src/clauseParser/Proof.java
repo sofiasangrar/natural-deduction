@@ -74,7 +74,8 @@ public class Proof{
 				  clause.getAssumptions().size() - 1 == conclusion.getAssumptions().size()) {
 
 				Expr left = ((BinaryExpr) conclusion.getExpression()).left;
-				if (clause.getAssumptions().contains(left) && !conclusion.getAssumptions().contains(left)) {
+				if (clause.getAssumptions().contains(left)
+						&& !conclusion.getAssumptions().contains(left)) {
 					ArrayList<Expr> assumptions = new ArrayList<>(conclusion.getAssumptions());
 					assumptions.add(((BinaryExpr) conclusion.getExpression()).left);
 					Assumptions newAssumptions = new Assumptions(assumptions);
@@ -101,8 +102,6 @@ public class Proof{
 				return true;
 			}
 
-			System.out.println("invalid!");
-			return false;
 	  } else if (premisses.size()==2) {
 			Clause clause1 = premisses.get(0);
 			Clause clause2 = premisses.get(1);
@@ -122,6 +121,7 @@ public class Proof{
 			}
 
 		}
+	    System.out.println("invalid!");
 		return false;
   }
 

@@ -75,6 +75,7 @@ public class UserInterface implements EventHandler<KeyEvent> {
     }
 
     public void updateView(StepNode root) {
+        drawDoneButton(this.root);
         double width = WINDOW_X;
         addField(root, width, 0);
         int noChildren = root.getChildren().size();
@@ -253,6 +254,7 @@ public class UserInterface implements EventHandler<KeyEvent> {
         button.setLayoutX(WINDOW_X-BOARD_PADDING);
         button.setLayoutY(BOARD_PADDING);
         root.getChildren().add(button);
+        button.setOnMouseClicked(new DoneClick(listener));
     }
 
     public void showError(String message) {

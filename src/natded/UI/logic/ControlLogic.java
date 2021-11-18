@@ -88,7 +88,7 @@ public class ControlLogic {
     public void parseTree(StepNode node){
         Lexer.setLexString(node.getInput());
         Parser.t = Lexer.lex();
-        Clause.parse(node.getIndex());
+        node.setParsedInput(Clause.parse(node.getIndex()));
         for (int i = 0; i < node.getChildren().size(); i++) {
             parseTree(node.getChildren().get(i));
         }

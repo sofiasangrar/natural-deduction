@@ -133,7 +133,7 @@ public final class Lexer {
                 case 'z':{
                     return checkCharacterStream();
                 }
-                case (char)(-1):{
+                case (char)-1:{
                     return new EOIToken();
                 }
                 default : {

@@ -1,9 +1,7 @@
 package parser;
 
 import lexer.Lexer;
-import lexer.tokens.FalseToken;
-import lexer.tokens.IdentToken;
-import lexer.tokens.TrueToken;
+import lexer.tokens.*;
 
 public abstract class PrimaryExpr extends Expr {
   public static Expr parse() {
