@@ -1,5 +1,6 @@
 package clauseParser;
 
+import com.sun.tools.corba.se.idl.constExpr.Not;
 import lexer.Lexer;
 import lexer.tokens.AndToken;
 import lexer.tokens.ImpliesToken;
@@ -55,7 +56,29 @@ public class Proof{
 
   public static boolean checkStep(ArrayList<Clause> premisses, Clause conclusion){
 		if(premisses == null || premisses.size()==0){
+			//assumption
+			if (conclusion.getAssumptions().contains(conclusion.getExpression())) {
+				return true;
+			}
 
+			//true intro
+			if(conclusion.getExpression() instanceof BooleanExpr && ((BooleanExpr) conclusion.getExpression()).value) {
+				System.out.println("true-intro");
+				return true;
+			}
+
+			//excluded middle
+			if(conclusion.getExpression() instanceof BinaryExpr
+					&& ((BinaryExpr)conclusion.getExpression()).oper instanceof OrToken){
+				Expr left = ((BinaryExpr) conclusion.getExpression()).left;
+				Expr right = ((BinaryExpr) conclusion.getExpression()).right;
+
+				if ((left instanceof NotExpr && ((NotExpr)left).right.equals(right))
+				|| (right instanceof NotExpr && ((NotExpr)right).right.equals(left))) {
+					System.out.println("excluded middle");
+					return true;
+				}
+			}
 		}
 
 		if (premisses.size()==1) {
@@ -130,23 +153,65 @@ public class Proof{
 					&& conclusion.getExpression() instanceof BinaryExpr
 					&& ((BinaryExpr) conclusion.getExpression()).oper instanceof ImpliesToken
 					&& ((clause1.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause1.getExpression()).oper instanceof ImpliesToken)
-						|| clause2.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause2.getExpression()).oper instanceof ImpliesToken)){
+						|| clause2.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause2.getExpression()).oper instanceof ImpliesToken)
 
-				BinaryExpr implExpr;
-				Expr other;
-				if (clause1.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause1.getExpression()).oper instanceof ImpliesToken){
-					implExpr = (BinaryExpr)clause1.getExpression();
-					other = clause2.getExpression();
-				} else {
-					implExpr = (BinaryExpr)clause2.getExpression();
-					other = clause1.getExpression();
+					&& ((clause1.getExpression() instanceof BinaryExpr
+							&& ((BinaryExpr) clause1.getExpression()).oper instanceof ImpliesToken
+							&& ((BinaryExpr) clause1.getExpression()).left.equals(clause2.getExpression())
+							&& ((BinaryExpr) clause1.getExpression()).right.equals(conclusion.getExpression()))
+						|| (clause2.getExpression() instanceof BinaryExpr
+							&& ((BinaryExpr) clause2.getExpression()).oper instanceof ImpliesToken
+							&& ((BinaryExpr) clause2.getExpression()).left.equals(clause1.getExpression())
+							&& ((BinaryExpr) clause2.getExpression()).right.equals(conclusion.getExpression())))
+				)
+				{
+					System.out.println("imp-elim");
+					return true;
 				}
 
-				Expr left = implExpr.left;
-				Expr right = implExpr.right;
+			//neg elim
+			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject())
+					&& clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())
+					&& ((clause1.getExpression() instanceof NotExpr
+						&& clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right))
+					|| (clause2.getExpression() instanceof NotExpr
+						&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)))
+			){
+				System.out.println("neg-elim");
+				return true;
+			}
 
-				if (left.equals(conclusion.getExpression()) && right.equals(other)){
-					System.out.println("imp-elim");
+			//neg-intro
+			if (clause1.getAssumptions().size()!=0
+					&& clause2.getAssumptions().size()!=0
+					&& ((clause1.getExpression() instanceof NotExpr
+							&& clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right))
+						|| (clause2.getExpression() instanceof NotExpr
+							&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)
+						))
+					&& conclusion.getExpression() instanceof NotExpr
+					&& clause1.getAssumptions().contains(((NotExpr) conclusion.getExpression()).right)
+					&& clause2.getAssumptions().contains(((NotExpr) conclusion.getExpression()).right)
+					&& !conclusion.getAssumptions().contains(((NotExpr) conclusion.getExpression()).right)
+			) {
+
+				Assumptions newAssumptions = new Assumptions();
+				Expr P = ((NotExpr) conclusion.getExpression()).right;
+
+				for (Expr assumption : clause1.getAssumptions()) {
+					if (!assumption.equals(P)) {
+						newAssumptions.getAssumptions().add(assumption);
+					}
+				}
+
+				for (Expr assumption : clause2.getAssumptions()) {
+					if (!assumption.equals(P)) {
+						newAssumptions.getAssumptions().add(assumption);
+					}
+				}
+
+				if (newAssumptions.equals(conclusion.getAssumptionsObject())) {
+					System.out.println("neg-intro");
 					return true;
 				}
 			}
