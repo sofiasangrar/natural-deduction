@@ -54,6 +54,10 @@ public class Proof{
   }
 
   public static boolean checkStep(ArrayList<Clause> premisses, Clause conclusion){
+		if(premisses == null || premisses.size()==0){
+
+		}
+
 		if (premisses.size()==1) {
 			Clause clause = premisses.get(0);
 
@@ -114,8 +118,35 @@ public class Proof{
 
 				Expr left = ((BinaryExpr) conclusion.getExpression()).left;
 				Expr right = ((BinaryExpr) conclusion.getExpression()).right;
-				if (left.equals(clause1.getExpression()) && right.equals(clause2.getExpression())){
+				if ((left.equals(clause1.getExpression()) && right.equals(clause2.getExpression())) || (left.equals(clause2.getExpression()) && right.equals(clause1.getExpression()))){
 					System.out.println("and-intro");
+					return true;
+				}
+			}
+
+			//imp elim
+			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject())
+					&& clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())
+					&& conclusion.getExpression() instanceof BinaryExpr
+					&& ((BinaryExpr) conclusion.getExpression()).oper instanceof ImpliesToken
+					&& ((clause1.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause1.getExpression()).oper instanceof ImpliesToken)
+						|| clause2.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause2.getExpression()).oper instanceof ImpliesToken)){
+
+				BinaryExpr implExpr;
+				Expr other;
+				if (clause1.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause1.getExpression()).oper instanceof ImpliesToken){
+					implExpr = (BinaryExpr)clause1.getExpression();
+					other = clause2.getExpression();
+				} else {
+					implExpr = (BinaryExpr)clause2.getExpression();
+					other = clause1.getExpression();
+				}
+
+				Expr left = implExpr.left;
+				Expr right = implExpr.right;
+
+				if (left.equals(conclusion.getExpression()) && right.equals(other)){
+					System.out.println("imp-elim");
 					return true;
 				}
 			}
