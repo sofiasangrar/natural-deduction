@@ -129,6 +129,22 @@ public class Proof{
 				return true;
 			}
 
+			//neg intro
+			if (clause.getExpression() instanceof BooleanExpr
+					&& !((BooleanExpr) clause.getExpression()).value
+					&& conclusion.getExpression() instanceof NotExpr
+					&& !conclusion.getAssumptions().contains(((NotExpr)conclusion.getExpression()).right)
+					&& clause.getAssumptions().contains(((NotExpr)conclusion.getExpression()).right)
+					&& clause.getAssumptions().size() == conclusion.getAssumptions().size() + 1
+			) {
+				Assumptions newAssumptions = new Assumptions(conclusion.getAssumptions());
+				newAssumptions.getAssumptions().add(((NotExpr) conclusion.getExpression()).right);
+				if (clause.getAssumptionsObject().equals(newAssumptions)) {
+					System.out.println("neg-intro");
+					return true;
+				}
+			}
+
 	  } else if (premisses.size()==2) {
 			Clause clause1 = premisses.get(0);
 			Clause clause2 = premisses.get(1);
@@ -214,6 +230,62 @@ public class Proof{
 					System.out.println("neg-intro");
 					return true;
 				}
+			}
+
+		} else if (premisses.size()==3) {
+			//or elim
+			Expr R = conclusion.getExpression();
+			Clause orClause = null;
+			Clause clauseP = null;
+			Clause clauseQ = null;
+
+			for (Clause p : premisses) {
+				if (!p.getExpression().equals(conclusion.getExpression()) && p.getExpression() instanceof BinaryExpr && ((BinaryExpr) p.getExpression()).oper instanceof OrToken) {
+					orClause = p;
+				}
+			}
+
+			if (orClause==null){System.out.println("invalid!");
+				return false;
+			}
+
+			for (Clause p : premisses) {
+				if (p.getExpression().equals(conclusion.getExpression())) {
+					if (p.getAssumptions().contains(((BinaryExpr)orClause.getExpression()).left)) {
+						clauseP = p;
+					} else if (p.getAssumptions().contains(((BinaryExpr)orClause.getExpression()).right)) {
+						clauseQ = p;
+					}
+				}
+
+
+			}
+
+			if (clauseP==null || clauseQ==null){
+				System.out.println("invalid!");
+				return false;
+			}
+
+			Assumptions gamma = orClause.getAssumptionsObject();
+			Assumptions deltaP = new Assumptions(clauseP.getAssumptions());
+			Assumptions thetaQ = new Assumptions(clauseQ.getAssumptions());
+			Assumptions assumptions = new Assumptions(gamma.getAssumptions());
+
+			for (Expr assumption : deltaP.getAssumptions()) {
+				if (!assumptions.getAssumptions().contains(assumption)) {
+					assumptions.getAssumptions().add(assumption);
+				}
+			}
+
+			for (Expr assumption : thetaQ.getAssumptions()) {
+				if (!assumptions.getAssumptions().contains(assumption)) {
+					assumptions.getAssumptions().add(assumption);
+				}
+			}
+
+			if (conclusion.getAssumptionsObject().equals(assumptions)) {
+				System.out.println("or-elim");
+				return true;
 			}
 
 		}
