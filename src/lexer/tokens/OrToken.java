@@ -5,7 +5,7 @@ public class OrToken extends OperatorToken {
     // returns the precedence
     @Override
     public int precedence() {
-        return 5;
+        return 2;
     }
 
     // constructor

@@ -66,7 +66,7 @@ public class Proof{
 			}
 
 			//excluded middle
-			if(conclusion.getExpression() instanceof BinaryExpr
+			if(conclusion.getExpression() instanceof BooleanExpr
 					&& ((BinaryExpr)conclusion.getExpression()).oper instanceof OrToken){
 				Expr left = ((BinaryExpr) conclusion.getExpression()).left;
 				Expr right = ((BinaryExpr) conclusion.getExpression()).right;

@@ -1,9 +1,9 @@
 package lexer.tokens;
 
-public class ExprToken extends Token {
+public abstract class FactorToken extends Token {
 
     // constructor
-    public ExprToken(int startingColumnOfToken) {
+    public FactorToken(int startingColumnOfToken) {
         super(startingColumnOfToken);
     }
 

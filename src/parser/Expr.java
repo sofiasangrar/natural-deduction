@@ -1,27 +1,43 @@
 package parser;
 
 import lexer.Lexer;
-import lexer.tokens.LParenToken;
-import lexer.tokens.NotToken;
-import lexer.tokens.OperatorToken;
-import lexer.tokens.RParenToken;
+import lexer.tokens.*;
 
-public abstract class Expr {
+public class Expr {
+
+	public Disj left;
+	public Expr right;
+	public boolean hasright;
+
+	Expr(Disj left){
+		this.left = left;
+		this.right = null;
+		hasright = false;
+	}
+
+	Expr(){
+
+	}
+
+	@Override
+	public String toString() {
+		return left.toString() + " => " + right.toString();
+	}
+
+	Expr(Disj left, Expr right){
+		this.left = left;
+		this.right = right;
+		hasright = true;
+	}
 
 	  public static Expr parse() {
-//	  		if (Parser.t instanceof LParenToken) {
-//	  			Parser.t = Lexer.lex();
-//	  			Expr expr = Expr.parse();
-//	  			if (!(Parser.t instanceof RParenToken)){
-//	  				Parser.errorHandle(new RParenToken(0));
-//				}
-//	  			Parser.t = Lexer.lex();
-//	  			return expr;
-//			} else
-//				if (Parser.t instanceof NotToken) {
-//	  			return NotExpr.parse();
-//			}
-		    return fraserHanson(1);
+	  	Disj left = Disj.parse();
+	  	if (Parser.t instanceof ImpliesToken) {
+			Parser.t = Lexer.lex();
+			Expr right = Expr.parse();
+			return new Expr(left, right);
+		}
+		return left;
 	  }
 
 	  //Binary Expressions precedence handler from Fraser and Hanson C Compiler book
@@ -37,7 +53,7 @@ public abstract class Expr {
 			  if (Parser.t instanceof NotToken) {
 				  left = NotExpr.parse();
 			  } else {
-				  left = PrimaryExpr.parse();
+				  left = Factor.parse();
 			  }
 			  if (!(Parser.t instanceof RParenToken)){
 				  end = true;
@@ -48,7 +64,7 @@ public abstract class Expr {
 			  if (Parser.t instanceof NotToken) {
 				  left = NotExpr.parse();
 			  } else {
-				  left = PrimaryExpr.parse();
+				  left = Factor.parse();
 			  }
 		  }
 

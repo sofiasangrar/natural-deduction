@@ -24,11 +24,10 @@ public class Clause {
   public static Clause parse(int line) {
 		Assumptions assumptions = new Assumptions();
 		Expr expression = new IdentExpr();
-	 // checks if the first token received is a PROC token, if not an error message is displayed
+
 	 if(Parser.t instanceof EmptyToken) {
 	 	Parser.t= Lexer.lex();
-
- 	} else {
+	 } else {
 	 	assumptions = Assumptions.parse();
 	 }
 

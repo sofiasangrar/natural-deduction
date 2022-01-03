@@ -1,6 +1,6 @@
 package lexer.tokens;
 
-public class FalseToken extends ExprToken {
+public class FalseToken extends FactorToken {
 
     // constructor
     public FalseToken(int startingColumnOfToken) {

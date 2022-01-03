@@ -172,7 +172,7 @@ public final class Lexer {
             getChar();
 
             // checks if the character is alphabetic or is numeric.
-            while(Character.isAlphabetic(ch) && ch!='F' && ch!='T' && ch!='V') {
+            while(Character.isAlphabetic(ch)) {
                 characterStream += (char)ch;
                 getChar();
             }

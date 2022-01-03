@@ -3,7 +3,7 @@ package parser;
 import lexer.Lexer;
 import lexer.tokens.IdentToken;
 
-public class IdentExpr extends PrimaryExpr {
+public class IdentExpr extends Factor {
 
     String identifier;
 
@@ -14,7 +14,7 @@ public class IdentExpr extends PrimaryExpr {
     IdentExpr() {
     }
 
-    public static Expr parse() {
+    public static IdentExpr parse() {
         String s = ((IdentToken)Parser.t).getAttr();
         Parser.t = Lexer.lex();
         // returns the parsed identExpr

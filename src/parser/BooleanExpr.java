@@ -4,7 +4,7 @@ import lexer.Lexer;
 import lexer.tokens.FalseToken;
 import lexer.tokens.TrueToken;
 
-public final class BooleanExpr extends Expr {
+public final class BooleanExpr extends Factor {
     public boolean value;
 
     public BooleanExpr(boolean value) {

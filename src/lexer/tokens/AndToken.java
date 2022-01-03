@@ -5,7 +5,7 @@ public class AndToken extends OperatorToken {
     // returns the precedence of the operator
     @Override
     public int precedence() {
-        return 4;
+        return 1;
     }
 
     // constructor
