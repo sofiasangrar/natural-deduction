@@ -12,7 +12,7 @@ public final class NotExpr extends Factor {
 
     public static NotExpr parse(){
         Parser.t = Lexer.lex();
-        return new NotExpr(Expr.parse());
+        return new NotExpr(Factor.parse());
     }
 
     @Override
@@ -22,6 +22,12 @@ public final class NotExpr extends Factor {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof NotExpr && ((NotExpr)obj).right.equals(this.right);
+        Expr compare;
+        if (!(obj instanceof Expr)) {
+            return false;
+        }
+        compare = ((Expr)obj).unbracket();
+        return compare instanceof NotExpr && right.equals(((NotExpr) compare).right);
     }
+
 }

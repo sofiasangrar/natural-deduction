@@ -9,12 +9,6 @@ public class Expr {
 	public Expr right;
 	public boolean hasright;
 
-	Expr(Disj left){
-		this.left = left;
-		this.right = null;
-		hasright = false;
-	}
-
 	Expr(){
 
 	}
@@ -40,57 +34,36 @@ public class Expr {
 		return left;
 	  }
 
-	  //Binary Expressions precedence handler from Fraser and Hanson C Compiler book
-	  private static Expr fraserHanson(int k) {
-	  	boolean end = false;
-		  int   i;
-		  Expr left;
-		  OperatorToken oper;
-		  Expr right;
 
-		  if (Parser.t instanceof LParenToken) {
-			  Parser.t = Lexer.lex();
-			  if (Parser.t instanceof NotToken) {
-				  left = NotExpr.parse();
-			  } else {
-				  left = Factor.parse();
-			  }
-			  if (!(Parser.t instanceof RParenToken)){
-				  end = true;
-			  } else {
-				  Parser.t = Lexer.lex();
-			  }
-		  } else {
-			  if (Parser.t instanceof NotToken) {
-				  left = NotExpr.parse();
-			  } else {
-				  left = Factor.parse();
-			  }
-		  }
-
-
-
-		  for (i = Parser.t.precedence(); i >= k; i--) {
-		    while (Parser.t.precedence() == i) {
-		      oper = (OperatorToken) Parser.t;
-
-		      Parser.t = Lexer.lex();
-		      right = fraserHanson(i+1);
-		      left = new BinaryExpr(left, oper, right);
-		    }
-		  }
-		  if (end) {
-			  if (!(Parser.t instanceof RParenToken)) {
-				  Parser.errorHandle(new RParenToken(0));
-			  }
-			  Parser.t = Lexer.lex();
-		  }
-
-		  return left;
-	  }
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj.toString().equals(this.toString());
+		Expr compare;
+		if (!(obj instanceof Expr)) {
+			return false;
+		}
+		compare = ((Expr)obj).unbracket();
+
+		return left.equals(compare.left) && right.equals(compare.right);
+	}
+
+	public boolean isDisj(){
+		return this.unbracket() instanceof Disj	&& !(this.unbracket() instanceof Conj);
+	}
+
+	public boolean isConj(){
+		return this.unbracket() instanceof Conj	&& !(this.unbracket() instanceof Factor);
+	}
+
+	public boolean isImpl(){
+		return !(this.unbracket() instanceof Disj);
+	}
+
+	public Expr unbracket(){
+		Expr e = this;
+		while(e instanceof BracketedExpr) {
+			e = ((BracketedExpr) e).expr;
+		}
+		return e;
 	}
 }

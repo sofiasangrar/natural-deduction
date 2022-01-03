@@ -27,25 +27,25 @@ public class ProofStepTests {
     @Test
     public void testProof(){
         ArrayList<StepNode> l4 = new ArrayList<>();
-        l4.add(new StepNode(null, "!(PVQ), P |- P", null, new ArrayList<>()));
+        l4.add(new StepNode(null, "!(P V Q), P |- P", null, new ArrayList<>()));
         ArrayList<StepNode> l3 = new ArrayList<>();
-        l3.add(new StepNode(null, "!(PVQ), P |- P V Q", null, l4));
-        l3.add(new StepNode(null, "!(PVQ), P |- !(P V Q)", null, new ArrayList<>()));
+        l3.add(new StepNode(null, "!(P V Q), P |- P V Q", null, l4));
+        l3.add(new StepNode(null, "!(P V Q), P |- !(P V Q)", null, new ArrayList<>()));
 
         ArrayList<StepNode> l6 = new ArrayList<>();
-        l6.add(new StepNode(null, "!(PVQ), Q |- Q", null, new ArrayList<>()));
+        l6.add(new StepNode(null, "!(P V Q), Q |- Q", null, new ArrayList<>()));
         ArrayList<StepNode> l5 = new ArrayList<>();
-        l5.add(new StepNode(null, "!(PVQ), Q |- P V Q", null, l6));
-        l5.add(new StepNode(null, "!(PVQ), Q |- !(P V Q)", null, new ArrayList<>()));
+        l5.add(new StepNode(null, "!(P V Q), Q |- P V Q", null, l6));
+        l5.add(new StepNode(null, "!(P V Q), Q |- !(P V Q)", null, new ArrayList<>()));
 
         ArrayList<StepNode> l2 = new ArrayList<>();
-        l2.add(new StepNode(null, "!(PVQ) |- (!P)", null, l3));
-        l2.add(new StepNode(null, "!(PVQ) |- (!Q)", null,l5));
+        l2.add(new StepNode(null, "!(P V Q) |- (!P)", null, l3));
+        l2.add(new StepNode(null, "!(P V Q) |- (!Q)", null,l5));
 
         ArrayList<StepNode> l1 = new ArrayList<>();
-        l1.add(new StepNode(null, "!(PVQ) |- (!P) ^ (!Q)", null,l2));
+        l1.add(new StepNode(null, "!(P V Q) |- (!P) ^ (!Q)", null,l2));
 
-        root = new StepNode(null, "%|-!(PVQ)=>(!P) ^ (!Q)", null, l1);
+        root = new StepNode(null, "%|-!(P V Q)=>(!P) ^ (!Q)", null, l1);
 
         parseTree(root);
         assertFalse(Logic.proofIsInvalid(root));
@@ -189,7 +189,7 @@ public class ProofStepTests {
     @Test
     public void orElimWorks(){
         ArrayList<StepNode> premisses = new ArrayList<>();
-        premisses.add(new StepNode(null, "PVQ |- P V Q", null, new ArrayList<>()));
+        premisses.add(new StepNode(null, "P V Q |- P V Q", null, new ArrayList<>()));
         premisses.add(new StepNode(null, "P V Q, P |- R", null, new ArrayList<>()));
         premisses.add(new StepNode(null, "P V Q, Q |- R", null, new ArrayList<>()));
         root = new StepNode(null, "P V Q |- R", null, premisses);

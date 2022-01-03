@@ -29,4 +29,14 @@ public final class BooleanExpr extends Factor {
     public String toString() {
         if (value) return new TrueToken(0).toString(); else return new FalseToken(0).toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Expr compare;
+        if (!(obj instanceof Expr)) {
+            return false;
+        }
+        compare = ((Expr)obj).unbracket();
+        return compare instanceof BooleanExpr && value == ((BooleanExpr) compare).value;
+    }
 }

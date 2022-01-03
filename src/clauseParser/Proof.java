@@ -44,13 +44,6 @@ public class Proof{
 		}
   }
 
-  public boolean checkFirstClause(){
-		return (clauses.get(0).getAssumptions().contains(clauses.get(0).getExpression())
-				|| (clauses.get(0).getExpression() instanceof BooleanExpr && ((BooleanExpr)clauses.get(0).getExpression()).value))
-				//law of excluded middle
-	  ;
-  }
-
   public static boolean checkStep(ArrayList<Clause> premisses, Clause conclusion){
 		if(premisses == null || premisses.size()==0){
 			//assumption
@@ -66,13 +59,12 @@ public class Proof{
 			}
 
 			//excluded middle
-			if(conclusion.getExpression() instanceof BooleanExpr
-					&& ((BinaryExpr)conclusion.getExpression()).oper instanceof OrToken){
-				Expr left = ((BinaryExpr) conclusion.getExpression()).left;
-				Expr right = ((BinaryExpr) conclusion.getExpression()).right;
+			if(conclusion.getExpression().isDisj()){
+				Expr left = ((Disj) conclusion.getExpression()).left;
+				Expr right = ((Disj) conclusion.getExpression()).right;
 
-				if ((left instanceof NotExpr && ((NotExpr)left).right.equals(right))
-				|| (right instanceof NotExpr && ((NotExpr)right).right.equals(left))) {
+				if (right instanceof NotExpr
+						&& ((NotExpr)right).right.equals(left)) {
 					System.out.println("excluded middle");
 					return true;
 				}
@@ -83,10 +75,12 @@ public class Proof{
 			Clause clause = premisses.get(0);
 
 	  	//and elim
-		  if (clause.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause.getExpression()).oper instanceof AndToken) {
-		  	Expr left = ((BinaryExpr) clause.getExpression()).left;
-		  	Expr right = ((BinaryExpr) clause.getExpression()).right;
-		  	if ((conclusion.getExpression().equals(left) || conclusion.getExpression().equals(right)) && clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
+		  if (clause.getExpression().isConj()) {
+		  	Expr left = ((Conj)clause.getExpression()).left;
+		  	Expr right = ((Conj)clause.getExpression()).right;
+		  	if ((conclusion.getExpression().equals(left)
+					|| conclusion.getExpression().equals(right))
+					&& clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 				System.out.println("and-elim");
 				return true;
 			}
@@ -94,17 +88,16 @@ public class Proof{
 
 		  //imp intro
 		  if (clause.getAssumptions().size()!=0 &&
-				  conclusion.getExpression() instanceof BinaryExpr &&
-				  ((BinaryExpr) conclusion.getExpression()).oper instanceof ImpliesToken &&
+				  conclusion.getExpression().isImpl() &&
 				  clause.getAssumptions().size() - 1 == conclusion.getAssumptions().size()) {
 
-				Expr left = ((BinaryExpr) conclusion.getExpression()).left;
+				Expr left = conclusion.getExpression().left;
 				if (clause.getAssumptions().contains(left)
 						&& !conclusion.getAssumptions().contains(left)) {
 					ArrayList<Expr> assumptions = new ArrayList<>(conclusion.getAssumptions());
-					assumptions.add(((BinaryExpr) conclusion.getExpression()).left);
+					assumptions.add(conclusion.getExpression().left);
 					Assumptions newAssumptions = new Assumptions(assumptions);
-					if (newAssumptions.equals(clause.getAssumptionsObject()) && ((BinaryExpr) conclusion.getExpression()).right.equals(clause.getExpression())) {
+					if (newAssumptions.equals(clause.getAssumptionsObject()) && conclusion.getExpression().right.equals(clause.getExpression())) {
 						System.out.println("imp-intro");
 						return true;
 					}
@@ -112,10 +105,12 @@ public class Proof{
 		  }
 
 		  //or intro
-			if (conclusion.getExpression() instanceof BinaryExpr && ((BinaryExpr) conclusion.getExpression()).oper instanceof OrToken) {
-				Expr left = ((BinaryExpr) conclusion.getExpression()).left;
-				Expr right = ((BinaryExpr) conclusion.getExpression()).right;
-				if ((clause.getExpression().equals(left) || clause.getExpression().equals(right)) && clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
+			if (conclusion.getExpression().isDisj()) {
+				Expr left = ((Disj)conclusion.getExpression()).left;
+				Expr right = ((Disj)conclusion.getExpression()).right;
+				if ((clause.getExpression().equals(left)
+						|| clause.getExpression().equals(right))
+						&& clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 					System.out.println("or-intro");
 					return true ;
 				}
@@ -150,11 +145,10 @@ public class Proof{
 			//and intro
 			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject())
 					&& clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())
-					&& conclusion.getExpression() instanceof BinaryExpr
-					&& ((BinaryExpr) conclusion.getExpression()).oper instanceof AndToken) {
+					&& conclusion.getExpression().isConj()) {
 
-				Expr left = ((BinaryExpr) conclusion.getExpression()).left;
-				Expr right = ((BinaryExpr) conclusion.getExpression()).right;
+				Expr left = ((Conj) conclusion.getExpression()).left;
+				Expr right = ((Conj) conclusion.getExpression()).right;
 				if ((left.equals(clause1.getExpression()) && right.equals(clause2.getExpression())) || (left.equals(clause2.getExpression()) && right.equals(clause1.getExpression()))){
 					System.out.println("and-intro");
 					return true;
@@ -164,19 +158,15 @@ public class Proof{
 			//imp elim
 			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject())
 					&& clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())
-					&& conclusion.getExpression() instanceof BinaryExpr
-					&& ((BinaryExpr) conclusion.getExpression()).oper instanceof ImpliesToken
-					&& ((clause1.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause1.getExpression()).oper instanceof ImpliesToken)
-						|| clause2.getExpression() instanceof BinaryExpr && ((BinaryExpr) clause2.getExpression()).oper instanceof ImpliesToken)
+					&& ((clause1.getExpression().isImpl())
+						|| clause2.getExpression().isImpl())
 
-					&& ((clause1.getExpression() instanceof BinaryExpr
-							&& ((BinaryExpr) clause1.getExpression()).oper instanceof ImpliesToken
-							&& ((BinaryExpr) clause1.getExpression()).left.equals(clause2.getExpression())
-							&& ((BinaryExpr) clause1.getExpression()).right.equals(conclusion.getExpression()))
-						|| (clause2.getExpression() instanceof BinaryExpr
-							&& ((BinaryExpr) clause2.getExpression()).oper instanceof ImpliesToken
-							&& ((BinaryExpr) clause2.getExpression()).left.equals(clause1.getExpression())
-							&& ((BinaryExpr) clause2.getExpression()).right.equals(conclusion.getExpression())))
+					&& (( clause1.getExpression().isImpl()
+							&& clause1.getExpression().left.equals(clause2.getExpression())
+							&& clause1.getExpression().right.equals(conclusion.getExpression()))
+						|| (clause2.getExpression().isImpl()
+							&& clause2.getExpression().left.equals(clause1.getExpression())
+							&& clause2.getExpression().right.equals(conclusion.getExpression())))
 				)
 				{
 					System.out.println("imp-elim");
@@ -237,9 +227,31 @@ public class Proof{
 			Clause clauseP = null;
 			Clause clauseQ = null;
 
-			for (Clause p : premisses) {
-				if (!p.getExpression().equals(conclusion.getExpression()) && p.getExpression() instanceof BinaryExpr && ((BinaryExpr) p.getExpression()).oper instanceof OrToken) {
-					orClause = p;
+
+			for (int i = 0; i < 3; i++) {
+				int j = (i+1)%3;
+				int k = (i+2)%3;
+
+				if (premisses.get(i).getExpression().isDisj()) {
+					if (premisses.get(j).getAssumptions().contains(((Disj) (premisses.get(i).getExpression())).left) &&
+							premisses.get(k).getAssumptions().contains(((Disj) (premisses.get(i).getExpression())).right) &&
+							premisses.get(j).getExpression().equals(R) &&
+							premisses.get(k).getExpression().equals(R)) {
+
+						orClause = premisses.get(i);
+						clauseP = premisses.get(j);
+						clauseQ = premisses.get(k);
+						break;
+					} else if (premisses.get(k).getAssumptions().contains(((Disj) (premisses.get(i).getExpression())).left) &&
+							premisses.get(j).getAssumptions().contains(((Disj) (premisses.get(i).getExpression())).right) &&
+							premisses.get(k).getExpression().equals(R) &&
+							premisses.get(j).getExpression().equals(R)) {
+
+						orClause = premisses.get(i);
+						clauseP = premisses.get(k);
+						clauseQ = premisses.get(j);
+						break;
+					}
 				}
 			}
 
@@ -247,22 +259,6 @@ public class Proof{
 				return false;
 			}
 
-			for (Clause p : premisses) {
-				if (p.getExpression().equals(conclusion.getExpression())) {
-					if (p.getAssumptions().contains(((BinaryExpr)orClause.getExpression()).left)) {
-						clauseP = p;
-					} else if (p.getAssumptions().contains(((BinaryExpr)orClause.getExpression()).right)) {
-						clauseQ = p;
-					}
-				}
-
-
-			}
-
-			if (clauseP==null || clauseQ==null){
-				System.out.println("invalid!");
-				return false;
-			}
 
 			Assumptions gamma = orClause.getAssumptionsObject();
 			Assumptions deltaP = new Assumptions(clauseP.getAssumptions());
@@ -270,13 +266,13 @@ public class Proof{
 			Assumptions assumptions = new Assumptions(gamma.getAssumptions());
 
 			for (Expr assumption : deltaP.getAssumptions()) {
-				if (!assumptions.getAssumptions().contains(assumption)) {
+				if (!assumptions.getAssumptions().contains(assumption) && !assumption.equals(((Disj)orClause.getExpression()).left)) {
 					assumptions.getAssumptions().add(assumption);
 				}
 			}
 
 			for (Expr assumption : thetaQ.getAssumptions()) {
-				if (!assumptions.getAssumptions().contains(assumption)) {
+				if (!assumptions.getAssumptions().contains(assumption) && !assumption.equals(((Disj)orClause.getExpression()).right)) {
 					assumptions.getAssumptions().add(assumption);
 				}
 			}

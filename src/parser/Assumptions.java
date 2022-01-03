@@ -61,15 +61,13 @@ public class Assumptions {
 		ArrayList<Expr> list1 = new ArrayList<>(this.getAssumptions());
 		ArrayList<Expr> list2 = new ArrayList<>(compare.getAssumptions());
 
-		for (int i = 0; i < list1.size(); i++) {
-			boolean found = false;
-			for (int j = 0; j < list2.size(); j++) {
-				if (list1.get(i).equals(list2.get(j))){
-					found = true;
-					break;
-				}
+		for (Expr expr : list1) {
+			if (!list2.contains(expr)) {
+				return false;
 			}
-			if (!found) {
+		}
+		for (Expr expr : list2) {
+			if (!list1.contains(expr)) {
 				return false;
 			}
 		}

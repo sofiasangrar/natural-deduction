@@ -5,9 +5,9 @@ import lexer.tokens.AndToken;
 import lexer.tokens.OrToken;
 
 public class Conj extends Disj {
-    Factor left;
+    public Factor left;
     public Conj right;
-    boolean hasright;
+    public boolean hasright;
 
     Conj(){
 
@@ -38,5 +38,15 @@ public class Conj extends Disj {
     @Override
     public String toString() {
         return left.toString() + " ^ " + right.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Expr compare;
+        if (!(obj instanceof Expr)) {
+            return false;
+        }
+        compare = ((Expr)obj).unbracket();
+        return compare instanceof Conj && left.equals(((Conj)compare).left) && right.equals(((Conj)compare).right);
     }
 }

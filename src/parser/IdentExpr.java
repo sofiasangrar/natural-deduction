@@ -29,6 +29,11 @@ public class IdentExpr extends Factor {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof IdentExpr && obj.toString().equals(identifier);
+        Expr compare;
+        if (!(obj instanceof Expr)) {
+            return false;
+        }
+        compare = ((Expr)obj).unbracket();
+        return compare instanceof IdentExpr && identifier.equals(((IdentExpr) compare).identifier);
     }
 }

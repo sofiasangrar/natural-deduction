@@ -30,8 +30,15 @@ public final class BracketedExpr extends Factor {
         return "(" + expr.toString() + ")";
     }
 
+
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof BracketedExpr && ((BracketedExpr)obj).right.equals(this.expr);
+        Expr compare;
+        if (!(obj instanceof Expr)) {
+            return false;
+        }
+        compare = ((Expr)obj).unbracket();
+        return this.unbracket().equals(compare);
     }
+
 }

@@ -64,7 +64,7 @@ public class Clause {
 	}
 
 	public Expr getExpression() {
-		return expression;
+		return expression.unbracket();
 	}
 
 	@Override

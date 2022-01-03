@@ -43,4 +43,18 @@ public class LexerTests {
         assertTrue(((Disj) c.getExpression().right).right instanceof Conj);
 
     }
+
+    @Test
+    public void unbracketTest(){
+        String s = "P |- P";
+        Lexer.setLexString(s);
+        Parser.t = Lexer.lex();
+        Clause c = Clause.parse(0);
+        s = "P |- (P)";
+        Lexer.setLexString(s);
+        Parser.t = Lexer.lex();
+        Clause c2 = Clause.parse(1);
+        assertEquals(c.getExpression(), c.getExpression());
+        assertEquals(c.getExpression(), c2.getExpression());
+    }
 }
