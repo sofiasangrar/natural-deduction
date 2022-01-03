@@ -36,9 +36,6 @@ public class Proof{
   }
 
   public static void check(Proof proof){
-		if (!proof.checkFirstClause()){
-			System.out.println("Assumption not found at clause 1");
-		}
 		for (int i = 1; i < proof.size(); i++) {
 			ArrayList<Clause> clauses = new ArrayList<>();
 			clauses.add(proof.clauses.get(i-1));
@@ -58,6 +55,7 @@ public class Proof{
 		if(premisses == null || premisses.size()==0){
 			//assumption
 			if (conclusion.getAssumptions().contains(conclusion.getExpression())) {
+				System.out.println("assumption");
 				return true;
 			}
 
@@ -221,7 +219,7 @@ public class Proof{
 				}
 
 				for (Expr assumption : clause2.getAssumptions()) {
-					if (!assumption.equals(P)) {
+					if (!assumption.equals(P) && !newAssumptions.getAssumptions().contains(assumption)) {
 						newAssumptions.getAssumptions().add(assumption);
 					}
 				}

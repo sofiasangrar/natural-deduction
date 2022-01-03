@@ -68,7 +68,7 @@ public class Logic {
         boolean isInvalid = false;
         isInvalid = !Proof.checkStep(tree.getPremisses(), tree.getParsedInput());
         for (int i = 0; i < tree.getChildren().size(); i++) {
-            if (!Proof.checkStep(tree.getChildren().get(i).getPremisses(), tree.getChildren().get(i).getParsedInput())) {
+            if (proofIsInvalid(tree.getChildren().get(i))) {
                 isInvalid = true;
             }
         }
