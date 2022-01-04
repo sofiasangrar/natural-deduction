@@ -1,6 +1,6 @@
 package lexer.tokens;
 
-public class TrueToken extends FactorToken {
+public class TrueToken extends Token {
 
     // constructor
     public TrueToken(int startingColumnOfToken) {

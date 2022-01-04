@@ -1,13 +1,6 @@
 package lexer.tokens;
 
-public class NotToken extends OperatorToken {
-
-
-    // returns the precedence of the operator
-    @Override
-    public int precedence() {
-        return 0;
-    }
+public class NotToken extends Token {
 
     // constructor
     public NotToken(int startingColumnOfToken) {

@@ -1,6 +1,5 @@
-package natded.problemDomain;
+package natded;
 
-import natded.computationLogic.NatDedUtilities;
 import natded.constants.Step;
 import parser.Clause;
 

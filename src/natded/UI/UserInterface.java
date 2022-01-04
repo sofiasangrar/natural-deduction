@@ -6,22 +6,15 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Control;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import natded.UI.logic.ControlLogic;
-import natded.computationLogic.NatDedUtilities;
-import natded.constants.SpaceState;
-import natded.problemDomain.NatDedSpace;
-import natded.problemDomain.StepNode;
+import natded.StepNode;
+import natded.UIListener;
 
 import java.util.HashMap;
 
@@ -31,7 +24,7 @@ public class UserInterface implements EventHandler<KeyEvent> {
 
      private HashMap<Integer, StepTextField> indexes;
 
-    private ControlLogic listener;
+    private UIListener listener;
 
     //Size of the window
     private static final double WINDOW_Y = 650;
@@ -62,7 +55,7 @@ public class UserInterface implements EventHandler<KeyEvent> {
             }
 
 
-    public void setListener(ControlLogic listener) {
+    public void setListener(UIListener listener) {
             this.listener = listener;
             }
 

@@ -3,7 +3,7 @@ package parser;
 import lexer.Lexer;
 import lexer.tokens.NotToken;
 
-public final class NotExpr extends Factor {
+public class NotExpr extends Factor {
     public Expr right;
 
     public NotExpr(Expr right) {

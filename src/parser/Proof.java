@@ -1,51 +1,49 @@
-package clauseParser;
+package parser;
 
-import com.sun.tools.corba.se.idl.constExpr.Not;
 import lexer.Lexer;
-import lexer.tokens.AndToken;
-import lexer.tokens.ImpliesToken;
-import lexer.tokens.OrToken;
-import parser.*;
+import natded.StepNode;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Proof{
 
-	ArrayList<Clause> clauses;
+	StepNode root;
 
-	// Constructor
-	private Proof(ArrayList<Clause> clauses) {
-		this.clauses = clauses;
+	Proof(StepNode root) {
+		this.root = root;
 	}
-	
-  public static Proof parse(Scanner scanner, int clauses) {
-		ArrayList<Clause> clauseList = new ArrayList<>();
-		for (int i = 0; i < clauses; i++) {
-			Lexer.setLexString(scanner.nextLine());
-			Parser.t = Lexer.lex();
-			Parser.t = Lexer.lex();
-			Clause c = Clause.parse(i);
-			clauseList.add(c);
-		}
-    return new Proof(clauseList);
-  }
 
-  public int size(){
-		return clauses.size();
-  }
-
-  public static void check(Proof proof){
-		for (int i = 1; i < proof.size(); i++) {
-			ArrayList<Clause> clauses = new ArrayList<>();
-			clauses.add(proof.clauses.get(i-1));
-			Clause current = proof.clauses.get(i);
-			checkStep(clauses, current);
+	public static Proof parse(StepNode node){
+		Lexer.setLexString(node.getInput());
+		Parser.t = Lexer.lex();
+		node.setParsedInput(Clause.parse(node.getIndex()));
+		for (int i = 0; i < node.getChildren().size(); i++) {
+			parse(node.getChildren().get(i));
 		}
-  }
+		return new Proof(node);
+	}
+
+	public boolean isValid() {
+		return isValid(root);
+	}
+
+	private boolean isValid(StepNode root) {
+		boolean isValid = Proof.checkStep(root.getPremisses(), root.getParsedInput());
+		if (!isValid) {
+			return false;
+		}
+		for (int i = 0; i < root.getChildren().size(); i++) {
+			if (!isValid(root.getChildren().get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 
   public static boolean checkStep(ArrayList<Clause> premisses, Clause conclusion){
-		if(premisses == null || premisses.size()==0){
+
+  	if(premisses == null || premisses.size()==0){
 			//assumption
 			if (conclusion.getAssumptions().contains(conclusion.getExpression())) {
 				System.out.println("assumption");

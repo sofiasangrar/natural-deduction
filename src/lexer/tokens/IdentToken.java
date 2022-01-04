@@ -1,6 +1,6 @@
 package lexer.tokens;
 
-public class IdentToken extends FactorToken {
+public class IdentToken extends Token {
 
     // Stores the identifier of the token
     private String identifier;

@@ -1,6 +1,6 @@
 package lexer.tokens;
 
-public class OrToken extends OperatorToken {
+public class OrToken extends Token {
 
     // returns the precedence
     @Override

@@ -3,29 +3,24 @@ package natded;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import natded.UI.UserInterface;
-import natded.UI.logic.ControlLogic;
-import natded.computationLogic.SpaceGenerator;
-import natded.problemDomain.NatDedSpace;
-
-import java.io.IOException;
 
 public class Main extends Application {
 
-    private UserInterface uiImpl;
+    private UserInterface ui;
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        uiImpl = new UserInterface(primaryStage);
+    public void start(Stage primaryStage) {
+        ui = new UserInterface(primaryStage);
         NatDedSpace initialState;
-        initialState = new NatDedSpace(SpaceGenerator.getNewSpace());
+        initialState = new NatDedSpace(); //generates random goal
 
-        ControlLogic uiLogic = new ControlLogic(initialState, uiImpl);
-        uiImpl.setListener(uiLogic);
-        uiImpl.updateView(initialState.getRoot());
+        UIListener uiLogic = new UIListener(initialState, ui);
+        ui.setListener(uiLogic);
+        ui.updateView(initialState.getRoot());
 
     }
 }

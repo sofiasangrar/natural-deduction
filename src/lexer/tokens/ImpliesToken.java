@@ -1,11 +1,6 @@
 package lexer.tokens;
 
-public class ImpliesToken extends OperatorToken  {
-
-    @Override
-    public int precedence() {
-        return 3;
-    }
+public class ImpliesToken extends Token  {
 
     // constructor
     public ImpliesToken(int startingColumnOfToken) {

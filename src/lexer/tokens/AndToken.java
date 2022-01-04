@@ -1,12 +1,6 @@
 package lexer.tokens;
 
-public class AndToken extends OperatorToken {
-
-    // returns the precedence of the operator
-    @Override
-    public int precedence() {
-        return 1;
-    }
+public class AndToken extends Token {
 
     // constructor
     public AndToken(int startingColumnOfToken) {

@@ -1,7 +1,6 @@
-import clauseParser.Proof;
+import parser.Proof;
 import lexer.Lexer;
-import natded.computationLogic.Logic;
-import natded.problemDomain.StepNode;
+import natded.StepNode;
 import org.junit.Test;
 import parser.Clause;
 import parser.Parser;
@@ -47,8 +46,8 @@ public class ProofStepTests {
 
         root = new StepNode(null, "%|-!(P V Q)=>(!P) ^ (!Q)", null, l1);
 
-        parseTree(root);
-        assertFalse(Logic.proofIsInvalid(root));
+        Proof p = Proof.parse(root);
+        assertTrue(p.isValid());
     }
 
     @Test
