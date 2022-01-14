@@ -259,24 +259,7 @@ public class UserInterface implements EventHandler<KeyEvent> {
     @Override
     public void handle(KeyEvent event) {
         listener.onTextInput(((StepTextField) event.getSource()).getNode(), ((StepTextField) event.getSource()).getText());
-        /*
-        if (event.getEventType() == KeyEvent.KEY_PRESSED) {
-            String value = event.getText();
-            handleInput(value, event.getSource());
-        } else if (event.getCode() == KeyCode.BACK_SPACE) {
-            handleInput("", event.getSource());
-        } else {
-            ((TextField)event.getSource()).setText("");
-        }
-        */
         event.consume();
     }
 
-    /**
-     * @param value  expected to be an integer from 0-9, inclusive
-     * @param source the textfield object that was clicked.
-     */
-    private void handleInput(String value, Object source) {
-
-    }
 }
