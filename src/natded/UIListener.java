@@ -1,25 +1,27 @@
 package natded;
 
+import natded.UI.Window;
 import parser.Proof;
-import natded.UI.UserInterface;
 import natded.constants.SpaceState;
 
 import java.util.ArrayList;
 
 public class UIListener {
 
-    private UserInterface view;
+    private Window view;
     private NatDedSpace space;
 
-    public UIListener(NatDedSpace space, UserInterface view) {
+    public UIListener(NatDedSpace space, Window view) {
         this.space = space;
         this.view = view;
     }
 
+    /*
     public void onAddChildClick(StepNode node) {
             node.addChild(new StepNode(node, "", null, new ArrayList<>()));
             view.updateView(space.getRoot());
     }
+
 
     public void onTextInput(StepNode node, String input) {
             node.setInput(input);
@@ -39,5 +41,6 @@ public class UIListener {
                 view.showDialog("invalid");
             }
     }
+    */
 
 }

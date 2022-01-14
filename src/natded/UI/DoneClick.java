@@ -12,8 +12,9 @@ public class DoneClick implements EventHandler<MouseEvent> {
         this.listener = listener;
     }
 
+
     @Override
     public void handle(MouseEvent event) {
-        listener.onFinishedClick();
+        //listener.onFinishedClick();
     }
 }

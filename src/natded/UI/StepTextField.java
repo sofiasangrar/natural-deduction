@@ -4,6 +4,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.shape.Rectangle;
 import natded.StepNode;
 
+import java.util.ArrayList;
+
 public class StepTextField extends TextField {
     private AddButton addButton;
     private StepNode node;
@@ -15,6 +17,10 @@ public class StepTextField extends TextField {
         addButton = new AddButton(node.getIndex());
         line = new Rectangle();
 
+    }
+
+    StepTextField(){
+        super();
     }
 
     public int getIndex() {

@@ -18,12 +18,14 @@ public class EventClick implements EventHandler<MouseEvent> {
         this.listener = listener;
     }
 
+
     @Override
     public void handle(MouseEvent event) {
         if(event.getSource() instanceof AddButton) {
             int index = ((AddButton) event.getSource()).index;
             StepNode node = fieldMap.get(index).getNode();
-            listener.onAddChildClick(node);
+            //listener.onAddChildClick(node);
         }
     }
+
 }
