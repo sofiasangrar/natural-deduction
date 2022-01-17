@@ -20,6 +20,7 @@ public class LeafNode extends VBox {
     private HBox childrenBox;
     private HBox fieldHbox;
     private LeafNode parent;
+    private Justification justif;
 
 
     LeafNode(){
@@ -49,12 +50,12 @@ public class LeafNode extends VBox {
 
         this.getChildren().add(childrenBox);
 
-        Justification justif = new Justification(this);
+        justif = new Justification(this);
         HBox justifBox = new HBox();
         justifBox.getChildren().add(justif);
         justifBox.setAlignment(Pos.TOP_LEFT);
 
-        fieldHbox.getChildren().addAll(justifBox, field, addButton);
+        fieldHbox.getChildren().addAll(addButton, field, justifBox);
         fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
         this.getChildren().add(fieldHbox);
 
@@ -72,7 +73,7 @@ public class LeafNode extends VBox {
     }
 
     private void addSubButton(){
-        fieldHbox.getChildren().add(new SubtractButton(this));
+        fieldHbox.getChildren().add(1, new SubtractButton(this));
     }
 
 
@@ -100,6 +101,11 @@ public class LeafNode extends VBox {
 
     StepNode getTree(){
         StepNode n = new StepNode(null, this.field.getText(), null, new ArrayList<>());
+        try {
+            n.setStep(justif.getValue().getValue());
+        } catch (NullPointerException e) {
+            System.out.println("No justification!");
+        }
         for (LeafNode child : getChildNodes()) {
             n.addChild(child.getTree(n));
         }
@@ -108,6 +114,7 @@ public class LeafNode extends VBox {
 
     private StepNode getTree(StepNode parent){
         StepNode n = new StepNode(parent, this.field.getText(), null, new ArrayList<>());
+        n.setStep(justif.getValue().getValue());
         for (LeafNode child : getChildNodes()) {
             n.addChild(child.getTree(n));
         }

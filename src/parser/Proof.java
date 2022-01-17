@@ -2,8 +2,11 @@ package parser;
 
 import lexer.Lexer;
 import natded.StepNode;
+import natded.constants.Step;
 
 import java.util.ArrayList;
+
+import static natded.constants.Step.*;
 
 public class Proof{
 
@@ -17,6 +20,7 @@ public class Proof{
 		Lexer.setLexString(node.getInput());
 		Parser.t = Lexer.lex();
 		node.setParsedInput(Clause.parse(node.getIndex()));
+
 		for (int i = 0; i < node.getChildren().size(); i++) {
 			parse(node.getChildren().get(i));
 		}
@@ -28,7 +32,7 @@ public class Proof{
 	}
 
 	private boolean isValid(StepNode root) {
-		boolean isValid = Proof.checkStep(root.getPremisses(), root.getParsedInput());
+		boolean isValid = Proof.checkStep(root.getPremisses(), root.getParsedInput(), root.getStep());
 		if (!isValid) {
 			return false;
 		}
@@ -41,19 +45,19 @@ public class Proof{
 	}
 
 
-  public static boolean checkStep(ArrayList<Clause> premisses, Clause conclusion){
+  public static boolean checkStep(ArrayList<Clause> premisses, Clause conclusion, Step step){
 
   	if(premisses == null || premisses.size()==0){
 			//assumption
 			if (conclusion.getAssumptions().contains(conclusion.getExpression())) {
 				System.out.println("assumption");
-				return true;
+				return(step==ASSUMPTION);
 			}
 
 			//true intro
 			if(conclusion.getExpression() instanceof BooleanExpr && ((BooleanExpr) conclusion.getExpression()).value) {
 				System.out.println("true-intro");
-				return true;
+				return step==TRUE_INTRO;
 			}
 
 			//excluded middle
@@ -64,7 +68,7 @@ public class Proof{
 				if (right instanceof NotExpr
 						&& ((NotExpr)right).right.equals(left)) {
 					System.out.println("excluded middle");
-					return true;
+					return step==EXCL_MIDDLE;
 				}
 			}
 		}
@@ -80,7 +84,7 @@ public class Proof{
 					|| conclusion.getExpression().equals(right))
 					&& clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 				System.out.println("and-elim");
-				return true;
+				return step==AND_ELIM;
 			}
 		  }
 
@@ -97,7 +101,7 @@ public class Proof{
 					Assumptions newAssumptions = new Assumptions(assumptions);
 					if (newAssumptions.equals(clause.getAssumptionsObject()) && conclusion.getExpression().right.equals(clause.getExpression())) {
 						System.out.println("imp-intro");
-						return true;
+						return step==IMP_INTRO;
 					}
 				}
 		  }
@@ -110,14 +114,14 @@ public class Proof{
 						|| clause.getExpression().equals(right))
 						&& clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 					System.out.println("or-intro");
-					return true ;
+					return step==OR_INTRO;
 				}
 			}
 
 			//false elim
 			if (clause.getExpression() instanceof BooleanExpr && !((BooleanExpr)clause.getExpression()).value && clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())){
 				System.out.println("false-elim");
-				return true;
+				return step==FALSE_ELIM;
 			}
 
 			//neg intro
@@ -132,7 +136,7 @@ public class Proof{
 				newAssumptions.getAssumptions().add(((NotExpr) conclusion.getExpression()).right);
 				if (clause.getAssumptionsObject().equals(newAssumptions)) {
 					System.out.println("neg-intro");
-					return true;
+					return step==NEG_INTRO;
 				}
 			}
 
@@ -149,7 +153,7 @@ public class Proof{
 				Expr right = ((Conj) conclusion.getExpression()).right;
 				if ((left.equals(clause1.getExpression()) && right.equals(clause2.getExpression())) || (left.equals(clause2.getExpression()) && right.equals(clause1.getExpression()))){
 					System.out.println("and-intro");
-					return true;
+					return step==AND_INTRO;
 				}
 			}
 
@@ -168,7 +172,7 @@ public class Proof{
 				)
 				{
 					System.out.println("imp-elim");
-					return true;
+					return step==IMP_ELIM;
 				}
 
 			//neg elim
@@ -180,7 +184,7 @@ public class Proof{
 						&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)))
 			){
 				System.out.println("neg-elim");
-				return true;
+				return step==NEG_ELIM;
 			}
 
 			//neg-intro
@@ -214,7 +218,7 @@ public class Proof{
 
 				if (newAssumptions.equals(conclusion.getAssumptionsObject())) {
 					System.out.println("neg-intro");
-					return true;
+					return step==NEG_INTRO;
 				}
 			}
 
@@ -277,7 +281,7 @@ public class Proof{
 
 			if (conclusion.getAssumptionsObject().equals(assumptions)) {
 				System.out.println("or-elim");
-				return true;
+				return step==OR_ELIM;
 			}
 
 		}

@@ -1,8 +1,13 @@
 package natded.UI;
 
+import com.sun.tools.corba.se.idl.constExpr.And;
 import javafx.scene.control.ChoiceBox;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
+import lexer.tokens.AndToken;
+import lexer.tokens.ImpliesToken;
+import lexer.tokens.NotToken;
+import lexer.tokens.OrToken;
 import natded.constants.Step;
 
 import java.util.ArrayList;
@@ -15,19 +20,21 @@ public class Justification extends ChoiceBox<Pair<String, Step>> {
     Justification(LeafNode parent){
         super();
         this.parent = parent;
+        this.setMaxSize(30,20);
+
         List<Pair<String, Step>> choices = new ArrayList<>();
-        choices.add(new Pair("Asseumption", Step.ASSUMPTION));
-        choices.add(new Pair("Implication-Elimination", Step.IMP_ELIM));
-        choices.add(new Pair("Implication-Introduction", Step.IMP_INTRO));
-        choices.add(new Pair("And-Elimination", Step.AND_ELIM));
-        choices.add(new Pair("And-Introduction", Step.AND_INTRO));
-        choices.add(new Pair("Or-Elimination", Step.OR_ELIM));
-        choices.add(new Pair("Or-Introduction", Step.OR_INTRO));
-        choices.add(new Pair("Negation-Elimination", Step.NEG_ELIM));
-        choices.add(new Pair("Negation-Introduction", Step.NEG_INTRO));
-        choices.add(new Pair("False-Elimination", Step.FALSE_ELIM));
-        choices.add(new Pair("True-Introduction", Step.TRUE_INTRO));
-        choices.add(new Pair("Excluded Middle", Step.EXCL_MIDDLE));
+        choices.add(new Pair<>("Ass.", Step.ASSUMPTION));
+        choices.add(new Pair<>(ImpliesToken.getString()+"-E", Step.IMP_ELIM));
+        choices.add(new Pair<>(ImpliesToken.getString()+"-I", Step.IMP_INTRO));
+        choices.add(new Pair<>(AndToken.getString()+"-E", Step.AND_ELIM));
+        choices.add(new Pair<>(AndToken.getString()+"-I", Step.AND_INTRO));
+        choices.add(new Pair<>(OrToken.getString()+"-E", Step.OR_ELIM));
+        choices.add(new Pair<>(OrToken.getString()+"-I", Step.OR_INTRO));
+        choices.add(new Pair<>(NotToken.getString()+"-E", Step.NEG_ELIM));
+        choices.add(new Pair<>(NotToken.getString()+"-I", Step.NEG_INTRO));
+        choices.add(new Pair<>("F-E", Step.FALSE_ELIM));
+        choices.add(new Pair<>("T-I", Step.TRUE_INTRO));
+        choices.add(new Pair<>("Magic", Step.EXCL_MIDDLE));
 
         this.setConverter( new StringConverter<Pair<String,Step>>() {
             @Override

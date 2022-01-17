@@ -1,3 +1,4 @@
+import parser.Assumptions;
 import parser.Proof;
 import lexer.Lexer;
 import natded.StepNode;
@@ -8,6 +9,7 @@ import parser.Parser;
 import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertTrue;
+import static natded.constants.Step.*;
 import static org.junit.Assert.assertFalse;
 
 public class ProofStepTests {
@@ -55,7 +57,7 @@ public class ProofStepTests {
         ArrayList<StepNode> premisses = new ArrayList<>();
         root = new StepNode(null, "P^Q, !(R ^ S)|- P^Q", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), ASSUMPTION));
     }
 
     @Test
@@ -63,7 +65,7 @@ public class ProofStepTests {
         ArrayList<StepNode> premisses = new ArrayList<>();
         root = new StepNode(null, "P^Q, !(R ^ S)|- T", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), TRUE_INTRO));
     }
 
     @Test
@@ -71,7 +73,7 @@ public class ProofStepTests {
         ArrayList<StepNode> premisses = new ArrayList<>();
         root = new StepNode(null, "P^Q, !(R ^ S)|- !X V !(!X)", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), EXCL_MIDDLE));
     }
 
     @Test
@@ -79,7 +81,7 @@ public class ProofStepTests {
         ArrayList<StepNode> premisses = new ArrayList<>();
         root = new StepNode(null, "P^Q, !(R ^ S)|- X V !X", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), EXCL_MIDDLE));
     }
 
     @Test
@@ -88,7 +90,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^Q, !(R ^ S)|- P^Q", null, new ArrayList<>()));
         root = new StepNode(null, "P^Q, !(R ^ S)|- P", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), AND_ELIM));
     }
 
     @Test
@@ -97,7 +99,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^Q, !(R ^ S)|- P^Q", null, new ArrayList<>()));
         root = new StepNode(null, "P^Q, !(R ^ S)|- Q", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), AND_ELIM));
     }
 
     @Test
@@ -106,7 +108,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^Q, R, S|- !(!P ^ !Q)", null, new ArrayList<>()));
         root = new StepNode(null, "S, R|- (P^Q) => !((!P)^(!Q))", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), IMP_INTRO));
     }
 
     @Test
@@ -115,7 +117,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^Q, !(R ^ S)|- P^Q", null, new ArrayList<>()));
         root = new StepNode(null, "P^Q, !(R ^ S)|- (P^Q) V W", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), OR_INTRO));
     }
 
     @Test
@@ -124,7 +126,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^Q, !(R ^ S)|- P^Q", null, new ArrayList<>()));
         root = new StepNode(null, "P^Q, !(R ^ S)|- W V (P^Q)", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), OR_INTRO));
     }
 
     @Test
@@ -133,7 +135,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^Q, !(P ^ Q)|- F", null, new ArrayList<>()));
         root = new StepNode(null, "P^Q, !(P ^ Q)|- W", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), FALSE_ELIM));
     }
 
     @Test
@@ -142,7 +144,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^Q, !P|- F", null, new ArrayList<>()));
         root = new StepNode(null, "P^Q |- !(!P)", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), NEG_INTRO));
     }
 
     @Test
@@ -152,7 +154,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P, R, Q|- Q", null, new ArrayList<>()));
         root = new StepNode(null, "P, R, Q|- P^Q", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), AND_INTRO));
     }
 
     @Test
@@ -162,7 +164,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^Q, Q=>W|- Q=>W", null, new ArrayList<>()));
         root = new StepNode(null, "P^Q, Q=>W |- W", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), IMP_ELIM));
     }
 
     @Test
@@ -172,7 +174,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "R, Q|- !P", null, new ArrayList<>()));
         root = new StepNode(null, "S, R|- !Q", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), NEG_INTRO));
     }
 
     @Test
@@ -182,7 +184,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P^(!P) |- !P", null, new ArrayList<>()));
         root = new StepNode(null, "P^(!P) |- Q", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), NEG_ELIM));
     }
 
     @Test
@@ -193,7 +195,7 @@ public class ProofStepTests {
         premisses.add(new StepNode(null, "P V Q, Q |- R", null, new ArrayList<>()));
         root = new StepNode(null, "P V Q |- R", null, premisses);
         parseTree(root);
-        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput()));
+        assertTrue(Proof.checkStep(root.getPremisses(), root.getParsedInput(), OR_ELIM));
     }
 
 
