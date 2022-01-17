@@ -11,13 +11,13 @@ import java.util.Set;
 
 public class Assumptions {
 
-	private List<Expr> assumptions = new ArrayList<>();
+	private List<Expr> assumptions;
 	public Assumptions(List<Expr> assumptions){
 		this.assumptions = assumptions;
 	}
 
 	public Assumptions() {
-		List<Expr> assumptions = new ArrayList<>();
+		this.assumptions = new ArrayList<>();
 	}
 
 	public static Assumptions parse(){

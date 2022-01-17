@@ -10,6 +10,8 @@ import natded.StepNode;
 import parser.Clause;
 import parser.Parser;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 
 public class StepTextField extends TextField {
@@ -18,16 +20,22 @@ public class StepTextField extends TextField {
 
     public StepTextField(LeafNode parent) {
         super();
-        this.parent = parent;
-        setOnMouseExited( e -> {
-            if (!e.getSource().equals(this)){
-                Lexer.setLexString(this.getText());
+        this.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue){
+                Parser.error = false;
+                Lexer.setLexString(StepTextField.this.getText());
+                Parser.t = Lexer.lex();
                 Clause.parse(0);
                 if (Parser.error) {
-                    this.setStyle("-fx-text-fill: darkred;");
+                    StepTextField.this.setStyle("-fx-text-fill: darkred;");
+                } else {
+                    StepTextField.this.setStyle("-fx-text-fill: black;");
                 }
+            } else {
+                StepTextField.this.setStyle("-fx-text-fill: black;");
             }
-        });
+    });
+        this.parent = parent;
         this.getContent().addListener((observable, oldValue, newValue) -> {
             for (String key : AndToken.getKeys()) {
                 String s = newValue.replace(key, AndToken.getString());

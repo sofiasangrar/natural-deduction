@@ -23,7 +23,7 @@ public class Clause {
 	
   public static Clause parse(int line) {
 		Assumptions assumptions = new Assumptions();
-		Expr expression = new IdentExpr();
+		Expr expression = new Expr();
 
 	 if(Parser.t instanceof EmptyToken) {
 	 	Parser.t= Lexer.lex();
@@ -35,7 +35,7 @@ public class Clause {
 		  Parser.t = Lexer.lex();
 		  expression = Expr.parse();
 	  } else {
-		  Parser.errorHandle(new NDToken(0));
+		  Parser.errorHandle(new NDToken(Lexer.characterCountOnLine));
 		  Parser.t = Lexer.lex();
 	  }
 

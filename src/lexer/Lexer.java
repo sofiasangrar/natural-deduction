@@ -8,7 +8,7 @@ public final class Lexer {
         private static int ch = ' ';
 
         // stores the column of the current character
-        private static int characterCountOnLine = 0;
+        public static int characterCountOnLine = 0;
 
         // stores the column number for the first character of a token
         private static int characterForToken = 0;

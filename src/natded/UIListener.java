@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class UIListener {
 
     private UserInterface view;
-    private NatDedSpace space;
 
     public UIListener(UserInterface view) {
         this.view = view;
