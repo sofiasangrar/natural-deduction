@@ -11,9 +11,18 @@ public class IllegalStringToken extends Token {
 		this.illegalString = illegalString;
 	}
 
-	// gets the error message specific to the token
+	public static String getString(){
+		return "an illegal string";
+	}
+
 	@Override
-	public String getString() {
+	public String expectedString() {
 		return "an illegal string: " + "\"" + illegalString + "\"";
 	}
+
+	@Override
+	public String toString() {
+		return illegalString;
+	}
+
 }

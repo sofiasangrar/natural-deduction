@@ -7,7 +7,7 @@ public final class Parser {
 
   public static void errorHandle(Token expectedToken) {
       System.out.println("Error occurred at character " + t.getStartingColumnOfToken() + ":");
-      System.out.println("Expected " + expectedToken.getString() + " but received " + t.getString() + ".");
+      System.out.println("Expected " + expectedToken.expectedString() + " but received " + t.expectedString() + ".");
       error = true;
 
   }

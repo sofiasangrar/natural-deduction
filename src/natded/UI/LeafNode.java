@@ -10,19 +10,17 @@ import javafx.scene.layout.*;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 import natded.StepNode;
-import natded.constants.SpaceState;
-import natded.constants.Step;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LeafNode extends VBox {
 
-    private TextField field;
+    private StepTextField field;
     private HBox childrenBox;
     private HBox fieldHbox;
     private LeafNode parent;
-    private ChoiceBox<Pair<String, Step>> justif;
+
 
     LeafNode(){
         super();
@@ -35,7 +33,8 @@ public class LeafNode extends VBox {
         HBox.setMargin(childrenBox, new Insets(10.0d));
         HBox.setHgrow(childrenBox, Priority.ALWAYS);
 
-        field = new TextField();
+        field = new StepTextField(this);
+        field.setEditable(false);
         field.setMinSize(field.getWidth(), field.getHeight());
         field.setAlignment(Pos.CENTER);
         fieldHbox = new HBox();
@@ -50,55 +49,26 @@ public class LeafNode extends VBox {
 
         this.getChildren().add(childrenBox);
 
-        createChoiceBox();
+        Justification justif = new Justification(this);
         HBox justifBox = new HBox();
         justifBox.getChildren().add(justif);
         justifBox.setAlignment(Pos.TOP_LEFT);
 
-        fieldHbox.getChildren().addAll(field, addButton);
+        fieldHbox.getChildren().addAll(justifBox, field, addButton);
         fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
         this.getChildren().add(fieldHbox);
 
+    }
 
-
-
+    public void setText(String text){
+        field.setText(text);
     }
 
     LeafNode(LeafNode parent){
         this();
         this.parent = parent;
+        field.setEditable(true);
         addSubButton();
-    }
-
-    private void createChoiceBox(){
-        justif = new ChoiceBox<>();
-        List<Pair<String, Step>> choices = new ArrayList<>();
-        choices.add(new Pair("Asseumption", Step.ASSUMPTION));
-        choices.add(new Pair("Implication-Elimination", Step.IMP_ELIM));
-        choices.add(new Pair("Implication-Introduction", Step.IMP_INTRO));
-        choices.add(new Pair("And-Elimination", Step.AND_ELIM));
-        choices.add(new Pair("And-Introduction", Step.AND_INTRO));
-        choices.add(new Pair("Or-Elimination", Step.OR_ELIM));
-        choices.add(new Pair("Or-Introduction", Step.OR_INTRO));
-        choices.add(new Pair("Negation-Elimination", Step.NEG_ELIM));
-        choices.add(new Pair("Negation-Introduction", Step.NEG_INTRO));
-        choices.add(new Pair("False-Elimination", Step.FALSE_ELIM));
-        choices.add(new Pair("True-Introduction", Step.TRUE_INTRO));
-        choices.add(new Pair("Excluded Middle", Step.EXCL_MIDDLE));
-
-        justif.setConverter( new StringConverter<Pair<String,Step>>() {
-            @Override
-            public String toString(Pair<String, Step> pair) {
-                return pair.getKey();
-            }
-
-            @Override
-            public Pair<String, Step> fromString(String string) {
-                return null;
-            }
-        });
-
-        justif.getItems().addAll( choices );
     }
 
     private void addSubButton(){

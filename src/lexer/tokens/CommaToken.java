@@ -8,19 +8,24 @@ public class CommaToken extends Token {
 
     }
 
-    // returns the expected input of the token
-    @Override
-    public String getString() {
-        return "','";
-    }
-
-    @Override
-    public String toString() {
+    public static String getString() {
         return ",";
     }
 
+    /*
+    @Override
+    public String toString() {
+        return "'"+ getString() + "'";
+    }
+
+    @Override
+    public String expectedString(){
+        return getString();
+    }
+    */
+
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof CommaToken || obj.toString().equals(",");
+        return obj instanceof CommaToken || obj.toString().equals(this.toString());
     }
 }

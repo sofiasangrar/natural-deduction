@@ -17,15 +17,19 @@ public class IdentToken extends Token {
         return identifier;
     }
 
-    // returns the expected input of the token
-    @Override
-    public String getString() {
+
+    public static String getString() {
         return "an identifier";
     }
 
     @Override
     public String toString() {
         return identifier;
+    }
+
+    @Override
+    public String expectedString() {
+        return getString();
     }
 
     @Override

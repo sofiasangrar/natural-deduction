@@ -1,43 +1,60 @@
 package natded.UI;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Rectangle;
+import lexer.tokens.*;
 import natded.StepNode;
 
 import java.util.ArrayList;
 
 public class StepTextField extends TextField {
-    private AddButton addButton;
-    private StepNode node;
-    private Rectangle line;
 
+    private LeafNode parent;
 
-    public StepTextField(StepNode node) {
-        this.node = node;
-        addButton = new AddButton(new LeafNode());
-        line = new Rectangle();
-
-    }
-
-    StepTextField(){
+    public StepTextField(LeafNode parent) {
         super();
+        this.parent = parent;
+        this.getContent().addListener((observable, oldValue, newValue) -> {
+            for (String key : AndToken.getKeys()) {
+                String s = newValue.replace(key, AndToken.getString());
+                if (!s.equals(newValue)) {
+                    this.setText(s);
+                }
+            }
+
+            for (String key : EmptyToken.getKeys()) {
+                String s = newValue.replace(key, EmptyToken.getString());
+                if (!s.equals(newValue)) {
+                    this.setText(s);
+                }            }
+
+            for (String key : ImpliesToken.getKeys()) {
+                String s = newValue.replace(key, ImpliesToken.getString());
+                if (!s.equals(newValue)) {
+                    this.setText(s);
+                }            }
+
+            for (String key : NDToken.getKeys()) {
+                String s = newValue.replace(key, NDToken.getString());
+                if (!s.equals(newValue)) {
+                    this.setText(s);
+                }            }
+
+            for (String key : NotToken.getKeys()) {
+                String s = newValue.replace(key, NotToken.getString());
+                if (!s.equals(newValue)) {
+                    this.setText(s);
+                }            }
+
+            for (String key : OrToken.getKeys()) {
+                String s = newValue.replace(key, OrToken.getString());
+                if (!s.equals(newValue)) {
+                    this.setText(s);
+                }            }
+        });
     }
 
-    public int getIndex() {
-        return node.getIndex();
-    }
 
-    public StepNode getNode() {
-        return node;
-    }
-
-    public AddButton getAddButton() {
-        return addButton;
-    }
-
-    public Rectangle getLine(){ return line;}
-
-    public void setLine(Rectangle line) {
-        this.line = line;
-    }
 }

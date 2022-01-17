@@ -54,20 +54,20 @@ public final class Lexer {
                     return new LParenToken(characterForToken);
                 }
 
-                case '%':{
+                case EmptyToken.code:{
                     getChar();
                     return new EmptyToken(characterForToken);
                 }
 
-                case 'V':{
+                case OrToken.code: {
                     getChar();
                     return new OrToken(characterForToken);
                 }
-                case '^':{
+                case AndToken.code: {
                     getChar();
                     return new AndToken(characterForToken);
                 }
-                case '!':
+                case NotToken.code:
                     getChar();
                     return new NotToken(characterForToken);
                 case 'T':
@@ -79,9 +79,12 @@ public final class Lexer {
                 case ',':
                     getChar();
                     return new CommaToken(characterForToken);
-                case '=':
-                case '|':
-                    return operatorCheck();
+                case ImpliesToken.code:
+                    getChar();
+                    return new ImpliesToken(characterForToken);
+                case NDToken.code:
+                    getChar();
+                    return new NDToken(characterForToken);
                 case 'A':
                 case 'B':
                 case 'C':
@@ -126,7 +129,6 @@ public final class Lexer {
                 case 's':
                 case 't':
                 case 'u':
-                case 'v':
                 case 'w':
                 case 'x':
                 case 'y':
@@ -150,14 +152,21 @@ public final class Lexer {
             char char1 = (char)ch;
             ch = getChar();
             char char2=(char)ch;
-            ch = getChar();
+
 
 
             // checks the second character to see if it a token involving an equals
             if (char1 == '=' && char2 == '>') {
+                ch = getChar();
                 return new ImpliesToken(characterForToken);
-            } else if (char1 == '|' && char2 == '-'){
+            } else if (char1 == '-' && char2 == '>'){
+                ch = getChar();
+                return new ImpliesToken(characterForToken);
+            }else if (char1 == '|' && char2 == '-'){
+                ch = getChar();
                 return new NDToken(characterForToken);
+            } else if (char1 == '|') {
+                return new OrToken(characterForToken);
             }
             // if the token fails all checks then it will begin checking illegal input
             return checkIllegalInputStream(char1);

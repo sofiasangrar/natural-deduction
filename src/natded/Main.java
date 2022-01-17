@@ -20,11 +20,8 @@ public class Main extends Application {
         NDScene ui = new NDScene(primaryStage.widthProperty().doubleValue(), primaryStage.heightProperty().doubleValue());
         primaryStage.setScene(ui);
         primaryStage.show();
-        NatDedSpace initialState;
-        initialState = new NatDedSpace(); //generates random goal
-        UIListener listener = new UIListener(initialState, ui.getUI());
+        UIListener listener = new UIListener(ui.getUI());
         ui.setListener(listener);
-        ui.updateView(initialState.getRoot());
-
+        ui.setGoal(NatDedUtilities.randomGoal());
     }
 }

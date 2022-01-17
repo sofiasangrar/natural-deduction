@@ -11,7 +11,7 @@ import static natded.NatDedUtilities.randomGoal;
 
 public class NatDedSpace {
     private SpaceState spaceState;
-    private final StepNode treeState;
+    private StepNode treeState;
 
     public NatDedSpace(StepNode treeState) {
         this.treeState = treeState;

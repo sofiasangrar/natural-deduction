@@ -8,16 +8,16 @@ public class FalseToken extends Token {
 
     }
 
-    // returns the expected input of the token
-    @Override
-    public String getString() {
+    public static String getString() {
         return "F";
     }
 
+    /*
     @Override
     public String toString() {
         return "F";
     }
+    */
 
     @Override
     public boolean equals(Object obj) {

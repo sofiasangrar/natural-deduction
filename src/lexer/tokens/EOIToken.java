@@ -8,4 +8,20 @@ public final class EOIToken extends Token {
     public EOIToken() {
         super(0);
     }
+
+    public static String getString() {
+        return "End of Input";
+    }
+
+    /*
+    @Override
+    public String expectedString(){
+        return getString();
+    }
+
+    @Override
+    public String toString() {
+        return getString();
+    }
+    */
 }

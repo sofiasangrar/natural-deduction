@@ -2,25 +2,33 @@ package lexer.tokens;
 
 public class ImpliesToken extends Token  {
 
+    private static final String[] keys = new String[]{"=>", "->"};
+    public static final char code = 8658;
+
     // constructor
     public ImpliesToken(int startingColumnOfToken) {
         super(startingColumnOfToken);
     }
 
-    // returns the expected input of the token
-    @Override
-    public String getString() {
-        return "'=>'";
+
+    public static String getString() {
+        return code + "";
     }
 
+    /*
     @Override
     public String toString() {
-        char implies = 8658;
-        return implies+"";
+        return code+"";
     }
+    */
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof ImpliesToken || obj.toString().equals("=>") || obj.toString().equals(this.toString());
+        return obj instanceof ImpliesToken || obj.toString().equals(this.toString());
     }
+
+    public static String[] getKeys(){
+        return keys;
+    }
+
 }

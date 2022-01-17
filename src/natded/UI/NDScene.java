@@ -28,12 +28,12 @@ public class NDScene extends Scene {
         this.indexes = new HashMap<>();
     }
 
-    public void updateView(StepNode root){
-        ((UserInterface)getRoot()).updateView(root);
-    }
-
     public UserInterface getUI(){
         return (UserInterface)this.getRoot();
+    }
+
+    public void setGoal(String goal) {
+        getUI().setGoal(goal);
     }
 
     public void setListener(UIListener listener) {

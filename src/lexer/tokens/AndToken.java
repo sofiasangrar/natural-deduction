@@ -2,25 +2,37 @@ package lexer.tokens;
 
 public class AndToken extends Token {
 
+    private static final String[] keys = new String[]{"^", "&"};
+    public static final char code = 8743;
+
     // constructor
     public AndToken(int startingColumnOfToken) {
         super(startingColumnOfToken);
     }
 
-    // returns the expected input of the token
-    @Override
-    public String getString() {
-        return "'^'";
+    public static String getString() {
+        return code + "";
     }
+
+    /*
+    @Override
+    public String expectedString(){
+        return "'" + getString() + "'";
+    }
+
 
     @Override
     public String toString() {
-        char land = 8743;
-        return land + "";
+        return getString();
     }
+*/
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof AndToken || obj.toString().equals("^") || obj.toString().equals(this.toString());
+        return obj instanceof AndToken || obj.toString().equals(this.toString());
+    }
+
+    public static String[] getKeys(){
+        return keys;
     }
 }

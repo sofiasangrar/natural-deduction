@@ -8,16 +8,16 @@ public class TrueToken extends Token {
 
     }
 
-    // returns the expected input of the token
-    @Override
-    public String getString() {
+    public static String getString() {
         return "T";
     }
 
+    /*
     @Override
     public String toString() {
         return "T";
     }
+    */
 
     @Override
     public boolean equals(Object obj) {
