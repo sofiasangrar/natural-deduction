@@ -1,6 +1,7 @@
 package natded.UI;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -36,8 +37,11 @@ public class UserInterface extends VBox {
     int WINDOW_X = 100;
     int WINDOW_Y = 100;
 
+
     public UserInterface(){
         super();
+        //this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+
         this.indexes = new HashMap<>();
         this.setAlignment(Pos.TOP_CENTER);
         initializeUserInterface();
@@ -45,6 +49,10 @@ public class UserInterface extends VBox {
 
     public void setListener(UIListener listener) {
         this.listener = listener;
+    }
+
+    public StepNode getTree(){
+        return root.getTree();
     }
 
     public void updateField(int index, String input) {
@@ -206,11 +214,15 @@ public class UserInterface extends VBox {
     private void drawSpace() {
 
         VBox boardBackground = new VBox();
+        VBox.setMargin(boardBackground, new Insets(10.0d, 10.0d, 10.0d, 10.0d));
+
+        //boardBackground.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+
         VBox.setVgrow(boardBackground, Priority.ALWAYS);
         boardBackground.setAlignment(Pos.CENTER);
         //HBox rootNode = new HBox();
         root = new LeafNode();
-        root.setAlignment(Pos.BOTTOM_CENTER);
+        //root.setAlignment(Pos.BOTTOM_CENTER);
         boardBackground.setAlignment(Pos.BOTTOM_CENTER);
         //rootNode.getChildren().add(root);
         //boardBackground.getChildren().add(rootNode);
@@ -239,10 +251,14 @@ public class UserInterface extends VBox {
     private void drawDoneButton() {
 
         DoneButton button = new DoneButton();
-        button.setAlignment(Pos.BOTTOM_RIGHT);
+        //addButton.setAlignment(Pos.BOTTOM_RIGHT);
         HBox doneBox = new HBox(button);
+        HBox.setMargin(doneBox, new Insets(10.0d));
+
+        //doneBox.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+
         doneBox.setAlignment(Pos.BOTTOM_RIGHT);
-        button.setOnMouseClicked(new DoneClick(listener));
+        button.setOnMouseClicked(e -> listener.onFinishedClick());
         getChildren().add(doneBox);
     }
 

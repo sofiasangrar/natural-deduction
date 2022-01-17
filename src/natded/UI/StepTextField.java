@@ -14,7 +14,7 @@ public class StepTextField extends TextField {
 
     public StepTextField(StepNode node) {
         this.node = node;
-        addButton = new AddButton(node.getIndex());
+        addButton = new AddButton(new LeafNode());
         line = new Rectangle();
 
     }

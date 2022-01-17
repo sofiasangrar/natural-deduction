@@ -1,16 +1,20 @@
 package natded.UI;
 
 import javafx.scene.control.Button;
+import javafx.scene.paint.Paint;
 
 public class AddButton extends Button {
 
-    int index;
+    LeafNode parent;
 
-    AddButton(int index) {
-        this.index = index;
+    AddButton(LeafNode parent) {
+        this.parent = parent;
         this.setWidth(20);
         this.setHeight(20);
         this.setText("+");
-
+        this.setTextFill(Paint.valueOf("green"));
+        setOnMouseClicked(event -> parent.addChild());
     }
+
+
 }

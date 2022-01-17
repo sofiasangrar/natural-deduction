@@ -11,6 +11,8 @@ public class Window {
         this.stage.setFullScreen(true);
     }
 
-
+    public Stage getStage() {
+        return stage;
+    }
 
 }

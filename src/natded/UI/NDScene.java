@@ -32,4 +32,11 @@ public class NDScene extends Scene {
         ((UserInterface)getRoot()).updateView(root);
     }
 
+    public UserInterface getUI(){
+        return (UserInterface)this.getRoot();
+    }
+
+    public void setListener(UIListener listener) {
+        getUI().setListener(listener);
+    }
 }

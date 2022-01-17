@@ -1,5 +1,7 @@
 package natded;
 
+import natded.UI.NDScene;
+import natded.UI.UserInterface;
 import natded.UI.Window;
 import parser.Proof;
 import natded.constants.SpaceState;
@@ -8,10 +10,10 @@ import java.util.ArrayList;
 
 public class UIListener {
 
-    private Window view;
+    private UserInterface view;
     private NatDedSpace space;
 
-    public UIListener(NatDedSpace space, Window view) {
+    public UIListener(NatDedSpace space, UserInterface view) {
         this.space = space;
         this.view = view;
     }
@@ -27,8 +29,9 @@ public class UIListener {
             node.setInput(input);
     }
 
+*/
     public void onFinishedClick() {
-            StepNode root = space.getRoot();
+            StepNode root = view.getTree();
             Proof p = Proof.parse(root);
             if (p.isValid()) {
                 space.setSpaceState(SpaceState.VALID);
@@ -41,6 +44,6 @@ public class UIListener {
                 view.showDialog("invalid");
             }
     }
-    */
+
 
 }
