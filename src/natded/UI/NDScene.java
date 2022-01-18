@@ -4,7 +4,6 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import natded.UIListener;
 
-import java.util.HashMap;
 
 public class NDScene extends Scene {
     private static final Color WINDOW_BACKGROUND_COLOR = Color.WHITE;

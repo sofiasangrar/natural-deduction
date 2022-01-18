@@ -7,6 +7,8 @@ import lexer.tokens.NDToken;
 
 import java.util.List;
 
+import static natded.NatDedUtilities.nd;
+
 public class Clause {
 
 	private Assumptions assumptions;
@@ -56,7 +58,7 @@ public class Clause {
 
 	@Override
 	public String toString() {
-		return assumptions.toString() + " " + NDToken.getString() + " " + expression.toString();
+		return assumptions.toString() + " " + nd + " " + expression.toString();
 	}
 
 	@Override

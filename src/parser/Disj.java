@@ -4,6 +4,8 @@ import lexer.Lexer;
 import lexer.tokens.ImpliesToken;
 import lexer.tokens.OrToken;
 
+import static natded.NatDedUtilities.or;
+
 public class Disj extends Expr{
     public Conj left;
     public Disj right;
@@ -31,7 +33,7 @@ public class Disj extends Expr{
 
     @Override
     public String toString() {
-        return left.toString() + " " + OrToken.getString() + " " + right.toString();
+        return left.toString() + " " + or + " " + right.toString();
     }
 
     @Override

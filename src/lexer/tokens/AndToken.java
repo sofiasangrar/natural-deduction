@@ -2,7 +2,7 @@ package lexer.tokens;
 
 public class AndToken extends Token {
 
-    private static final String[] keys = new String[]{"^", "&"};
+    private static final String[] keys = new String[]{"^", "&", "+"};
 
     public static final char code = '\u2227';
 

@@ -145,7 +145,7 @@ public final class Lexer {
             String illegalStream = firstChar + "";
             getChar();
 
-            while (!Character.isWhitespace(ch)) {
+            while (!Character.isWhitespace(ch) && ch!=-1) {
                 illegalStream += (char) ch;
                 getChar();
             }

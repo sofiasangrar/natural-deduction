@@ -48,7 +48,7 @@ public class StepNode {
     }
 
     public void addChildren(ArrayList<StepNode> children) {
-        children.addAll(children);
+        this.children.addAll(children);
     }
 
     public Step getStep() {

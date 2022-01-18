@@ -5,7 +5,7 @@ import lexer.tokens.IdentToken;
 
 public class IdentExpr extends Factor {
 
-    String identifier;
+    private String identifier;
 
     IdentExpr(String identifier) {
         this.identifier = identifier;

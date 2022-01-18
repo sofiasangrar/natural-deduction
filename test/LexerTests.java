@@ -3,12 +3,13 @@ import org.junit.Test;
 import parser.*;
 
 import static junit.framework.TestCase.*;
+import static natded.NatDedUtilities.*;
 
 public class LexerTests {
 
     @Test
     public void testWorkingSimple(){
-        String s = "P |- P";
+        String s = "P " + nd + "P";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
         Clause c = Clause.parse();
@@ -18,7 +19,7 @@ public class LexerTests {
 
     @Test
     public void testBrackets(){
-        String s = "(P ^ !P) |- F";
+        String s = "(P "+ and + not + "P) " + nd + " F";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
         Clause c = Clause.parse();
@@ -28,7 +29,7 @@ public class LexerTests {
 
     @Test
     public void testPrecedence(){
-        String s = "P ^ !P |- A => B V A ^ B";
+        String s = "P " + and + not + "P " + nd + " A " + impl + " B " + or + " A " + and + " B";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
         Clause c = Clause.parse();
@@ -45,11 +46,11 @@ public class LexerTests {
 
     @Test
     public void unbracketTest(){
-        String s = "P |- P";
+        String s = "P " + nd + " P";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
         Clause c = Clause.parse();
-        s = "P |- (P)";
+        s = "P " + nd + " (P)";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
         Clause c2 = Clause.parse();

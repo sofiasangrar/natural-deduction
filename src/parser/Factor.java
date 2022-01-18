@@ -28,7 +28,7 @@ public class Factor extends Conj {
       }
     }
 
-    return null;
+    return new Factor();
 
   }
 

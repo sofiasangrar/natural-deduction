@@ -2,6 +2,7 @@ package parser;
 
 import lexer.Lexer;
 import lexer.tokens.*;
+import static natded.NatDedUtilities.impl;
 
 public class Expr {
 
@@ -15,7 +16,7 @@ public class Expr {
 
 	@Override
 	public String toString() {
-		return left.toString() + " "+ ImpliesToken.getString() +" " + right.toString();
+		return left.toString() + " "+ impl +" " + right.toString();
 	}
 
 	Expr(Disj left, Expr right){

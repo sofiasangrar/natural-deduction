@@ -3,6 +3,8 @@ package parser;
 import lexer.Lexer;
 import lexer.tokens.NotToken;
 
+import static natded.NatDedUtilities.not;
+
 public class NotExpr extends Factor {
     public Expr right;
 
@@ -17,7 +19,7 @@ public class NotExpr extends Factor {
 
     @Override
     public String toString() {
-        return NotToken.getString() + right.toString();
+        return not + right.toString();
     }
 
     @Override

@@ -4,6 +4,8 @@ import lexer.Lexer;
 import lexer.tokens.AndToken;
 import lexer.tokens.OrToken;
 
+import static natded.NatDedUtilities.and;
+
 public class Conj extends Disj {
     public Factor left;
     public Conj right;
@@ -31,7 +33,7 @@ public class Conj extends Disj {
 
     @Override
     public String toString() {
-        return left.toString() + " " + AndToken.getString() +" " + right.toString();
+        return left.toString() + " " + and +" " + right.toString();
     }
 
     @Override
