@@ -51,7 +51,7 @@ public class Proof{
 
 	}
 
-	private static boolean handleStep(ArrayList<Clause> premises, Clause conclusion, Step expected, Step actual) {
+	public static boolean handleStep(ArrayList<Clause> premises, Clause conclusion, Step expected, Step actual) {
 		if (actual.equals(UNASSIGNED)) {
 			findErrors(premises, conclusion, expected);
 			return false;
@@ -609,21 +609,21 @@ public class Proof{
 					System.out.println("Implication-Introduction must have exactly 1 premise");
 				} else {
 					Clause clause = premisses.get(0);
-					if( conclusion.getExpression().right.equals(clause.getExpression())) {
-						System.out.println("RHS of conclusion does not match RHS of premise");
-					}
 					if (clause.getAssumptions().size()==0) {
 						System.out.println("LHS of premise must contain assumption to discharge");
 					}
-					if (clause.getAssumptions().size() - 1 >= conclusion.getAssumptions().size()) {
+					if (clause.getAssumptions().size() - 1 > conclusion.getAssumptions().size()) {
 						System.out.println("Conclusion contains too few assumptions");
 					}
-					if (clause.getAssumptions().size() - 1 <= conclusion.getAssumptions().size()) {
+					if (clause.getAssumptions().size() - 1 < conclusion.getAssumptions().size()) {
 						System.out.println("Conclusion contains too many assumptions");
 					}
 					if (conclusion.getExpression().isImpl()) {
+						if( conclusion.getExpression().right.equals(clause.getExpression())) {
+							System.out.println("RHS of conclusion does not match RHS of premise");
+						}
 						Expr left = conclusion.getExpression().left;
-						if (!(clause.getAssumptions().contains(left)) || conclusion.getAssumptions().contains(left)) {
+						if (!(clause.getAssumptions().contains(left))) {
 							System.out.println("Assumption not discharged properly");
 						} else {
 							ArrayList<Expr> assumptions = new ArrayList<>(conclusion.getAssumptions());
@@ -692,10 +692,10 @@ public class Proof{
 					if (!(clause.getAssumptionsObject().equals(newAssumptions))) {
 						System.out.println("Assumptions mismatch");
 					}
-					if (clause.getAssumptions().size() - 1 >= conclusion.getAssumptions().size()) {
+					if (clause.getAssumptions().size() - 1 > conclusion.getAssumptions().size()) {
 						System.out.println("Conclusion contains too few assumptions");
 					}
-					if (clause.getAssumptions().size() - 1 <= conclusion.getAssumptions().size()) {
+					if (clause.getAssumptions().size() - 1 < conclusion.getAssumptions().size()) {
 						System.out.println("Conclusion contains too many assumptions");
 					}
 
