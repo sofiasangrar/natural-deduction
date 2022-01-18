@@ -12,19 +12,11 @@ import static junit.framework.TestCase.assertTrue;
 import static natded.NatDedUtilities.*;
 import static natded.constants.Step.*;
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProofStepTests {
 
     StepNode root;
-
-    public void parseTree(StepNode node){
-        Lexer.setLexString(node.getInput());
-        Parser.t = Lexer.lex();
-        node.setParsedInput(Clause.parse());
-        for (int i = 0; i < node.getChildren().size(); i++) {
-            parseTree(node.getChildren().get(i));
-        }
-    }
 
     @Test
     public void testProof(){
@@ -87,26 +79,28 @@ public class ProofStepTests {
     public void assumptionWorks(){
         root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " P" + and + "Q", ASSUMPTION);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());}
+        assertTrue(Proof.checkStep(root));
+    }
 
     @Test
     public void trueIntroWorks(){
-        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " T", ASSUMPTION);
+        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " T", TRUE_INTRO);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid()); }
+        assertTrue(Proof.checkStep(root));
+    }
 
     @Test
     public void excludedMiddleWorks1(){
         root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + not + "X " + or + not + "(" + not + "X)", EXCL_MIDDLE);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
     public void excludedMiddleWorks2(){
         root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " X " + or + not + "X", EXCL_MIDDLE);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -115,7 +109,7 @@ public class ProofStepTests {
         root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " P", AND_ELIM);
         root.addChild(premiss);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -124,7 +118,7 @@ public class ProofStepTests {
         root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " Q", AND_ELIM);
         root.addChild(premiss);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -133,7 +127,7 @@ public class ProofStepTests {
         root = new StepNode("S, R" + nd + " (P" + and + "Q) " + impl +  not + "((" + not + "P)" + and + "(" + not + "Q))", IMP_INTRO);
         root.addChild(premiss);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -142,7 +136,7 @@ public class ProofStepTests {
         root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " (P" + and + "Q) " + or + " W", OR_INTRO);
         root.addChild(premiss);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -151,7 +145,7 @@ public class ProofStepTests {
         root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " W " + or + " (P" + and + "Q)", OR_INTRO);
         root.addChild(premiss);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -160,7 +154,7 @@ public class ProofStepTests {
         root = new StepNode("P" + and + "Q, " + not + "(P " + and + " Q)" + nd + " W", FALSE_ELIM);
         root.addChild(premiss);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -169,7 +163,7 @@ public class ProofStepTests {
         root = new StepNode("P" + and + "Q " + nd + not + "(" + not + "P)", NEG_INTRO);
         root.addChild(premiss);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -180,7 +174,7 @@ public class ProofStepTests {
         root = new StepNode("P, R, Q" + nd + " P" + and + "Q", AND_INTRO);
         root.addChildren(premisses);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -191,7 +185,7 @@ public class ProofStepTests {
         root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " W", IMP_ELIM);
         root.addChildren(premisses);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -202,18 +196,21 @@ public class ProofStepTests {
         root = new StepNode("S, R" + nd +  not + "Q", NEG_INTRO);
         root.addChildren(premisses);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
     public void negElimWorks(){
         ArrayList<StepNode> premisses = new ArrayList<>();
-        premisses.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
-        premisses.add(new StepNode("P" + and + "(" + not + "P) " + nd + not + "P", ASSUMPTION));
+        StepNode p1 = new StepNode("P" + and + "(" + not + "P) " + nd + " P", AND_ELIM);
+        StepNode p2 = new StepNode("P" + and + "(" + not + "P) " + nd + not + "P", AND_ELIM);
+        p1.addChild(new StepNode("P" + and + "(" + not + "P) " + nd + " P " + and + not + "P", ASSUMPTION));
+        p2.addChild(new StepNode("P" + and + "(" + not + "P) " + nd + " P " + and + not + "P", ASSUMPTION));
         root = new StepNode("P" + and + "(" + not + "P) " + nd + " Q", NEG_ELIM);
-        root.addChildren(premisses);
+        root.addChild(p1);
+        root.addChild(p2);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
     @Test
@@ -225,8 +222,154 @@ public class ProofStepTests {
         root = new StepNode("P " + or + " Q " + nd + " R", OR_ELIM);
         root.addChildren(premisses);
         Proof p = Proof.parse(root);
-        assertTrue(p.isValid());
+        assertTrue(Proof.checkStep(root));
     }
 
+    @Test
+    public void identifyAssumption() {
+        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " P" + and + "Q", ASSUMPTION);
+        Proof.parse(root);
+        assertEquals(ASSUMPTION, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyTrueIntro() {
+        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " T", TRUE_INTRO);
+        Proof.parse(root);
+        assertEquals(TRUE_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+        @Test
+        public void identifyExcludedMiddle1(){
+            root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + not + "X " + or + not + "(" + not + "X)", EXCL_MIDDLE);
+            Proof.parse(root);
+            assertEquals(EXCL_MIDDLE, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+        }
+
+    @Test
+    public void identifyExcludedMiddle2(){
+        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " X " + or + not + "X", EXCL_MIDDLE);
+        Proof.parse(root);
+        assertEquals(EXCL_MIDDLE, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyAndElim1(){
+        StepNode premiss = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " P" + and + "Q", ASSUMPTION);
+        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " P", AND_ELIM);
+        root.addChild(premiss);
+        Proof.parse(root);
+        assertEquals(AND_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyAndElim2(){
+        StepNode premiss = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " P" + and + "Q", ASSUMPTION);
+        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " Q", AND_ELIM);
+        root.addChild(premiss);
+        Proof.parse(root);
+        assertEquals(AND_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyImpIntro(){
+        StepNode premiss = new StepNode("P" + and + "Q, R, S" + nd + not + "(" + not + "P " + and + " " + not + "Q)", ASSUMPTION);
+        root = new StepNode("S, R" + nd + " (P" + and + "Q) " + impl +  not + "((" + not + "P)" + and + "(" + not + "Q))", IMP_INTRO);
+        root.addChild(premiss);
+        Proof.parse(root);
+        assertEquals(IMP_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyOrIntro1(){
+        StepNode premiss = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " P" + and + "Q", ASSUMPTION);
+        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " (P" + and + "Q) " + or + " W", OR_INTRO);
+        root.addChild(premiss);
+        Proof.parse(root);
+        assertEquals(OR_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyOrIntro2(){
+        StepNode premiss = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " P" + and + "Q", ASSUMPTION);
+        root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + nd + " W " + or + " (P" + and + "Q)", OR_INTRO);
+        root.addChild(premiss);
+        Proof.parse(root);
+        assertEquals(OR_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void IdentifyFalseElim(){
+        StepNode premiss = new StepNode("P" + and + "Q, " + not + "(P " + and + " Q)" + nd + " F", ASSUMPTION);
+        root = new StepNode("P" + and + "Q, " + not + "(P " + and + " Q)" + nd + " W", FALSE_ELIM);
+        root.addChild(premiss);
+        Proof.parse(root);
+        assertEquals(FALSE_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyNegIntro1(){
+        StepNode premiss = new StepNode("P" + and + "Q, " + not + "P" + nd + " F", ASSUMPTION);
+        root = new StepNode("P" + and + "Q " + nd + not + "(" + not + "P)", NEG_INTRO);
+        root.addChild(premiss);
+        Proof.parse(root);
+        assertEquals(NEG_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyAndIntro(){
+        ArrayList<StepNode> premisses = new ArrayList<>();
+        premisses.add(new StepNode("R, P, Q" + nd + " P", ASSUMPTION));
+        premisses.add(new StepNode("P, R, Q" + nd + " Q", ASSUMPTION));
+        root = new StepNode("P, R, Q" + nd + " P" + and + "Q", AND_INTRO);
+        root.addChildren(premisses);
+        Proof.parse(root);
+        assertEquals(AND_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyImpElim(){
+        ArrayList<StepNode> premisses = new ArrayList<>();
+        premisses.add(new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " Q", ASSUMPTION));
+        premisses.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " Q" + impl + "W", ASSUMPTION));
+        root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " W", IMP_ELIM);
+        root.addChildren(premisses);
+        Proof.parse(root);
+        assertEquals(IMP_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyNegIntro(){
+        ArrayList<StepNode> premisses = new ArrayList<>();
+        premisses.add(new StepNode("S, Q" + nd + " P", ASSUMPTION));
+        premisses.add(new StepNode("R, Q" + nd + not + "P", ASSUMPTION));
+        root = new StepNode("S, R" + nd +  not + "Q", NEG_INTRO);
+        root.addChildren(premisses);
+        Proof.parse(root);
+        assertEquals(NEG_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyNegElim2(){
+        ArrayList<StepNode> premisses = new ArrayList<>();
+        premisses.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
+        premisses.add(new StepNode("P" + and + "(" + not + "P) " + nd + not + "P", ASSUMPTION));
+        root = new StepNode("P" + and + "(" + not + "P) " + nd + " Q", NEG_ELIM);
+        root.addChildren(premisses);
+        Proof.parse(root);
+        assertEquals(NEG_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
+
+    @Test
+    public void identifyOrElim(){
+        ArrayList<StepNode> premisses = new ArrayList<>();
+        premisses.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
+        premisses.add(new StepNode("P " + or + " Q, P " + nd + " R", ASSUMPTION));
+        premisses.add(new StepNode("P " + or + " Q, Q " + nd + " R", ASSUMPTION));
+        root = new StepNode("P " + or + " Q " + nd + " R", OR_ELIM);
+        root.addChildren(premisses);
+        Proof.parse(root);
+        assertEquals(OR_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+    }
 
 }

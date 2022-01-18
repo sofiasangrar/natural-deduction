@@ -34,9 +34,7 @@ public class Proof{
 	}
 
 	private boolean isValid(StepNode root) {
-		Step stepGiven = determineStep(root.getPremisses(), root.getParsedInput());
-		boolean check = handleStep(root.getPremisses(), root.getParsedInput(), root.getStep(), stepGiven);
-		if (!check) {
+		if (!checkStep(root)) {
 			isValid = false;
 		}
 		for (int i = 0; i < root.getChildren().size(); i++) {
@@ -47,13 +45,14 @@ public class Proof{
 		return isValid;
 	}
 
-	private static boolean findErrors(StepNode root, Step stepGiven) {
-		return true;
+	public static boolean checkStep(StepNode node){
+		Step stepGiven = determineStep(node.getPremisses(), node.getParsedInput());
+		return handleStep(node.getPremisses(), node.getParsedInput(), node.getStep(), stepGiven);
+
 	}
 
 	private static boolean handleStep(ArrayList<Clause> premises, Clause conclusion, Step expected, Step actual) {
 		if (actual.equals(UNASSIGNED)) {
-			System.out.println("could not determine step");
 			findErrors(premises, conclusion, expected);
 			return false;
 		}
@@ -82,8 +81,7 @@ public class Proof{
 				Expr left = ((Disj) conclusion.getExpression()).left;
 				Expr right = ((Disj) conclusion.getExpression()).right;
 
-				if (right instanceof NotExpr
-						&& ((NotExpr)right).right.equals(left)) {
+				if (right instanceof NotExpr && ((NotExpr)right).right.equals(left)) {
 					return EXCL_MIDDLE;
 
 				}
@@ -748,6 +746,7 @@ public class Proof{
 				}
 				break;
 
+				//TODO - finish error messages
 			case AND_INTRO:
 				if (premisses.size()!=2) {
 					System.out.println("And-Introduction must have exactly 1 premise");
