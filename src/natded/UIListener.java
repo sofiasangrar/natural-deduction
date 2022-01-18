@@ -1,12 +1,7 @@
 package natded;
 
-import natded.UI.NDScene;
 import natded.UI.UserInterface;
-import natded.UI.Window;
 import parser.Proof;
-import natded.constants.SpaceState;
-
-import java.util.ArrayList;
 
 public class UIListener {
 

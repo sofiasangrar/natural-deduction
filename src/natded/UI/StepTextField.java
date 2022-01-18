@@ -1,18 +1,10 @@
 package natded.UI;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
-import javafx.scene.shape.Rectangle;
 import lexer.Lexer;
 import lexer.tokens.*;
-import natded.StepNode;
 import parser.Clause;
 import parser.Parser;
-
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.ArrayList;
 
 public class StepTextField extends TextField {
 
@@ -25,7 +17,7 @@ public class StepTextField extends TextField {
                 Parser.error = false;
                 Lexer.setLexString(StepTextField.this.getText());
                 Parser.t = Lexer.lex();
-                Clause.parse(0);
+                Clause.parse();
                 if (Parser.error) {
                     StepTextField.this.setStyle("-fx-text-fill: darkred;");
                 } else {

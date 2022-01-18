@@ -5,9 +5,7 @@ import lexer.tokens.CommaToken;
 import lexer.tokens.EmptyToken;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Assumptions {
 
@@ -39,11 +37,11 @@ public class Assumptions {
 	@Override
 	public String toString() {
 		if (assumptions.size()==0) {
-			return new EmptyToken(0).toString();
+			return EmptyToken.getString();
 		} else {
 			String returnstring = assumptions.get(0).toString();
 			for (int i = 1; i < assumptions.size(); i ++) {
-				returnstring+=", " + assumptions.get(i).toString();
+				returnstring += ", " + assumptions.get(i).toString();
 			}
 			return returnstring;
 		}

@@ -1,5 +1,4 @@
 import lexer.Lexer;
-import lexer.tokens.ImpliesToken;
 import org.junit.Test;
 import parser.*;
 
@@ -12,7 +11,7 @@ public class LexerTests {
         String s = "P |- P";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c = Clause.parse(0);
+        Clause c = Clause.parse();
         assertNotNull(c);
         assertFalse(Parser.error);
     }
@@ -22,7 +21,7 @@ public class LexerTests {
         String s = "(P ^ !P) |- F";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c = Clause.parse(0);
+        Clause c = Clause.parse();
         assertNotNull(c);
         assertFalse(Parser.error);
     }
@@ -32,7 +31,7 @@ public class LexerTests {
         String s = "P ^ !P |- A => B V A ^ B";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c = Clause.parse(0);
+        Clause c = Clause.parse();
         assertNotNull(c);
         assertFalse(Parser.error);
         assertEquals(1, c.getAssumptions().size());
@@ -49,11 +48,11 @@ public class LexerTests {
         String s = "P |- P";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c = Clause.parse(0);
+        Clause c = Clause.parse();
         s = "P |- (P)";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c2 = Clause.parse(1);
+        Clause c2 = Clause.parse();
         assertEquals(c.getExpression(), c.getExpression());
         assertEquals(c.getExpression(), c2.getExpression());
     }

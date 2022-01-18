@@ -15,17 +15,16 @@ public class Factor extends Conj {
     } else if (Parser.t instanceof LParenToken) {
       return BracketedExpr.parse();
     } else {
-      // the reason for not using the error handle method of the parser is that there is no factor to pass through
       if (Parser.t == null) {
-        System.out.println("Error occurred:");
+        System.out.println("Error occurred at character " + Lexer.characterForToken + ":");
         System.out.println("Expected a factor.");
         Parser.error = true;
-        Parser.t = Lexer.lex();
+        //Parser.t = Lexer.lex();
       } else {
-        System.out.println("Error occurred at character " + Lexer.characterCountOnLine + ":");
+        System.out.println("Error occurred at character " + Lexer.characterForToken + ":");
         System.out.println("Expected a factor but received " + Parser.t.expectedString() + ".");
         Parser.error = true;
-        Parser.t = Lexer.lex();
+        //Parser.t = Lexer.lex();
       }
     }
 

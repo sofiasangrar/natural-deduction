@@ -1,8 +1,8 @@
 package lexer.tokens;
 
-public class FalseToken extends BooleanToken {
+public class BooleanToken extends Token {
 
-    public FalseToken() {
+    public BooleanToken() {
         super();
     }
 
@@ -13,15 +13,16 @@ public class FalseToken extends BooleanToken {
 
     @Override
     public String expectedString(){
-        return "'" + getString() + "'";
+        return "'" + TrueToken.getString() + "' or '" + FalseToken.getString() + "'";
     }
 
     public static String getString() {
-        return "F";
+        return "a boolean expression";
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj instanceof FalseToken || obj.toString().equals(this.toString());
     }
+
 }

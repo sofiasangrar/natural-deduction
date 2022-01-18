@@ -8,8 +8,6 @@ import natded.UI.Window;
 
 public class Main extends Application {
 
-    private Window ui;
-
     public static void main(String[] args) {
         launch(args);
     }

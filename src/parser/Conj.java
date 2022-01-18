@@ -13,12 +13,6 @@ public class Conj extends Disj {
 
     }
 
-    Conj(Factor left){
-        this.left = left;
-        this.right = null;
-        hasright = false;
-    }
-
     Conj(Factor left, Conj right){
         this.left = left;
         this.right = right;
@@ -37,7 +31,7 @@ public class Conj extends Disj {
 
     @Override
     public String toString() {
-        return left.toString() + " ^ " + right.toString();
+        return left.toString() + " " + AndToken.getString() +" " + right.toString();
     }
 
     @Override

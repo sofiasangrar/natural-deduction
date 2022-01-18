@@ -1,26 +1,27 @@
 package lexer.tokens;
 
-public class TrueToken extends Token {
+public class TrueToken extends BooleanToken {
 
-    // constructor
-    public TrueToken(int startingColumnOfToken) {
-        super(startingColumnOfToken);
-
+    public TrueToken() {
+        super();
     }
 
     public static String getString() {
         return "T";
     }
 
-    /*
     @Override
     public String toString() {
-        return "T";
+        return getString();
     }
-    */
+
+    @Override
+    public String expectedString(){
+        return "'" + getString() + "'";
+    }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof TrueToken || obj.toString().equals("T");
+        return obj instanceof TrueToken || obj.toString().equals(this.toString());
     }
 }

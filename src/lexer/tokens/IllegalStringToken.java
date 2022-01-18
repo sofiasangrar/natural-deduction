@@ -2,12 +2,10 @@ package lexer.tokens;
 
 public class IllegalStringToken extends Token {
 
-	// Stores the illegal string
 	private String illegalString;
 
-	// constructor
-	public IllegalStringToken(String illegalString, int startingColumnOfToken) {
-		super(startingColumnOfToken);
+	public IllegalStringToken(String illegalString) {
+		super();
 		this.illegalString = illegalString;
 	}
 
@@ -17,7 +15,7 @@ public class IllegalStringToken extends Token {
 
 	@Override
 	public String expectedString() {
-		return "an illegal string: " + "\"" + illegalString + "\"";
+		return getString() + ": '"+ toString() + "'";
 	}
 
 	@Override

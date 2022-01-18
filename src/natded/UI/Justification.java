@@ -1,6 +1,5 @@
 package natded.UI;
 
-import com.sun.tools.corba.se.idl.constExpr.And;
 import javafx.scene.control.ChoiceBox;
 import javafx.util.Pair;
 import javafx.util.StringConverter;

@@ -4,26 +4,27 @@ public class OrToken extends Token {
     private static final String[] keys = new String[]{"V", "v"};
     public static final char code = 8744;
 
-    // constructor
-    public OrToken(int startingColumnOfToken) {
-        super(startingColumnOfToken);
+    public OrToken() {
+        super();
     }
 
     public static String getString() {
         return code + "";
     }
 
-    /*
     @Override
     public String toString() {
-        char or = 8744;
-        return or + "";
+        return getString();
     }
-    */
+
+    @Override
+    public String expectedString() {
+        return getString();
+    }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof OrToken || obj.toString().equals("V") || obj.toString().equals(this.toString());
+        return obj instanceof OrToken || obj.toString().equals(this.toString());
     }
 
     public static String[] getKeys(){

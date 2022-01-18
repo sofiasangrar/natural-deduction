@@ -17,7 +17,7 @@ public class NotExpr extends Factor {
 
     @Override
     public String toString() {
-        return "!" + right.toString();
+        return NotToken.getString() + right.toString();
     }
 
     @Override

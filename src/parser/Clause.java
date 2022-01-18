@@ -9,19 +9,15 @@ import java.util.List;
 
 public class Clause {
 
-	// stores all of the parsed procedures.
 	private Assumptions assumptions;
 	private Expr expression;
-	private int lineNumber;
 
-	// Constructor
-	private Clause(Assumptions assumptions, Expr expression, int lineNumber) {
+	private Clause(Assumptions assumptions, Expr expression) {
 		this.assumptions = assumptions;
 		this.expression = expression;
-		this.lineNumber = lineNumber;
 	}
 	
-  public static Clause parse(int line) {
+  public static Clause parse() {
 		Assumptions assumptions = new Assumptions();
 		Expr expression = new Expr();
 
@@ -35,28 +31,19 @@ public class Clause {
 		  Parser.t = Lexer.lex();
 		  expression = Expr.parse();
 	  } else {
-		  Parser.errorHandle(new NDToken(Lexer.characterCountOnLine));
-		  Parser.t = Lexer.lex();
+		  Parser.errorHandle(new NDToken());
+		  //Parser.t = Lexer.lex();
 	  }
 
-    // checks if the last token is an EOI Token
     if (!(Parser.t instanceof EOIToken)) {
-      System.out.println("No End Of Input Token received.");
+		Parser.errorHandle(new EOIToken());
     }
 
-    return new Clause(assumptions, expression, line);
-  }
-
-  public int getLine(){
-		return lineNumber;
+    return new Clause(assumptions, expression);
   }
 
 	public List<Expr> getAssumptions() {
 		return assumptions.getAssumptions();
-	}
-
-	public String getAssumptionsString(){
-		return assumptions.toString();
 	}
 
 	public Assumptions getAssumptionsObject(){
@@ -69,7 +56,7 @@ public class Clause {
 
 	@Override
 	public String toString() {
-		return assumptions.toString() + " " + new NDToken(0).toString() + " " + expression.toString();
+		return assumptions.toString() + " " + NDToken.getString() + " " + expression.toString();
 	}
 
 	@Override

@@ -1,28 +1,19 @@
 package natded.UI;
 
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import natded.StepNode;
 import natded.UIListener;
-import sun.tools.jstat.Alignment;
-
-import java.util.HashMap;
 
 public class UserInterface extends VBox {
 
-    private HashMap<Integer, StepTextField> indexes;
     LeafNode root;
 
     private UIListener listener;
@@ -36,9 +27,6 @@ public class UserInterface extends VBox {
 
     public UserInterface(){
         super();
-        //this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
-
-        this.indexes = new HashMap<>();
         this.setAlignment(Pos.TOP_CENTER);
         initializeUserInterface();
     }
@@ -57,31 +45,7 @@ public class UserInterface extends VBox {
         drawTitle();
         drawSpace();
         drawDoneButton();
-        //drawTextFields(root);
-        //
-        //stage.show();
     }
-
-
-    /**
-     * Helper method for styling a sudoku tile number
-     * @param tile
-     * @param x
-     * @param y
-     */
-    private void styleField(StepTextField tile, double x, double y, double width, double height) {
-        Font numberFont = new Font(32);
-        tile.setFont(numberFont);
-        tile.setAlignment(Pos.CENTER);
-
-        tile.setLayoutX(x);
-        tile.setLayoutY(y);
-        tile.setPrefHeight(height);
-        tile.setPrefWidth(width);
-
-        tile.setBackground(Background.EMPTY);
-    }
-
 
     private void drawSpace() {
 

@@ -4,15 +4,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.util.Pair;
-import javafx.util.StringConverter;
 import natded.StepNode;
+import natded.constants.Step;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LeafNode extends VBox {
 
@@ -35,7 +31,7 @@ public class LeafNode extends VBox {
         HBox.setHgrow(childrenBox, Priority.ALWAYS);
 
         field = new StepTextField(this);
-        field.setEditable(false);
+        //field.setEditable(false);
         field.setMinSize(field.getWidth(), field.getHeight());
         field.setAlignment(Pos.CENTER);
         fieldHbox = new HBox();
@@ -100,23 +96,17 @@ public class LeafNode extends VBox {
 
 
     StepNode getTree(){
-        StepNode n = new StepNode(null, this.field.getText(), null, new ArrayList<>());
+        Step s = Step.UNASSIGNED;
         try {
-            n.setStep(justif.getValue().getValue());
+            s = justif.getValue().getValue();
         } catch (NullPointerException e) {
             System.out.println("No justification!");
         }
-        for (LeafNode child : getChildNodes()) {
-            n.addChild(child.getTree(n));
-        }
-        return n;
-    }
 
-    private StepNode getTree(StepNode parent){
-        StepNode n = new StepNode(parent, this.field.getText(), null, new ArrayList<>());
-        n.setStep(justif.getValue().getValue());
+        StepNode n = new StepNode(this.field.getText(), s);
+
         for (LeafNode child : getChildNodes()) {
-            n.addChild(child.getTree(n));
+            n.addChild(child.getTree());
         }
         return n;
     }

@@ -9,7 +9,6 @@ public final class Parser {
       System.out.println("Error occurred at character " + t.getStartingColumnOfToken() + ":");
       System.out.println("Expected " + expectedToken.expectedString() + " but received " + t.expectedString() + ".");
       error = true;
-
   }
   
 }

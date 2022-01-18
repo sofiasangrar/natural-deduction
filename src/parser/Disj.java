@@ -13,12 +13,6 @@ public class Disj extends Expr{
 
     }
 
-    Disj(Conj left){
-        this.left = left;
-        this.right = null;
-        hasright = false;
-    }
-
     Disj(Conj left, Disj right){
         this.left = left;
         this.right = right;
@@ -37,7 +31,7 @@ public class Disj extends Expr{
 
     @Override
     public String toString() {
-        return left.toString() + " V " + right.toString();
+        return left.toString() + " " + OrToken.getString() + " " + right.toString();
     }
 
     @Override

@@ -2,21 +2,23 @@ package lexer.tokens;
 
 public class LParenToken extends Token {
 
-    // constructor
-    public LParenToken(int startingColumnOfToken) {
-        super( startingColumnOfToken);
+    public LParenToken() {
+        super();
     }
 
     public static String getString() {
         return "(";
     }
 
-    /*
     @Override
     public String toString() {
-        return "(";
+        return getString();
     }
-    */
+
+    @Override
+    public String expectedString(){
+        return "'" + getString() + "'";
+    }
 
     @Override
     public boolean equals(Object obj) {

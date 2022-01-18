@@ -5,21 +5,23 @@ public class EmptyToken extends Token {
     private static final String[] keys = new String[]{"%", "0"};
     public static final char code = '\u2205';
 
-    // constructor
-    public EmptyToken(int startingColumnOfToken) {
-        super(startingColumnOfToken);
+    public EmptyToken() {
+        super();
     }
 
     public static String getString() {
         return code + "";
     }
 
-    /*
     @Override
     public String toString() {
         return getString();
     }
-*/
+
+    @Override
+    public String expectedString(){
+        return "'" + getString() + "'";
+    }
 
     @Override
     public boolean equals(Object obj) {

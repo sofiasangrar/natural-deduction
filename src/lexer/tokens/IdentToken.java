@@ -2,17 +2,14 @@ package lexer.tokens;
 
 public class IdentToken extends Token {
 
-    // Stores the identifier of the token
     private String identifier;
 
-    // constructor
-    public IdentToken(String identifier, int startingColumnOfToken) {
-        super(startingColumnOfToken);
+    public IdentToken(String identifier) {
+        super();
         this.identifier = identifier;
 
     }
 
-    // returns the identifier
     public String getAttr() {
         return identifier;
     }

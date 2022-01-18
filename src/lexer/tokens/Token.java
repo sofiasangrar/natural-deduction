@@ -1,15 +1,17 @@
 package lexer.tokens;
+
+import lexer.Lexer;
+
 public abstract class Token {
 
-	// stores the column of the first character
 	private int startingColumnOfToken;
 
 	public static String getString(){
-		return "";
+		return "input";
 	}
 
 	public String expectedString(){
-		return "'" + getString() + "'";
+		return getString();
 	}
 
 	@Override
@@ -17,12 +19,10 @@ public abstract class Token {
 		return getString();
 	}
 
-	// allows for super() to be used for all of the tokens when creating their constructors
-	public Token(int startingColumnOfToken) {
-		this.startingColumnOfToken = startingColumnOfToken;
+	public Token() {
+		this.startingColumnOfToken = Lexer.characterForToken;
 	}
 
-    // returns the column that the token starts on
     public int getStartingColumnOfToken() {
 		return startingColumnOfToken;
 	}

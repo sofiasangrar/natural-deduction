@@ -4,15 +4,9 @@ import lexer.tokens.*;
 
 public final class Lexer {
 
-		// store the current character being processed
         private static int ch = ' ';
-
-        // stores the column of the current character
-        public static int characterCountOnLine = 0;
-
-        // stores the column number for the first character of a token
-        private static int characterForToken = 0;
-
+        private static int characterCountOnLine = 0;
+        public static int characterForToken = 0;
         private static String lexString;
 
         public static void setLexString(String s){
@@ -21,70 +15,58 @@ public final class Lexer {
             ch = ' ';
         }
 
-        //return the next token in the logo code
         public static Token lex() {
 
-            //skip the white space
+            //skip whitespace
             while (ch == ' ' || ch == '\t' || ch == 13) {
-
-                switch (ch) {
-                    case '\t': {
-                        // each tab is worth 4 characters but as the get char method increments the the column count,
-						// we increment it by 3 here and then it is increased by 1, so 4 overall
-                        characterCountOnLine += 3;
-                        break;
-                    }
-                }
                 getChar();
             }
 
-            // sets the column of the first character to the column of the current character
             characterForToken = characterCountOnLine;
 
-            //identify new character and return correct token
             switch ((char)ch) {
 
                 case ')' : {
                     getChar();
-                    return new RParenToken(characterForToken);
+                    return new RParenToken();
                 }
 
                 case '(' : {
                     getChar();
-                    return new LParenToken(characterForToken);
+                    return new LParenToken();
                 }
 
                 case EmptyToken.code:{
                     getChar();
-                    return new EmptyToken(characterForToken);
+                    return new EmptyToken();
                 }
 
                 case OrToken.code: {
                     getChar();
-                    return new OrToken(characterForToken);
+                    return new OrToken();
                 }
                 case AndToken.code: {
                     getChar();
-                    return new AndToken(characterForToken);
+                    return new AndToken();
                 }
                 case NotToken.code:
                     getChar();
-                    return new NotToken(characterForToken);
+                    return new NotToken();
                 case 'T':
                     getChar();
-                    return new TrueToken(characterForToken);
+                    return new TrueToken();
                 case 'F':
                     getChar();
-                    return new FalseToken(characterForToken);
+                    return new FalseToken();
                 case ',':
                     getChar();
-                    return new CommaToken(characterForToken);
+                    return new CommaToken();
                 case ImpliesToken.code:
                     getChar();
-                    return new ImpliesToken(characterForToken);
+                    return new ImpliesToken();
                 case NDToken.code:
                     getChar();
-                    return new NDToken(characterForToken);
+                    return new NDToken();
                 case 'A':
                 case 'B':
                 case 'C':
@@ -133,94 +115,57 @@ public final class Lexer {
                 case 'x':
                 case 'y':
                 case 'z':{
-                    return checkCharacterStream();
+                    return getCharStream();
                 }
                 case (char)-1:{
                     return new EOIToken();
                 }
-                default : {
-                    // error returned get a new error
-                    char firstChar = (char) ch;
-                    getChar();
-                    return checkIllegalInputStream(firstChar);
+                default:{
+                    return getIllegalInput();
                 }
             }
         }
 
-        //check what operator a token is
-        private static Token operatorCheck(){
-            char char1 = (char)ch;
-            ch = getChar();
-            char char2=(char)ch;
-
-
-
-            // checks the second character to see if it a token involving an equals
-            if (char1 == '=' && char2 == '>') {
-                ch = getChar();
-                return new ImpliesToken(characterForToken);
-            } else if (char1 == '-' && char2 == '>'){
-                ch = getChar();
-                return new ImpliesToken(characterForToken);
-            }else if (char1 == '|' && char2 == '-'){
-                ch = getChar();
-                return new NDToken(characterForToken);
-            } else if (char1 == '|') {
-                return new OrToken(characterForToken);
-            }
-            // if the token fails all checks then it will begin checking illegal input
-            return checkIllegalInputStream(char1);
-        }
-
-        // create a character stream and identify whether it is a keyword or identifier
-        private static Token checkCharacterStream() {
+        private static Token getCharStream() {
             char firstCharacter=(char)ch;
             String characterStream = firstCharacter + "";
 
-            // gets the second character
             getChar();
 
-            // checks if the character is alphabetic or is numeric.
             while(Character.isAlphabetic(ch)) {
                 characterStream += (char)ch;
                 getChar();
             }
 
-            return new IdentToken(characterStream, characterForToken);
-
+            return new IdentToken(characterStream);
         }
 
-
-
-        //receive the rest of the illegal input
-    private static Token checkIllegalInputStream(char firstChar) {
+        private static Token getIllegalInput() {
+            char firstChar = (char) ch;
             String illegalStream = firstChar + "";
-
-        // checks if the next character is whitespace
-        while (!Character.isWhitespace(ch)) {
-            illegalStream += (char) ch;
             getChar();
+
+            while (!Character.isWhitespace(ch)) {
+                illegalStream += (char) ch;
+                getChar();
+            }
+
+            return new IllegalStringToken(illegalStream);
         }
 
-        return new IllegalStringToken(illegalStream, characterForToken);
-    }
-
-
-
-        //this reads chars from stdin. You can read in files any way you want, using FileReader etc.
-        private static int getChar() {
+        private static void getChar() {
             try {
-                if (characterCountOnLine>=lexString.length()) {
+                if (characterCountOnLine >= lexString.length()) {
                     ch=-1;
-                    return -1;
+                    return;
                 }
                 ch = lexString.charAt(characterCountOnLine);
 
                 characterCountOnLine++;
+
             } catch (Exception e) {
                 System.out.println(e);
                 System.exit(1);
             }
-            return ch;
         }
     }

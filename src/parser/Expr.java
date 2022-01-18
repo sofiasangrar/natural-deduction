@@ -15,7 +15,7 @@ public class Expr {
 
 	@Override
 	public String toString() {
-		return left.toString() + " => " + right.toString();
+		return left.toString() + " "+ ImpliesToken.getString() +" " + right.toString();
 	}
 
 	Expr(Disj left, Expr right){

@@ -5,9 +5,8 @@ public class ImpliesToken extends Token  {
     private static final String[] keys = new String[]{"=>", "->"};
     public static final char code = 8658;
 
-    // constructor
-    public ImpliesToken(int startingColumnOfToken) {
-        super(startingColumnOfToken);
+    public ImpliesToken() {
+        super();
     }
 
 
@@ -15,12 +14,15 @@ public class ImpliesToken extends Token  {
         return code + "";
     }
 
-    /*
     @Override
     public String toString() {
-        return code+"";
+        return getString();
     }
-    */
+
+    @Override
+    public String expectedString(){
+        return "'" + getString() + "'";
+    }
 
     @Override
     public boolean equals(Object obj) {

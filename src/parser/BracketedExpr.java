@@ -15,11 +15,9 @@ public final class BracketedExpr extends Factor {
         Parser.t = Lexer.lex();
         Expr expr = Expr.parse();
         if (!(Parser.t instanceof RParenToken)) {
-            System.out.println("Error occurred at character " + Parser.t.getStartingColumnOfToken() + ":");
-            System.out.println("Expected ')' but received " + Parser.t.expectedString() + ".");
-            Parser.error = true;
-            Parser.t = Lexer.lex();
-            return null;
+            Parser.errorHandle(new RParenToken());
+            //Parser.t = Lexer.lex();
+            return new BracketedExpr(expr);
         }
         Parser.t = Lexer.lex();
         return new BracketedExpr(expr);
