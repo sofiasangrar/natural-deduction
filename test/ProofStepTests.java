@@ -677,71 +677,310 @@ public class ProofStepTests {
         assertFalse(Proof.checkStep(root));
     }
 
-    /*
     @Test
-    public void identifyNegIntro1(){
-        StepNode premiss = new StepNode("P" + and + "Q, " + not + "P" + nd + " F", ASSUMPTION);
-        root = new StepNode("P" + and + "Q " + nd + not + "(" + not + "P)", NEG_INTRO);
-        root.addChild(premiss);
-        Proof.parse(root);
-        assertEquals(NEG_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
-    }
-
-    @Test
-    public void identifyAndIntro(){
+    public void andIntroWithoutAnd(){
         ArrayList<StepNode> premisses = new ArrayList<>();
         premisses.add(new StepNode("R, P, Q" + nd + " P", ASSUMPTION));
         premisses.add(new StepNode("P, R, Q" + nd + " Q", ASSUMPTION));
+        root = new StepNode("P, R, Q" + nd + " P", AND_INTRO);
+        root.addChildren(premisses);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void andIntroOnePremise(){
+        ArrayList<StepNode> premisses = new ArrayList<>();
+        premisses.add(new StepNode("R, P, Q" + nd + " P", ASSUMPTION));
         root = new StepNode("P, R, Q" + nd + " P" + and + "Q", AND_INTRO);
         root.addChildren(premisses);
         Proof.parse(root);
-        assertEquals(AND_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+        assertFalse(Proof.checkStep(root));
     }
 
     @Test
-    public void identifyImpElim(){
+    public void andIntroThreePremises(){
         ArrayList<StepNode> premisses = new ArrayList<>();
-        premisses.add(new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " Q", ASSUMPTION));
-        premisses.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " Q" + impl + "W", ASSUMPTION));
+        premisses.add(new StepNode("R, P, Q" + nd + " P", ASSUMPTION));
+        premisses.add(new StepNode("P, R, Q" + nd + " Q", ASSUMPTION));
+        premisses.add(new StepNode("P, R, Q" + nd + " R", ASSUMPTION));
+        root = new StepNode("P, R, Q" + nd + " P" + and + "Q", AND_INTRO);
+        root.addChildren(premisses);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void andIntroAssumptionsInPremisesMismatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("R, P, Q" + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P, R, Q, S" + nd + " Q", ASSUMPTION));
+        root = new StepNode("P, R, Q" + nd + " P" + and + "Q", AND_INTRO);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void andIntroPremise1AssumptionsAndConclusionMismatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("R, P, Q" + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P, R, Q, S" + nd + " Q", ASSUMPTION));
+        root = new StepNode("P, R, Q, S" + nd + " P" + and + "Q", AND_INTRO);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void andIntroPremise2AndConclusionMismatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("R, P, Q, S" + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P, R, Q" + nd + " Q", ASSUMPTION));
+        root = new StepNode("P, R, Q, S" + nd + " P" + and + "Q", AND_INTRO);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void andIntroConclusionDoesNotMatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("R, P, Q" + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P, R, Q" + nd + " Q", ASSUMPTION));
+        root = new StepNode("P, R, Q" + nd + " P" + and + "R", AND_INTRO);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void impElimOnePremise(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " Q", ASSUMPTION));
         root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " W", IMP_ELIM);
-        root.addChildren(premisses);
+        root.addChildren(premises);
         Proof.parse(root);
-        assertEquals(IMP_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+        assertFalse(Proof.checkStep(root));
     }
 
     @Test
-    public void identifyNegIntro(){
-        ArrayList<StepNode> premisses = new ArrayList<>();
-        premisses.add(new StepNode("S, Q" + nd + " P", ASSUMPTION));
-        premisses.add(new StepNode("R, Q" + nd + not + "P", ASSUMPTION));
-        root = new StepNode("S, R" + nd +  not + "Q", NEG_INTRO);
-        root.addChildren(premisses);
+    public void impElimThreePremises(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " Q", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " Q" + impl + "W", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " P" + and + "Q", ASSUMPTION));
+        root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " W", IMP_ELIM);
+        root.addChildren(premises);
         Proof.parse(root);
-        assertEquals(NEG_INTRO, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+        assertFalse(Proof.checkStep(root));
     }
 
     @Test
-    public void identifyNegElim2(){
-        ArrayList<StepNode> premisses = new ArrayList<>();
-        premisses.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
-        premisses.add(new StepNode("P" + and + "(" + not + "P) " + nd + not + "P", ASSUMPTION));
+    public void impElimAssumptionsMismatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W, X " + nd + " Q", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " Q" + impl + "W", ASSUMPTION));
+        root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " W", IMP_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void impElimNoImpl(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " Q", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " Q" + or + "W", ASSUMPTION));
+        root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " W", IMP_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void impElimConclusionMismatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " Q", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " Q" + impl + "W", ASSUMPTION));
+        root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " P" + and + "Q", IMP_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void impElimLHSImplicationMismatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " R", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " Q" + impl + "W", ASSUMPTION));
+        root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " W", IMP_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void impElimConclusionMismatchRHS(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " Q", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "Q, Q" + impl + "W" + nd + " Q" + impl + "W", ASSUMPTION));
+        root = new StepNode("P" + and + "Q, Q" + impl + "W " + nd + " X", IMP_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void negElimOnePremise(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + not + "P", ASSUMPTION));
         root = new StepNode("P" + and + "(" + not + "P) " + nd + " Q", NEG_ELIM);
-        root.addChildren(premisses);
+        root.addChildren(premises);
         Proof.parse(root);
-        assertEquals(NEG_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
+        assertFalse(Proof.checkStep(root));
     }
 
     @Test
-    public void identifyOrElim(){
-        ArrayList<StepNode> premisses = new ArrayList<>();
-        premisses.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
-        premisses.add(new StepNode("P " + or + " Q, P " + nd + " R", ASSUMPTION));
-        premisses.add(new StepNode("P " + or + " Q, Q " + nd + " R", ASSUMPTION));
+    public void negElimThreePremises(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + not + "P", ASSUMPTION));
+        root = new StepNode("P" + and + "(" + not + "P) " + nd + " Q", NEG_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void negElimPremisesAssumptionsMismatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "(" + not + "P), Q " + nd + not + "P", ASSUMPTION));
+        root = new StepNode("P" + and + "(" + not + "P) " + nd + " Q", NEG_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void negElimAssumptionConclusionMismatch(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + not + "P", ASSUMPTION));
+        root = new StepNode("P" + and + "(" + not + "P), Q" + nd + " Q", NEG_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void negElimNoNegation(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
+        root = new StepNode("P" + and + "(" + not + "P) " + nd + " Q", NEG_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void negElimNotNegationOFTheOther(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + " P", ASSUMPTION));
+        premises.add(new StepNode("P" + and + "(" + not + "P) " + nd + not + not + "P", ASSUMPTION));
+        root = new StepNode("P" + and + not + "(" + not + "P) " + nd + " Q", NEG_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+
+    @Test
+    public void orElimTwoPremises(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
+        premises.add(new StepNode("P " + or + " Q, Q " + nd + " R", ASSUMPTION));
         root = new StepNode("P " + or + " Q " + nd + " R", OR_ELIM);
-        root.addChildren(premisses);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void orElimFourPremises(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
+        premises.add(new StepNode("P " + or + " Q, P " + nd + " R", ASSUMPTION));
+        premises.add(new StepNode("P " + or + " Q, P " + nd + " R", ASSUMPTION));
+        premises.add(new StepNode("P " + or + " Q, Q " + nd + " R", ASSUMPTION));
+        root = new StepNode("P " + or + " Q " + nd + " R", OR_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void orElimNoOr(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P " + or + " Q " + nd + " P " + and + " Q", ASSUMPTION));
+        premises.add(new StepNode("P " + and + " Q, P " + nd + " R", ASSUMPTION));
+        premises.add(new StepNode("P " + impl + " Q, Q " + nd + " R", ASSUMPTION));
+        root = new StepNode("P " + or + " Q, P" + and + "Q, P" + impl + "Q"  + nd + " R", OR_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void orElimNoResolution1(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
+        premises.add(new StepNode("P " + and + " Q, S " + nd + " R", ASSUMPTION));
+        premises.add(new StepNode("P " + impl + " Q, Q " + nd + " R", ASSUMPTION));
+        root = new StepNode("P " + or + " Q, P" + and + "Q, P" + impl + "Q"  + nd + " R", OR_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void orElimNoResolution2(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
+        premises.add(new StepNode("P " + and + " Q, P " + nd + " R", ASSUMPTION));
+        premises.add(new StepNode("P " + impl + " Q, S " + nd + " R", ASSUMPTION));
+        root = new StepNode("P " + or + " Q, P" + and + "Q, P" + impl + "Q"  + nd + " R", OR_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
+    @Test
+    public void identifyOrElim2(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
+        premises.add(new StepNode("P " + and + " Q, P " + nd + " R", ASSUMPTION));
+        premises.add(new StepNode("P " + impl + " Q, Q " + nd + " R", ASSUMPTION));
+        root = new StepNode("P " + or + " Q, P" + and + "Q, P" + impl + "Q"  + nd + " R", OR_ELIM);
+        root.addChildren(premises);
         Proof.parse(root);
         assertEquals(OR_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
     }
-    */
+
+    @Test
+    public void orElimMismatchingAssumptions(){
+        ArrayList<StepNode> premises = new ArrayList<>();
+        premises.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
+        premises.add(new StepNode("P " + and + " Q, P " + nd + " R", ASSUMPTION));
+        premises.add(new StepNode("P " + impl + " Q, Q " + nd + " R", ASSUMPTION));
+        root = new StepNode("P " + or + " Q, P" + and + "Q, P" + impl + "Q, S"  + nd + " R", OR_ELIM);
+        root.addChildren(premises);
+        Proof.parse(root);
+        assertFalse(Proof.checkStep(root));
+    }
+
 
 }
