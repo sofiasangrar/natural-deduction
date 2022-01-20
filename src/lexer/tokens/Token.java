@@ -20,7 +20,7 @@ public abstract class Token {
 	}
 
 	public Token() {
-		this.startingColumnOfToken = Lexer.characterForToken;
+		this.startingColumnOfToken = Lexer.tokenColumn;
 	}
 
     public int getStartingColumnOfToken() {

@@ -5,13 +5,13 @@ import lexer.tokens.*;
 public final class Lexer {
 
         private static int ch = ' ';
-        private static int characterCountOnLine = 0;
-        public static int characterForToken = 0;
+        private static int column = 0;
+        public static int tokenColumn = 0;
         private static String lexString;
 
         public static void setLexString(String s){
             lexString = s;
-            characterCountOnLine=0;
+            column =0;
             ch = ' ';
         }
 
@@ -22,7 +22,7 @@ public final class Lexer {
                 getChar();
             }
 
-            characterForToken = characterCountOnLine;
+            tokenColumn = column;
 
             switch ((char)ch) {
 
@@ -155,13 +155,13 @@ public final class Lexer {
 
         private static void getChar() {
             try {
-                if (characterCountOnLine >= lexString.length()) {
+                if (column >= lexString.length()) {
                     ch=-1;
                     return;
                 }
-                ch = lexString.charAt(characterCountOnLine);
+                ch = lexString.charAt(column);
 
-                characterCountOnLine++;
+                column++;
 
             } catch (Exception e) {
                 System.out.println(e);

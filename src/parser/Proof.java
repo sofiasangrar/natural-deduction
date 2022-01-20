@@ -10,8 +10,8 @@ import static natded.constants.Step.*;
 
 public class Proof{
 
-	StepNode root;
-	boolean isValid = true;
+	private StepNode root;
+	private boolean isValid = true;
 
 	Proof(StepNode root) {
 		this.root = root;
@@ -57,7 +57,7 @@ public class Proof{
 			return false;
 		}
 		if(expected!=actual) {
-			System.out.println("Did you mean " + actual + "?");
+			System.out.println("Justification mismatch. Did you mean " + actual + "?");
 			return false;
 		}
 		return true;
@@ -86,6 +86,7 @@ public class Proof{
 
 				}
 			}
+			return UNASSIGNED;
 		}
 
 		if (premisses.size()==1) {

@@ -13,7 +13,7 @@ public class StepTextField extends TextField {
     public StepTextField(LeafNode parent) {
         super();
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue){
+            if (!newValue && StepTextField.this.getContent().length()>0){
                 Parser.error = false;
                 Lexer.setLexString(StepTextField.this.getText());
                 Parser.t = Lexer.lex();

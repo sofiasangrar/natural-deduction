@@ -33,7 +33,7 @@ public class Justification extends ChoiceBox<Pair<String, Step>> {
         choices.add(new Pair<>(NotToken.getString()+"-I", Step.NEG_INTRO));
         choices.add(new Pair<>("F-E", Step.FALSE_ELIM));
         choices.add(new Pair<>("T-I", Step.TRUE_INTRO));
-        choices.add(new Pair<>("Magic", Step.EXCL_MIDDLE));
+        choices.add(new Pair<>("LEM", Step.EXCL_MIDDLE));
 
         this.setConverter( new StringConverter<Pair<String,Step>>() {
             @Override

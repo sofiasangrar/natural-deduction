@@ -1,11 +1,6 @@
-import lexer.tokens.*;
 import parser.Proof;
-import lexer.Lexer;
 import natded.StepNode;
 import org.junit.Test;
-import parser.Clause;
-import parser.Parser;
-
 import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertTrue;
