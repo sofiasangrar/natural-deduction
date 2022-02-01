@@ -74,13 +74,13 @@ public class UserInterface extends VBox {
 
     private void drawDoneButton() {
 
-        DoneButton button = new DoneButton();
+        DoneButton button = new DoneButton(this);
         HBox doneBox = new HBox(button);
         HBox.setMargin(doneBox, new Insets(10.0d));
 
 
         doneBox.setAlignment(Pos.BOTTOM_RIGHT);
-        button.setOnMouseClicked(e -> listener.onFinishedClick());
+        //button.setOnMouseClicked(e -> listener.onFinishedClick());
         getChildren().add(doneBox);
     }
 

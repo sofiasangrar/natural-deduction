@@ -10,6 +10,7 @@ public class UIListener {
     public UIListener(UserInterface view) {
         this.view = view;
     }
+
     public void onFinishedClick() {
             StepNode root = view.getTree();
             Proof p = Proof.parse(root);

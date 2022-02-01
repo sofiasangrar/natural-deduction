@@ -4,9 +4,16 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import natded.StepNode;
 import natded.constants.Step;
+import natded.exceptions.AssumptionsMismatchException;
+import natded.exceptions.JustificationMismatchException;
+import natded.exceptions.NoJustificationException;
+import natded.exceptions.PremiseNumberException;
+import parser.Assumptions;
 
 import java.util.ArrayList;
 
@@ -17,6 +24,7 @@ public class LeafNode extends VBox {
     private HBox fieldHbox;
     private LeafNode parent;
     private Justification justif;
+    Tooltip t = new Tooltip();
 
 
     LeafNode(){
@@ -96,14 +104,15 @@ public class LeafNode extends VBox {
 
 
     StepNode getTree(){
-        Step s = Step.UNASSIGNED;
+        Step s;
         try {
             s = justif.getValue().getValue();
         } catch (NullPointerException e) {
-            System.out.println("No justification!");
+            s = Step.UNASSIGNED;
         }
 
-        StepNode n = new StepNode(this.field.getText(), s);
+        resetError();
+        StepNode n = new StepNode(this.field.getText(), s, this);
 
         for (LeafNode child : getChildNodes()) {
             n.addChild(child.getTree());
@@ -118,4 +127,40 @@ public class LeafNode extends VBox {
     public void delete() {
         parent.deleteChild(this);
     }
+
+    public void displayException(RuntimeException e) {
+        t.setText(e.getMessage());
+        if (e instanceof NoJustificationException) {
+            fieldHbox.getChildren().add(new Text(e.getMessage()));
+            //Tooltip.install(field, t);
+            field.setTooltip(t);
+            this.justif.setStyle("-fx-background-color: #eb6651");
+        }
+        if (e instanceof AssumptionsMismatchException) {
+            //Tooltip.install(field, t);
+            field.setTooltip(t);
+            //fieldHbox.getChildren().add(new Text(e.getMessage()));
+        }
+        if (e instanceof JustificationMismatchException) {
+            fieldHbox.getChildren().add(new Text(e.getMessage()));
+            //Tooltip.install(field, t);
+            field.setTooltip(t);
+            this.justif.setStyle("-fx-background-color: #eb6651");
+        }
+        if (e instanceof PremiseNumberException) {
+            Tooltip.install(field, t);
+            field.setTooltip(t);
+            //fieldHbox.getChildren().add(new Text(e.getMessage()));
+        }
+    }
+
+    public void resetError(){
+        if (fieldHbox.getChildren().get(fieldHbox.getChildren().size()-1) instanceof Text) {
+            fieldHbox.getChildren().remove(fieldHbox.getChildren().size()-1);
+        }
+        this.justif.setStyle("-fx-background-color: gray");
+        field.setTooltip(null);
+    }
+
+
 }
