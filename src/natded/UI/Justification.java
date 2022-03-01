@@ -14,10 +14,21 @@ import java.util.List;
 
 public class Justification extends ChoiceBox<Pair<String, Step>> {
 
-    LeafNode parent;
+    private LeafNode parent;
+    private String style = UserInterface.buttonStyle;
+    private String wrongStyle = UserInterface.incorrectDropdownStyle;
+
+    public void resetStyle() {
+        this.setStyle(style);
+    }
+
+    public void setIncorrect(){
+        this.setStyle(wrongStyle);
+    }
 
     Justification(LeafNode parent){
         super();
+        this.setStyle(style);
         this.parent = parent;
         this.setMaxSize(30,20);
 

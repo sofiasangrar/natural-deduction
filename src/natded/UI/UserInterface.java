@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -12,9 +13,23 @@ import javafx.scene.text.TextAlignment;
 import natded.StepNode;
 import natded.UIListener;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class UserInterface extends VBox {
 
     LeafNode root;
+    static String buttonStyle = "-fx-background-color: linear-gradient(whitesmoke, darkgray); -fx-border-color: gray; -fx-border-radius: 1";
+    static String incorrectDropdownStyle = "-fx-background-color: linear-gradient(whitesmoke, #eb6651); -fx-border-color: gray; -fx-border-radius: 1";
+    static Image alert;
+
+    static {
+        try {
+            alert = new Image(new FileInputStream("src/natded/UI/alert.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     private UIListener listener;
 

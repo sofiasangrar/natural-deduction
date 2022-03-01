@@ -1,6 +1,10 @@
 package natded.UI;
 
+import com.sun.javafx.scene.control.skin.Utils;
+import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import lexer.Lexer;
 import lexer.tokens.*;
 import parser.Clause;
@@ -12,6 +16,11 @@ public class StepTextField extends TextField {
 
     public StepTextField(LeafNode parent) {
         super();
+        Text heightText = new Text("!");
+        heightText.setFont(StepTextField.this.getFont());
+        StepTextField.this.setMinHeight(heightText.getLayoutBounds().getHeight()+ 2 * StepTextField.this.getPadding().getTop() + 2d);
+        this.setMinWidth(100);
+        this.setFont(new Font(16));
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && StepTextField.this.getContent().length()>0){
                 Parser.error = false;
@@ -65,6 +74,10 @@ public class StepTextField extends TextField {
                 if (!s.equals(newValue)) {
                     this.setText(s);
                 }            }
+
+            Text text = new Text(StepTextField.this.getText());
+            text.setFont(StepTextField.this.getFont());
+            StepTextField.this.setPrefWidth(text.getLayoutBounds().getWidth()+ 2 * StepTextField.this.getPadding().getLeft() + 2d);
         });
     }
 

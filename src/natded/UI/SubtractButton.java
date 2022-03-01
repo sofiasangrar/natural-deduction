@@ -8,6 +8,7 @@ public class SubtractButton extends Button {
     LeafNode parent;
 
     SubtractButton(LeafNode parent) {
+        this.setStyle(UserInterface.buttonStyle);
         this.parent = parent;
         this.setWidth(20);
         this.setHeight(20);

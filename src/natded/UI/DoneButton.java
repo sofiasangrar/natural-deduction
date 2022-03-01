@@ -7,6 +7,7 @@ import parser.Proof;
 public class DoneButton extends Button {
 
     DoneButton(UserInterface view) {
+        this.setStyle(UserInterface.buttonStyle);
         this.setWidth(20);
         this.setHeight(20);
         this.setText("Check");
@@ -15,7 +16,7 @@ public class DoneButton extends Button {
         if (p.isValid()) {
             System.out.println("valid!");
         } else {
-            view.showError("invalid");
+            System.out.println("invalid!");
         }});
     }
 }

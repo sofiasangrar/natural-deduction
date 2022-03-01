@@ -17,7 +17,7 @@ public class UIListener {
             if (p.isValid()) {
                 System.out.println("valid!");
             } else {
-                view.showError("invalid");
+                System.out.println("invalid!");
             }
     }
 

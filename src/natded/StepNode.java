@@ -13,18 +13,29 @@ public class StepNode {
     List<StepNode> children;
     Step step;
     LeafNode node;
+    boolean incorrectSyntax;
 
     public StepNode(String input, Step step) {
         this.input = input;
         this.parsedInput = null;
         this.children = new ArrayList<>();
-        this.step=step;
+        this.step = step;
         this.node = null;
+        this.incorrectSyntax = false;
     }
 
     public StepNode(String input, Step step, LeafNode node) {
         this(input, step);
         this.node = node;
+        this.incorrectSyntax = false;
+    }
+
+    public void setIncorrectSyntax(boolean incorrectSyntax) {
+        this.incorrectSyntax = incorrectSyntax;
+    }
+
+    public boolean hasIncorrectSyntax() {
+        return incorrectSyntax;
     }
 
     public String getInput() {

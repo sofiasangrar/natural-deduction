@@ -21,8 +21,10 @@ public class Proof{
 
 	public static Proof parse(StepNode node){
 		Lexer.setLexString(node.getInput());
+		Parser.error = false;
 		Parser.t = Lexer.lex();
 		node.setParsedInput(Clause.parse());
+		node.setIncorrectSyntax(Parser.error);
 
 		for (int i = 0; i < node.getChildren().size(); i++) {
 			parse(node.getChildren().get(i));
@@ -36,7 +38,10 @@ public class Proof{
 	}
 
 	private boolean isValid(StepNode root) {
-		if (!checkStep(root)) {
+		if (root.hasIncorrectSyntax()) {
+			displayException(root.getUIElement(), new SyntaxError());
+			isValid=false;
+		} else if (!checkStep(root)) {
 			isValid = false;
 		}
 		for (int i = 0; i < root.getChildren().size(); i++) {
@@ -56,6 +61,12 @@ public class Proof{
 	}
 
 	public static boolean checkStep(StepNode node){
+		for (StepNode child : node.getChildren()) {
+			if (child.hasIncorrectSyntax()) {
+				displayException(node.getUIElement(), new RuleException("Predecessors have incorrect syntax."));
+				return false;
+			}
+		}
 		Step stepGiven = determineStep(node.getPremisses(), node.getParsedInput());
 		return handleStep(node.getUIElement(), node.getPremisses(), node.getParsedInput(), node.getStep(), stepGiven);
 
@@ -331,7 +342,7 @@ public class Proof{
 					throw new PremiseNumberException(ASSUMPTION, 0, size);
 				}
 				if (!conclusion.getAssumptions().contains(conclusion.getExpression())) {
-					System.out.println("RHS must contain an element from LHS");
+					throw new RuleException("RHS must contain an element from LHS");
 				}
 				break;
 
@@ -349,12 +360,12 @@ public class Proof{
 					throw new PremiseNumberException(EXCL_MIDDLE, 0, size);
 				}
 				if(!conclusion.getExpression().isDisj()){
-					System.out.println("RHS must be a disjunction");
+					throw new RuleException("RHS must be a disjunction");
 				} else {
 					right = ((Disj) conclusion.getExpression()).right;
 					left = ((Disj) conclusion.getExpression()).left;
 					if (!(right instanceof NotExpr && ((NotExpr)right).right.equals(left))) {
-						System.out.println("RHS of disjunction must be negation of LHS");
+						throw new RuleException("RHS of disjunction must be negation of LHS");
 					}
 				}
 				break;
@@ -373,7 +384,7 @@ public class Proof{
 				left = ((Conj)clause1.getExpression()).left;
 				right = ((Conj)clause1.getExpression()).right;
 				if (!(conclusion.getExpression().equals(left) || conclusion.getExpression().equals(right))) {
-					System.out.println("RHS of conclusion must be taken from conjunction");
+					throw new RuleException("RHS of conclusion must be taken from conjunction");
 
 				}
 
@@ -388,21 +399,21 @@ public class Proof{
 				} else {
 					clause1 = premisses.get(0);
 					if (clause1.getAssumptions().size()==0) {
-						System.out.println("LHS of premise must contain assumption to discharge");
+						throw new RuleException("LHS of premise must contain assumption to discharge");
 					}
 					if (clause1.getAssumptions().size() - 1 > conclusion.getAssumptions().size()) {
-						System.out.println("Premise contains too many assumptions");
+						throw new RuleException("Premise contains too many assumptions");
 					}
 					if (clause1.getAssumptions().size() - 1 < conclusion.getAssumptions().size()) {
-						System.out.println("Premise contains too few assumptions");
+						throw new RuleException("Premise contains too few assumptions");
 					}
 					if (conclusion.getExpression().isImpl()) {
 						if(!conclusion.getExpression().right.equals(clause1.getExpression())) {
-							System.out.println("RHS of conclusion does not match RHS of premise");
+							throw new RuleException("RHS of conclusion does not match RHS of premise");
 						}
 						left = conclusion.getExpression().left;
 						if (!(clause1.getAssumptions().contains(left))) {
-							System.out.println("Assumption not discharged properly");
+							throw new RuleException("Assumption not discharged properly");
 						} else {
 							ArrayList<Expr> assumptions = new ArrayList<>(conclusion.getAssumptions());
 							assumptions.add(conclusion.getExpression().left);
@@ -430,7 +441,7 @@ public class Proof{
 						left = ((Disj)conclusion.getExpression()).left;
 						right = ((Disj)conclusion.getExpression()).right;
 						if (!(clause1.getExpression().equals(left) || clause1.getExpression().equals(right))) {
-							System.out.println("RHS or LHS of disjunction must match RHS of premise");
+							throw new RuleException("RHS or LHS of disjunction must match RHS of premise");
 						}
 					}
 				}
@@ -438,7 +449,7 @@ public class Proof{
 
 			case FALSE_ELIM:
 				if (size!=1) {
-					throw new PremiseNumberException(AND_ELIM, 1, size);
+					throw new PremiseNumberException(FALSE_ELIM, 1, size);
 				} else {
 					clause1 = premisses.get(0);
 					if (!clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
@@ -457,24 +468,22 @@ public class Proof{
 				if (size==1) {
 					clause1 = premisses.get(0);
 					if(!(clause1.getExpression() instanceof BooleanExpr && !(((BooleanExpr) clause1.getExpression()).value))) {
-						System.out.println("RHS of premise must be 'F'");
+						throw new RuleException("RHS of premise must be 'F'");
 					}
 					if (!(clause1.getAssumptions().contains(((NotExpr)conclusion.getExpression()).right))) {
-						System.out.println("Assumptions of premise do not contain RHS of conclusion");
+						throw new RuleException("Assumptions of premise do not contain RHS of conclusion");
 					}
 					Assumptions newAssumptions = new Assumptions(conclusion.getAssumptions());
 					newAssumptions.getAssumptions().add(((NotExpr) conclusion.getExpression()).right);
 					if (!(clause1.getAssumptionsObject().equals(newAssumptions))) {
-						System.out.println("Assumptions mismatch");
+						throw new RuleException("Assumptions mismatch");
 					}
-					if (!(clause1.getAssumptionsObject().equals(newAssumptions))) {
-						System.out.println("Assumptions mismatch");
-					}
+
 					if (clause1.getAssumptions().size() - 1 > conclusion.getAssumptions().size()) {
-						System.out.println("Premise contains too many assumptions");
+						throw new RuleException("Premise contains too many assumptions");
 					}
 					if (clause1.getAssumptions().size() - 1 < conclusion.getAssumptions().size()) {
-						System.out.println("Premise contains too few assumptions");
+						throw new RuleException("Premise contains too few assumptions");
 					}
 
 				} else if (size==2) {
@@ -485,15 +494,15 @@ public class Proof{
 							|| (clause2.getExpression() instanceof NotExpr
 							&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)
 					))) {
-						System.out.println("RHS of one premise must be negation of the other");
+						throw new RuleException("RHS of one premise must be negation of the other");
 					}
 					if (conclusion.getExpression() instanceof NotExpr) {
 						Expr P = ((NotExpr) conclusion.getExpression()).right;
 						if(!(clause1.getAssumptions().contains(P))) {
-							System.out.println("Premise 1 must contain negation of conclusion's RHS");
+							throw new RuleException("Premise 1 must contain negation of conclusion's RHS");
 						}
 						if (!(clause2.getAssumptions().contains(P))) {
-							System.out.println("Premise 2 must contain negation of conclusion's RHS");
+							throw new RuleException("Premise 2 must contain negation of conclusion's RHS");
 						}
 						Assumptions newAssumptions = new Assumptions();
 
@@ -514,7 +523,7 @@ public class Proof{
 						}
 					}
 				} else {
-					System.out.println("Incorrect number of premises");
+					throw new RuleException("Incorrect number of premises");
 				}
 				break;
 
@@ -540,7 +549,7 @@ public class Proof{
 						left = ((Conj) conclusion.getExpression()).left;
 						right = ((Conj) conclusion.getExpression()).right;
 						if (!((left.equals(clause1.getExpression()) && right.equals(clause2.getExpression())) || left.equals(clause2.getExpression()) && right.equals(clause1.getExpression()))) {
-							System.out.println("premises do not match conclusion");
+							throw new RuleException("premises do not match conclusion");
 						}
 					}
 				}
@@ -567,23 +576,23 @@ public class Proof{
 						if ( clause1.getExpression().isImpl()
 								&& clause1.getExpression().left.equals(clause2.getExpression())
 								&& !clause1.getExpression().right.equals(conclusion.getExpression())) {
-							System.out.println("Conclusion does not match RHS of implication");
+							throw new RuleException("Conclusion does not match RHS of implication");
 						}
 						if ( clause1.getExpression().isImpl()
 								&& !clause1.getExpression().left.equals(clause2.getExpression())
 								&& clause1.getExpression().right.equals(conclusion.getExpression())) {
-							System.out.println("LHS of implication does not match other premise");
+							throw new RuleException("LHS of implication does not match other premise");
 						}
 						if (clause2.getExpression().isImpl()
 								&& clause2.getExpression().left.equals(clause1.getExpression())
 								&& !clause2.getExpression().right.equals(conclusion.getExpression())) {
-							System.out.println("Conclusion does not match RHS of implication");
+							throw new RuleException("Conclusion does not match RHS of implication");
 
 						}
 						if (clause2.getExpression().isImpl()
 								&& !clause2.getExpression().left.equals(clause1.getExpression())
 								&& clause2.getExpression().right.equals(conclusion.getExpression())) {
-							System.out.println("LHS of implication does not match other premise");
+							throw new RuleException("LHS of implication does not match other premise");
 						}
 					}
 				}
@@ -610,7 +619,7 @@ public class Proof{
 								&& clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right))
 								|| (clause2.getExpression() instanceof NotExpr
 								&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)))) {
-						System.out.println("Conclusion of one premise must be negation of another");
+						throw new RuleException("Conclusion of one premise must be negation of another");
 					}
 
 				}
@@ -665,7 +674,7 @@ public class Proof{
 						}
 
 						if (!(clauseP.getExpression().equals(R) && clauseQ.getExpression().equals(R))) {
-							System.out.println("Conclusion does not match");
+							throw new RuleException("Conclusion does not match");
 						}
 
 					}

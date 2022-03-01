@@ -9,6 +9,7 @@ public class AddButton extends Button {
 
     AddButton(LeafNode parent) {
         this.parent = parent;
+        this.setStyle(UserInterface.buttonStyle);
         this.setWidth(20);
         this.setHeight(20);
         this.setText("+");

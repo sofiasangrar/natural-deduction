@@ -18,7 +18,7 @@ public final class Lexer {
         public static Token lex() {
 
             //skip whitespace
-            while (ch == ' ' || ch == '\t' || ch == 13) {
+            while (ch == ' ' || ch == '\t' ||ch == 13) {
                 getChar();
             }
 
@@ -114,9 +114,8 @@ public final class Lexer {
                 case 'w':
                 case 'x':
                 case 'y':
-                case 'z':{
+                case 'z':
                     return getCharStream();
-                }
                 case (char)-1:{
                     return new EOIToken();
                 }
@@ -139,18 +138,34 @@ public final class Lexer {
 
             return new IdentToken(characterStream);
         }
-
+                    
         private static Token getIllegalInput() {
             char firstChar = (char) ch;
             String illegalStream = firstChar + "";
             getChar();
 
-            while (!Character.isWhitespace(ch) && ch!=-1) {
+            while (!Character.isWhitespace(ch) && ch!=-1 && !isPunctuation((char)ch)) {
                 illegalStream += (char) ch;
                 getChar();
             }
 
             return new IllegalStringToken(illegalStream);
+        }
+        
+        private static boolean isPunctuation(char ch){
+            switch (ch) {
+                case ')' :
+                    case '(' :
+                    case  EmptyToken.code :
+                    case  OrToken.code :
+                    case  AndToken.code :
+                    case  NotToken.code :
+                    case  ',' :
+                    case  ImpliesToken.code :
+                    case  NDToken.code:
+                    return true;
+            }
+            return false;
         }
 
         private static void getChar() {
