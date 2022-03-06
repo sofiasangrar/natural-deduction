@@ -8,6 +8,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 import natded.StepNode;
 import natded.constants.Step;
 import natded.exceptions.JustificationMismatchException;
@@ -18,23 +19,30 @@ import java.util.ArrayList;
 
 import static natded.Main.DISPLAY_HEIGHT;
 
-public class LeafNode extends VBox {
+//public class LeafNode extends VBox {
+public class LeafNode extends HBox {
+
 
     private StepTextField field;
     private HBox childrenBox;
     private HBox fieldHbox;
     private LeafNode parent;
     private Justification justif;
-    private ImageView error;
+    private ErrorSymbol error;
     Tooltip t = new Tooltip();
+    double margin = DISPLAY_HEIGHT/100;
 
 
     LeafNode(){
         super();
         this.parent = null;
-        this.setAlignment(Pos.BOTTOM_CENTER);
-        VBox.setVgrow(this, Priority.ALWAYS);
-        this.setAlignment(Pos.BOTTOM_CENTER);
+        VBox textAndLine = new VBox();
+        //this.setAlignment(Pos.BOTTOM_CENTER);
+        //VBox.setVgrow(this, Priority.ALWAYS);
+        //this.setAlignment(Pos.BOTTOM_CENTER);
+        textAndLine.setAlignment(Pos.BOTTOM_CENTER);
+        VBox.setVgrow(textAndLine, Priority.ALWAYS);
+        textAndLine.setAlignment(Pos.BOTTOM_CENTER);
         childrenBox = new HBox();
         HBox.setHgrow(childrenBox, Priority.ALWAYS);
         fieldHbox = new HBox();
@@ -43,14 +51,15 @@ public class LeafNode extends VBox {
         childrenBox.setAlignment(Pos.BOTTOM_CENTER);
         fieldHbox.setStyle("-fx-border-style: solid hidden hidden hidden;");
         fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
-        fieldHbox.setPadding(new Insets(DISPLAY_HEIGHT/100,0,0,0));
+        fieldHbox.setPadding(new Insets(margin,0.0,0.0,0.0));
 
-        VBox.setMargin(fieldHbox, new Insets(10.0d));
+        VBox.setMargin(fieldHbox, new Insets(0, margin*2, margin,0));
         HBox.setHgrow(fieldHbox, Priority.ALWAYS);
 
         AddButton addButton = new AddButton(this);
 
-        this.getChildren().add(childrenBox);
+        //this.getChildren().add(childrenBox);
+        textAndLine.getChildren().add(childrenBox);
 
         justif = new Justification(this);
         justif.setPrefHeight(fieldHbox.getPrefHeight());
@@ -63,13 +72,37 @@ public class LeafNode extends VBox {
         field.selectPositionCaret(field.getLength());
         field.setPrefHeight(fieldHbox.getPrefHeight() + 2);
 
+        error = new ErrorSymbol();
 
+        //fieldHbox.getChildren().addAll(addButton, field, justif);
         fieldHbox.getChildren().addAll(addButton, field, justif);
-        fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
-        this.getChildren().add(fieldHbox);
 
+        fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
+        //this.getChildren().add(fieldHbox);
+        textAndLine.getChildren().add(fieldHbox);
+
+        /*
         this.error = new ImageView(UserInterface.alert);
         error.setPreserveRatio(true);
+        error.setOnMouseEntered((e)->{
+                    error.setStyle("-fx-opacity: 0.5");
+                }
+                );
+        error.setOnMouseExited((e)->{
+                    error.setStyle("-fx-opacity: 1");
+                }
+        );
+        */
+
+        /*
+        AnchorPane rightAnchorPane = new AnchorPane();
+        AnchorPane.setLeftAnchor(justif, 0.0);
+        AnchorPane.setBottomAnchor(justif, fieldHbox.getPrefHeight() + justif.getPrefHeight()/2 - DISPLAY_HEIGHT/100);
+        rightAnchorPane.getChildren().add(justif);
+
+        */
+        this.getChildren().add(textAndLine);
+
 
     }
 
@@ -148,9 +181,14 @@ public class LeafNode extends VBox {
         if (e instanceof NoJustificationException || e instanceof JustificationMismatchException) {
             justif.setIncorrect();
         }
+        error.setFitHeight(fieldHbox.getPrefHeight());
 
-        error.setFitWidth(fieldHbox.getHeight());
+        //error.setFitWidth(fieldHbox.getHeight());
         fieldHbox.getChildren().add(error);
+        error.animate();
+
+
+
     }
 
     public void resetError() {
