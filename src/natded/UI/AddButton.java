@@ -1,7 +1,10 @@
 package natded.UI;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Paint;
+
+import static natded.Main.DISPLAY_WIDTH;
 
 public class AddButton extends Button {
 
@@ -10,8 +13,7 @@ public class AddButton extends Button {
     AddButton(LeafNode parent) {
         this.parent = parent;
         this.setStyle(UserInterface.buttonStyle);
-        this.setWidth(20);
-        this.setHeight(20);
+        this.setWrapText(false);
         this.setText("+");
         this.setTextFill(Paint.valueOf("green"));
         setOnMouseClicked(event -> parent.addChild());

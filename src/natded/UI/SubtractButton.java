@@ -10,8 +10,6 @@ public class SubtractButton extends Button {
     SubtractButton(LeafNode parent) {
         this.setStyle(UserInterface.buttonStyle);
         this.parent = parent;
-        this.setWidth(20);
-        this.setHeight(20);
         this.setText("-");
         this.setTextFill(Paint.valueOf("red"));
         setOnMouseClicked(event -> parent.delete());

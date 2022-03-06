@@ -8,8 +8,6 @@ public class DoneButton extends Button {
 
     DoneButton(UserInterface view) {
         this.setStyle(UserInterface.buttonStyle);
-        this.setWidth(20);
-        this.setHeight(20);
         this.setText("Check");
         setOnMouseClicked(event -> {StepNode root = view.getTree();
         Proof p = Proof.parse(root);

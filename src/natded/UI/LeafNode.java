@@ -1,28 +1,22 @@
 package natded.UI;
 
-import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
 import natded.StepNode;
 import natded.constants.Step;
-import natded.exceptions.AssumptionsMismatchException;
 import natded.exceptions.JustificationMismatchException;
 import natded.exceptions.NoJustificationException;
-import natded.exceptions.PremiseNumberException;
-import parser.Assumptions;
 
-import javax.tools.Tool;
+
 import java.util.ArrayList;
+
+import static natded.Main.DISPLAY_HEIGHT;
 
 public class LeafNode extends VBox {
 
@@ -40,20 +34,17 @@ public class LeafNode extends VBox {
         this.parent = null;
         this.setAlignment(Pos.BOTTOM_CENTER);
         VBox.setVgrow(this, Priority.ALWAYS);
-        VBox.setMargin(this, new Insets(10.0d));
         this.setAlignment(Pos.BOTTOM_CENTER);
         childrenBox = new HBox();
-        HBox.setMargin(childrenBox, new Insets(10.0d));
         HBox.setHgrow(childrenBox, Priority.ALWAYS);
-
-        field = new StepTextField(this);
-        field.setAlignment(Pos.CENTER);
-        field.selectPositionCaret(field.getLength());
         fieldHbox = new HBox();
+        fieldHbox.setPrefHeight(DISPLAY_HEIGHT/30);
         childrenBox.setAlignment(Pos.CENTER);
-        VBox.setMargin(fieldHbox, new Insets(10.0d));
         childrenBox.setAlignment(Pos.BOTTOM_CENTER);
         fieldHbox.setStyle("-fx-border-style: solid hidden hidden hidden;");
+        fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
+        fieldHbox.setPadding(new Insets(DISPLAY_HEIGHT/100,0,0,0));
+
         VBox.setMargin(fieldHbox, new Insets(10.0d));
         HBox.setHgrow(fieldHbox, Priority.ALWAYS);
 
@@ -62,14 +53,18 @@ public class LeafNode extends VBox {
         this.getChildren().add(childrenBox);
 
         justif = new Justification(this);
-        HBox justifBox = new HBox();
-        justifBox.getChildren().add(justif);
-        justifBox.setAlignment(Pos.TOP_LEFT);
+        justif.setPrefHeight(fieldHbox.getPrefHeight());
+        justif.setPrefWidth(1.75*fieldHbox.getPrefHeight());
+
+        addButton.setPrefSize(fieldHbox.getPrefHeight(), fieldHbox.getPrefHeight());
+        field = new StepTextField(this);
+
+        field.setAlignment(Pos.CENTER);
+        field.selectPositionCaret(field.getLength());
+        field.setPrefHeight(fieldHbox.getPrefHeight() + 2);
 
 
-
-
-        fieldHbox.getChildren().addAll(addButton, field, justifBox);
+        fieldHbox.getChildren().addAll(addButton, field, justif);
         fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
         this.getChildren().add(fieldHbox);
 
@@ -92,7 +87,10 @@ public class LeafNode extends VBox {
     }
 
     private void addSubButton(){
-        fieldHbox.getChildren().add(1, new SubtractButton(this));
+        SubtractButton s = new SubtractButton(this);
+        s.setPrefSize(fieldHbox.getPrefHeight(), fieldHbox.getPrefHeight());
+        fieldHbox.getChildren().add(1, s);
+
     }
 
 

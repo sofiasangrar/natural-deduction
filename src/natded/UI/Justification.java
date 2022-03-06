@@ -30,7 +30,7 @@ public class Justification extends ChoiceBox<Pair<String, Step>> {
         super();
         this.setStyle(style);
         this.parent = parent;
-        this.setMaxSize(30,20);
+        //this.setMaxSize(30,20);
 
         List<Pair<String, Step>> choices = new ArrayList<>();
         choices.add(new Pair<>("Ass.", Step.ASSUMPTION));

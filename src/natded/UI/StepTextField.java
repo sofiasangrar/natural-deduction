@@ -10,17 +10,21 @@ import lexer.tokens.*;
 import parser.Clause;
 import parser.Parser;
 
+import static natded.Main.DISPLAY_HEIGHT;
+import static natded.Main.DISPLAY_WIDTH;
+
 public class StepTextField extends TextField {
 
     private LeafNode parent;
+    private final double minWidth = DISPLAY_WIDTH/15;
 
     public StepTextField(LeafNode parent) {
         super();
-        Text heightText = new Text("!");
-        heightText.setFont(StepTextField.this.getFont());
-        StepTextField.this.setMinHeight(heightText.getLayoutBounds().getHeight()+ 2 * StepTextField.this.getPadding().getTop() + 2d);
-        this.setMinWidth(100);
-        this.setFont(new Font(16));
+        //Text heightText = new Text("!");
+        //heightText.setFont(StepTextField.this.getFont());
+        //StepTextField.this.setMinHeight(heightText.getLayoutBounds().getHeight()+ 2 * StepTextField.this.getPadding().getTop() + 2d);
+        this.setMinWidth(minWidth);
+        this.setFont(new Font(DISPLAY_HEIGHT/60));
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && StepTextField.this.getContent().length()>0){
                 Parser.error = false;
@@ -74,10 +78,10 @@ public class StepTextField extends TextField {
                 if (!s.equals(newValue)) {
                     this.setText(s);
                 }            }
-
             Text text = new Text(StepTextField.this.getText());
             text.setFont(StepTextField.this.getFont());
             StepTextField.this.setPrefWidth(text.getLayoutBounds().getWidth()+ 2 * StepTextField.this.getPadding().getLeft() + 2d);
+
         });
     }
 

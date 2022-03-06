@@ -2,11 +2,16 @@ package natded;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import natded.UI.NDScene;
 import natded.UI.Window;
 
 public class Main extends Application {
+
+    public static final double DISPLAY_WIDTH = Screen.getPrimary().getBounds().getWidth();
+    public static final double DISPLAY_HEIGHT = Screen.getPrimary().getBounds().getHeight();
+
 
     public static void main(String[] args) {
         launch(args);
@@ -18,8 +23,7 @@ public class Main extends Application {
         NDScene ui = new NDScene(primaryStage.widthProperty().doubleValue(), primaryStage.heightProperty().doubleValue());
         primaryStage.setScene(ui);
         primaryStage.show();
-        UIListener listener = new UIListener(ui.getUI());
-        ui.setListener(listener);
         ui.setGoal(NatDedUtilities.randomGoal());
+
     }
 }
