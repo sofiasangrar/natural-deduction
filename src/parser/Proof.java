@@ -283,8 +283,8 @@ public class Proof{
 				if (premisses.get(i).getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 					orClause = premisses.get(i);
 					if (premisses.get(i).getExpression().isDisj()) {
-						P = orClause.getExpression().left;
-						Q = orClause.getExpression().right;
+						P = ((Disj)orClause.getExpression()).left;
+						Q = ((Disj)orClause.getExpression()).right;
 						Assumptions pa = new Assumptions(orClause.getAssumptions());
 						Assumptions qa = new Assumptions(orClause.getAssumptions());
 
@@ -650,8 +650,8 @@ public class Proof{
 					if (!orClause.getExpression().isDisj()) {
 						throw new NothingToEliminateException("disjunction");
 					} else {
-						P = orClause.getExpression().left;
-						Q = orClause.getExpression().right;
+						P = ((Disj)orClause.getExpression()).left;
+						Q = ((Disj)orClause.getExpression()).right;
 						Assumptions pa = new Assumptions(orClause.getAssumptions());
 						Assumptions qa = new Assumptions(orClause.getAssumptions());
 

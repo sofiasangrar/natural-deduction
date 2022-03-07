@@ -9,7 +9,7 @@ public class ResetButton extends Button {
     ResetButton(UserInterface view) {
         this.setStyle(UserInterface.incorrectDropdownStyle);
         this.setText("Reset");
-        setOnMouseClicked(event -> {view.root.deleteChildren(); view.resetErrors();
+        setOnMouseClicked(event -> {view.root.deleteChildren(); view.resetErrors(); view.root.resetJustif();
         });
     }
 }

@@ -5,13 +5,16 @@ import lexer.tokens.CommaToken;
 import lexer.tokens.EmptyToken;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Assumptions {
 
 	private List<Expr> assumptions;
+
 	public Assumptions(List<Expr> assumptions){
-		this.assumptions = assumptions;
+		this.assumptions= new ArrayList<>(assumptions);
 	}
 
 	public Assumptions() {

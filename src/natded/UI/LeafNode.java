@@ -190,4 +190,8 @@ public class LeafNode extends VBox {
         field.setEditableField(editable);
     }
 
+    public void resetJustif(){
+        this.justif.getSelectionModel().clearSelection();
+    }
+
 }

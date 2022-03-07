@@ -953,17 +953,6 @@ public class ProofStepTests {
         assertFalse(Proof.checkStep(root));
     }
 
-    @Test
-    public void identifyOrElim2(){
-        ArrayList<StepNode> premises = new ArrayList<>();
-        premises.add(new StepNode("P " + or + " Q " + nd + " P " + or + " Q", ASSUMPTION));
-        premises.add(new StepNode("P " + and + " Q, P " + nd + " R", ASSUMPTION));
-        premises.add(new StepNode("P " + impl + " Q, Q " + nd + " R", ASSUMPTION));
-        root = new StepNode("P " + or + " Q, P" + and + "Q, P" + impl + "Q"  + nd + " R", OR_ELIM);
-        root.addChildren(premises);
-        Proof.parse(root);
-        assertEquals(OR_ELIM, Proof.determineStep(root.getPremisses(), root.getParsedInput()));
-    }
 
     @Test
     public void orElimMismatchingAssumptions(){

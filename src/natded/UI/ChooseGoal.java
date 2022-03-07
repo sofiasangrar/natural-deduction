@@ -16,6 +16,8 @@ import natded.constants.Step;
 
 import java.util.*;
 
+import static natded.NatDedUtilities.*;
+
 public class ChooseGoal extends ChoiceBox<String> {
 
     private String style = UserInterface.buttonStyle;
@@ -26,7 +28,14 @@ public class ChooseGoal extends ChoiceBox<String> {
         super();
         this.setStyle(style);
 
-        ObservableList<String> choices = FXCollections.observableArrayList(NatDedUtilities.deMorgan, NatDedUtilities.notPorQ, chooseOwn);
+        ObservableList<String> choices = FXCollections.observableArrayList(
+                deMorgan,
+                notPorQ,
+                modusPonens,
+                orAndAnd,
+                halfOfOr,
+                falseIsTrue,
+                chooseOwn);
 
         this.setItems(choices);
 

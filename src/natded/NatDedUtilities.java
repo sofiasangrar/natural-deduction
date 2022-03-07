@@ -26,6 +26,13 @@ public class NatDedUtilities {
 
     //following examples from https://www.danielclemente.com/logica/dn.en.pdf
     public static final String notPorQ = not + "P " + or + " Q " + nd + " P " + impl + " Q";
+    public static final String modusPonens = "P " + impl + " Q, " + not + "Q "  + nd + " " + not + "P";
+    public static final String orAndAnd = "P " + or + " (Q " + and + " R) "  + nd + " P " + or + " Q";
+    public static final String halfOfOr = "P " + or + " Q, " + not + "P " + nd + " Q";
+    public static final String falseIsTrue = not + "P " + nd + " P " + impl + " Q";
+
+
+
 
 
 }
