@@ -1,5 +1,6 @@
 package natded.UI;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
@@ -30,6 +31,8 @@ public class Justification extends ChoiceBox<Pair<String, Step>> {
         super();
         this.setStyle(style);
         this.parent = parent;
+        //this.setPadding(new Insets(0.0,0.0,0.0,0.0));
+
         //this.setMaxSize(30,20);
 
         List<Pair<String, Step>> choices = new ArrayList<>();

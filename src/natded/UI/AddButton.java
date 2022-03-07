@@ -4,7 +4,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Paint;
 
-import static natded.Main.DISPLAY_WIDTH;
+
 
 public class AddButton extends Button {
 
@@ -13,6 +13,7 @@ public class AddButton extends Button {
     AddButton(LeafNode parent) {
         this.parent = parent;
         this.setStyle(UserInterface.buttonStyle);
+        //this.setPadding(new Insets(0.0,0.0,0.0,0.0));
         this.setWrapText(false);
         this.setText("+");
         this.setTextFill(Paint.valueOf("green"));

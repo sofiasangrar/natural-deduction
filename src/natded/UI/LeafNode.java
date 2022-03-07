@@ -5,10 +5,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.util.Duration;
 import natded.StepNode;
 import natded.constants.Step;
 import natded.exceptions.JustificationMismatchException;
@@ -19,8 +17,8 @@ import java.util.ArrayList;
 
 import static natded.Main.DISPLAY_HEIGHT;
 
-//public class LeafNode extends VBox {
-public class LeafNode extends HBox {
+public class LeafNode extends VBox {
+//public class LeafNode extends HBox {
 
 
     private StepTextField field;
@@ -37,9 +35,9 @@ public class LeafNode extends HBox {
         super();
         this.parent = null;
         VBox textAndLine = new VBox();
-        //this.setAlignment(Pos.BOTTOM_CENTER);
-        //VBox.setVgrow(this, Priority.ALWAYS);
-        //this.setAlignment(Pos.BOTTOM_CENTER);
+        this.setAlignment(Pos.BOTTOM_CENTER);
+        VBox.setVgrow(this, Priority.ALWAYS);
+
         textAndLine.setAlignment(Pos.BOTTOM_CENTER);
         VBox.setVgrow(textAndLine, Priority.ALWAYS);
         textAndLine.setAlignment(Pos.BOTTOM_CENTER);
@@ -58,56 +56,41 @@ public class LeafNode extends HBox {
 
         AddButton addButton = new AddButton(this);
 
-        //this.getChildren().add(childrenBox);
-        textAndLine.getChildren().add(childrenBox);
+        this.getChildren().add(childrenBox);
 
         justif = new Justification(this);
         justif.setPrefHeight(fieldHbox.getPrefHeight());
         justif.setPrefWidth(1.75*fieldHbox.getPrefHeight());
 
         addButton.setPrefSize(fieldHbox.getPrefHeight(), fieldHbox.getPrefHeight());
+        //addButton.setMaxSize(fieldHbox.getPrefHeight(), fieldHbox.getPrefHeight());
         field = new StepTextField(this);
 
         field.setAlignment(Pos.CENTER);
         field.selectPositionCaret(field.getLength());
-        field.setPrefHeight(fieldHbox.getPrefHeight() + 2);
+        field.setPrefHeight(fieldHbox.getPrefHeight() + 3);
 
         error = new ErrorSymbol();
 
-        //fieldHbox.getChildren().addAll(addButton, field, justif);
         fieldHbox.getChildren().addAll(addButton, field, justif);
 
         fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
-        //this.getChildren().add(fieldHbox);
-        textAndLine.getChildren().add(fieldHbox);
 
-        /*
-        this.error = new ImageView(UserInterface.alert);
-        error.setPreserveRatio(true);
-        error.setOnMouseEntered((e)->{
-                    error.setStyle("-fx-opacity: 0.5");
-                }
-                );
-        error.setOnMouseExited((e)->{
-                    error.setStyle("-fx-opacity: 1");
-                }
-        );
-        */
-
-        /*
-        AnchorPane rightAnchorPane = new AnchorPane();
-        AnchorPane.setLeftAnchor(justif, 0.0);
-        AnchorPane.setBottomAnchor(justif, fieldHbox.getPrefHeight() + justif.getPrefHeight()/2 - DISPLAY_HEIGHT/100);
-        rightAnchorPane.getChildren().add(justif);
-
-        */
-        this.getChildren().add(textAndLine);
+        this.getChildren().add(fieldHbox);
 
 
     }
 
+    public void setFieldMinWidth(double width) {
+        field.setMinWidth(width);
+    }
+
     public void setText(String text){
         field.setText(text);
+    }
+
+    public void setPlaceHolder(String text) {
+        field.setPromptText(text);
     }
 
     LeafNode(LeafNode parent){
@@ -127,7 +110,7 @@ public class LeafNode extends HBox {
     }
 
 
-    private ArrayList<LeafNode> getChildNodes(){
+    public ArrayList<LeafNode> getChildNodes(){
         ArrayList<LeafNode> fields = new ArrayList<>();
         if (hasChildren()) {
             ObservableList<Node> boxes = childrenBox.getChildren();
@@ -183,7 +166,6 @@ public class LeafNode extends HBox {
         }
         error.setFitHeight(fieldHbox.getPrefHeight());
 
-        //error.setFitWidth(fieldHbox.getHeight());
         fieldHbox.getChildren().add(error);
         error.animate();
 
@@ -196,6 +178,16 @@ public class LeafNode extends HBox {
         justif.resetStyle();
         Tooltip.uninstall(error, t);
         this.fieldHbox.getChildren().remove(error);
+    }
+
+    public void deleteChildren() {
+        for (int i = getChildNodes().size()-1; i >=0; i--) {
+            getChildNodes().get(i).delete();
+        }
+    }
+
+    public void setEditable(boolean editable){
+        field.setEditableField(editable);
     }
 
 }

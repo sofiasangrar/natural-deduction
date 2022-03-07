@@ -1,8 +1,14 @@
 package natded.UI;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,11 +17,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Pair;
+import natded.NatDedUtilities;
 import natded.StepNode;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import static javafx.scene.input.KeyCode.T;
+import static javafx.scene.layout.Priority.ALWAYS;
 import static natded.Main.DISPLAY_HEIGHT;
 import static natded.Main.DISPLAY_WIDTH;
 
@@ -78,17 +88,19 @@ public class UserInterface extends VBox {
         drawRules();
         drawHelp();
         drawSpace();
-        drawDoneButton();
+        drawBottom();
     }
 
     private void drawSpace() {
         VBox boardBackground = new VBox();
         //VBox.setMargin(boardBackground, new Insets(10.0d, 10.0d, 10.0d, 10.0d));
-        VBox.setVgrow(boardBackground, Priority.ALWAYS);
+        VBox.setVgrow(boardBackground, ALWAYS);
         boardBackground.setAlignment(Pos.CENTER);
         HBox wrapper = new HBox();
         wrapper.setAlignment(Pos.CENTER);
         root = new LeafNode();
+        root.setEditable(false);
+        root.setFieldMinWidth(DISPLAY_WIDTH/10);
         boardBackground.setAlignment(Pos.BOTTOM_CENTER);
         wrapper.getChildren().add(root);
         boardBackground.getChildren().add(wrapper);
@@ -138,13 +150,48 @@ public class UserInterface extends VBox {
         getChildren().add(box);
     }
 
-    private void drawDoneButton() {
+    private void drawBottom(){
+        HBox bottomBar = new HBox();
+        bottomBar.setPadding(new Insets(0.0, DISPLAY_HEIGHT/50, DISPLAY_HEIGHT/50, DISPLAY_HEIGHT/50));
+        bottomBar.getChildren().add(new ResetButton(this));
+
+        ChooseGoal c = new ChooseGoal();
+
+        c.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+                root.setText(null);
+                resetErrors();
+                if (newValue.equals(ChooseGoal.chooseOwn)) {
+                    root.setEditable(true);
+                    root.setPlaceHolder("Type goal here...");
+                } else {
+                    setGoal(newValue);
+                    root.setEditable(false);
+                }
+        });
+
+        Label label = new Label("Choose goal:");
+        label.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
+        bottomBar.getChildren().addAll(label, c);
+
 
         DoneButton button = new DoneButton(this);
         HBox doneBox = new HBox(button);
         doneBox.setAlignment(Pos.BOTTOM_RIGHT);
-        getChildren().add(doneBox);
+        HBox.setHgrow(doneBox, ALWAYS);
+        bottomBar.getChildren().add(doneBox);
+        this.getChildren().add(bottomBar);
     }
 
+    public void resetErrors(){
+        resetErrors(root);
+    }
+
+    private void resetErrors(LeafNode node) {
+        node.resetError();
+        for (LeafNode child: node.getChildNodes()){
+            resetErrors(child);
+        }
+    }
 
 }

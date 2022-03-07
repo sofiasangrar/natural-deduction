@@ -1,8 +1,12 @@
 package natded.UI;
 
 import com.sun.javafx.scene.control.skin.Utils;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import lexer.Lexer;
@@ -25,6 +29,8 @@ public class StepTextField extends TextField {
         //StepTextField.this.setMinHeight(heightText.getLayoutBounds().getHeight()+ 2 * StepTextField.this.getPadding().getTop() + 2d);
         this.setMinWidth(minWidth);
         this.setFont(new Font(DISPLAY_HEIGHT/60));
+        this.setEditableField(true);
+        //this.setPadding(new Insets(0.0,0.0,0.0,0.0));
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && StepTextField.this.getContent().length()>0){
                 Parser.error = false;
@@ -83,6 +89,18 @@ public class StepTextField extends TextField {
             StepTextField.this.setPrefWidth(text.getLayoutBounds().getWidth()+ 2 * StepTextField.this.getPadding().getLeft() + 2d);
 
         });
+    }
+
+    public void setEditableField(boolean editable){
+        setEditable(editable);
+        System.out.println(getBorder());
+        if (editable) {
+            setCursor(Cursor.TEXT);
+            setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1");
+        } else {
+            setStyle("-fx-background-color: whitesmoke; -fx-border-width: 0");
+            setCursor(Cursor.DEFAULT);
+        }
     }
 
 
