@@ -1,5 +1,10 @@
 package natded;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.scene.Node;
+import javafx.util.Duration;
 import lexer.tokens.*;
 
 public class NatDedUtilities {
@@ -33,8 +38,5 @@ public class NatDedUtilities {
 
     public static final String[] proofs = {deMorgan, notPorQ, modusPonens, orAndAnd, halfOfOr, falseIsTrue};
     public static final Class[] logicSymbols = {AndToken.class, OrToken.class, EmptyToken.class, ImpliesToken.class, NDToken.class, NotToken.class};
-
-
-
 
 }

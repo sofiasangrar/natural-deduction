@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceBox;
 
-
 import static natded.NatDedUtilities.*;
 
 public class ChooseGoal extends ChoiceBox<String> {
@@ -18,14 +17,8 @@ public class ChooseGoal extends ChoiceBox<String> {
 
         this.setStyle(STYLE);
 
-        ObservableList<String> choices = FXCollections.observableArrayList(
-                deMorgan,
-                notPorQ,
-                modusPonens,
-                orAndAnd,
-                halfOfOr,
-                falseIsTrue,
-                chooseOwn);
+        ObservableList<String> choices = FXCollections.observableArrayList(proofs);
+        choices.add(chooseOwn);
 
         this.setItems(choices);
 

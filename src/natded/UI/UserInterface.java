@@ -1,8 +1,12 @@
 package natded.UI;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
@@ -12,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import lexer.tokens.*;
 import natded.StepNode;
 
@@ -21,10 +26,10 @@ import java.io.FileNotFoundException;
 import static javafx.scene.layout.Priority.ALWAYS;
 import static natded.Main.DISPLAY_HEIGHT;
 import static natded.Main.DISPLAY_WIDTH;
-import static natded.NatDedUtilities.logicSymbols;
 
-public class UserInterface extends VBox {
+public class UserInterface extends StackPane {
 
+    VBox space = new VBox();
     LeafNode root;
     private static final String lightGrad = "whitesmoke";
     private static final String borderColor = "gray";
@@ -32,12 +37,14 @@ public class UserInterface extends VBox {
     static String buttonStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", darkgray); -fx-border-color: " + borderColor + "; -fx-border-radius: " + borderRadius;
     static String incorrectDropdownStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", #eb6651); -fx-border-color: "+ borderColor +"; -fx-border-radius: " + borderRadius;
     static Image alert;
+    private static Image tick;
     private static Image[] instructionImages = new Image[3];
     private static Image[] ruleImages = new Image[13];
 
     //get images
     static {
         try {
+            tick = new Image(new FileInputStream("src/natded/UI/images/tick.png"));
             alert = new Image(new FileInputStream("src/natded/UI/images/alert.png"));
             instructionImages[0] = new Image(new FileInputStream("src/natded/UI/images/1.png"));
             instructionImages[1] = new Image(new FileInputStream("src/natded/UI/images/2.png"));
@@ -73,8 +80,9 @@ public class UserInterface extends VBox {
 
     UserInterface(){
         super();
-        this.setAlignment(Pos.TOP_CENTER);
-        this.setBackground(new Background(new BackgroundFill(NDScene.WINDOW_BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+        this.getChildren().add(space);
+        space.setAlignment(Pos.TOP_CENTER);
+        space.setBackground(new Background(new BackgroundFill(NDScene.WINDOW_BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
         initializeUserInterface();
     }
 
@@ -101,11 +109,11 @@ public class UserInterface extends VBox {
      * draw proof writing area
      */
     private void drawSpace() {
-        //elements grow vertically
-        //TODO - check if needed
+        //elements grow from the bottom up
         VBox boardBackground = new VBox();
         VBox.setVgrow(boardBackground, ALWAYS);
         boardBackground.setAlignment(Pos.BOTTOM_CENTER);
+
 
         //wrapper for proof area to contain its width
         HBox wrapper = new HBox();
@@ -118,7 +126,7 @@ public class UserInterface extends VBox {
 
         wrapper.getChildren().add(root);
         boardBackground.getChildren().add(wrapper);
-        getChildren().add(boardBackground);
+        space.getChildren().add(boardBackground);
 
     }
 
@@ -132,7 +140,7 @@ public class UserInterface extends VBox {
 
         Font titleFont = new Font(DISPLAY_WIDTH/40);
         title.setFont(titleFont);
-        getChildren().add(title);
+        space.getChildren().add(title);
     }
 
     /**
@@ -141,7 +149,7 @@ public class UserInterface extends VBox {
     private void drawTop(){
         VBox box = new VBox ();
         box.getChildren().addAll(getRules(), getInstructions());
-        getChildren().add(box);
+        space.getChildren().add(box);
     }
 
     /**
@@ -253,7 +261,7 @@ public class UserInterface extends VBox {
         label.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
 
         bottomBar.getChildren().addAll(label, getChooseBox(), getCheckButton());
-        this.getChildren().add(bottomBar);
+        space.getChildren().add(bottomBar);
     }
 
     /**
@@ -267,6 +275,7 @@ public class UserInterface extends VBox {
 
             root.setText(null);
             resetErrors();
+            removeValid();
             if (newValue.equals(ChooseGoal.chooseOwn)) {
                 root.setEditable(true);
                 root.setPlaceHolder();
@@ -330,8 +339,63 @@ public class UserInterface extends VBox {
 
     }
 
-    public void showValid(){
-
+    /**
+     * remove everything in screen, like error messages, except for goal
+     */
+    void reset(){
+        root.deleteChildren();
+        resetErrors();
+        root.resetJustif();
+        removeValid();
     }
+
+    /**
+     * remove the valid proof symbol
+     */
+    public void removeValid(){
+        if (this.getChildren().size()==2) {
+            this.getChildren().remove(1);
+        }
+    }
+
+    /**
+     * show the valid proof symbol, including animation
+     */
+    public void showValid(){
+        ImageView tickView = new ImageView(tick);
+        tickView.setPreserveRatio(true);
+        tickView.setFitWidth(DISPLAY_WIDTH/15);
+        tickView.setTranslateX(DISPLAY_WIDTH/3);
+        getChildren().add(tickView);
+        animate(tickView);
+    }
+
+    /**
+     * a scaling animation to draw attention
+     */
+    public static void animate(Node node) {
+        Duration start = Duration.ZERO;
+        Duration mid = Duration.seconds(0.25);
+        Duration end = Duration.seconds(0.5);
+
+        //at start, scale is normal
+        KeyValue startValueW = new KeyValue(node.scaleXProperty(), 1);
+        KeyValue startValueH = new KeyValue(node.scaleYProperty(), 1);
+        KeyFrame startFrame = new KeyFrame(start, startValueW, startValueH);
+
+        //scales up to 1.5
+        KeyValue midValueW = new KeyValue(node.scaleXProperty(), 1.5);
+        KeyValue midValueH = new KeyValue(node.scaleYProperty(), 1.5);
+        KeyFrame midFrame = new KeyFrame(mid, midValueW, midValueH);
+
+        //scale back to regular size at the end
+        KeyFrame endFrame = new KeyFrame(end, startValueH, startValueW);
+
+        Timeline t1 = new Timeline(startFrame, midFrame, endFrame);
+        t1.setCycleCount(1);
+        t1.setAutoReverse(true);
+        t1.play();
+    }
+
 
 }

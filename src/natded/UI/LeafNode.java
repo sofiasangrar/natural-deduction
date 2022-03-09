@@ -207,7 +207,7 @@ public class LeafNode extends VBox {
         fieldHbox.getChildren().add(error);
 
         //animate the error each time it is shown
-        error.animate();
+        UserInterface.animate(error);
     }
 
     /**
