@@ -1,12 +1,7 @@
 package natded.UI;
 
-import com.sun.javafx.scene.control.skin.Utils;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import lexer.Lexer;
@@ -14,23 +9,22 @@ import lexer.tokens.*;
 import parser.Clause;
 import parser.Parser;
 
+import java.lang.reflect.InvocationTargetException;
+
 import static natded.Main.DISPLAY_HEIGHT;
 import static natded.Main.DISPLAY_WIDTH;
+import static natded.NatDedUtilities.logicSymbols;
+import static natded.UI.NDScene.WINDOW_BACKGROUND_COLOR;
 
 public class StepTextField extends TextField {
 
-    private LeafNode parent;
-    private final double minWidth = DISPLAY_WIDTH/15;
+    private final double MIN_WIDTH = DISPLAY_WIDTH/15;
 
-    public StepTextField(LeafNode parent) {
+    StepTextField() {
         super();
-        //Text heightText = new Text("!");
-        //heightText.setFont(StepTextField.this.getFont());
-        //StepTextField.this.setMinHeight(heightText.getLayoutBounds().getHeight()+ 2 * StepTextField.this.getPadding().getTop() + 2d);
-        this.setMinWidth(minWidth);
+        this.setMinWidth(MIN_WIDTH);
         this.setFont(new Font(DISPLAY_HEIGHT/60));
         this.setEditableField(true);
-        //this.setPadding(new Insets(0.0,0.0,0.0,0.0));
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && StepTextField.this.getContent().length()>0){
                 Parser.error = false;
@@ -46,44 +40,26 @@ public class StepTextField extends TextField {
                 StepTextField.this.setStyle("-fx-text-fill: black;");
             }
     });
-        this.parent = parent;
+
+        //set listeners to replace keyboard keys as aliases for each logical symbol
         this.getContent().addListener((observable, oldValue, newValue) -> {
-            for (String key : AndToken.getKeys()) {
-                String s = newValue.replace(key, AndToken.getString());
-                if (!s.equals(newValue)) {
-                    this.setText(s);
+            for (Class<? extends Token> symbol : logicSymbols){
+                String[] keys;
+                String code;
+                try {
+                    keys = (String[])symbol.getMethod("getKeys").invoke(null);
+                    code = (String)symbol.getMethod("getString").invoke(null);
+                    for (String key : keys) {
+                        String s = newValue.replace(key, code);
+                        if (!s.equals(newValue)) {
+                            this.setText(s);
+                        }            }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
-            for (String key : EmptyToken.getKeys()) {
-                String s = newValue.replace(key, EmptyToken.getString());
-                if (!s.equals(newValue)) {
-                    this.setText(s);
-                }            }
-
-            for (String key : ImpliesToken.getKeys()) {
-                String s = newValue.replace(key, ImpliesToken.getString());
-                if (!s.equals(newValue)) {
-                    this.setText(s);
-                }            }
-
-            for (String key : NDToken.getKeys()) {
-                String s = newValue.replace(key, NDToken.getString());
-                if (!s.equals(newValue)) {
-                    this.setText(s);
-                }            }
-
-            for (String key : NotToken.getKeys()) {
-                String s = newValue.replace(key, NotToken.getString());
-                if (!s.equals(newValue)) {
-                    this.setText(s);
-                }            }
-
-            for (String key : OrToken.getKeys()) {
-                String s = newValue.replace(key, OrToken.getString());
-                if (!s.equals(newValue)) {
-                    this.setText(s);
-                }            }
+            // set field width to be based on current text in box
             Text text = new Text(StepTextField.this.getText());
             text.setFont(StepTextField.this.getFont());
             StepTextField.this.setPrefWidth(text.getLayoutBounds().getWidth()+ 2 * StepTextField.this.getPadding().getLeft() + 2d);
@@ -91,14 +67,17 @@ public class StepTextField extends TextField {
         });
     }
 
+    /**
+     * toggle whether field is editable and adjust style accordingly
+     * @param editable whether field should be editable or not
+     */
     public void setEditableField(boolean editable){
         setEditable(editable);
-        System.out.println(getBorder());
         if (editable) {
             setCursor(Cursor.TEXT);
             setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1");
         } else {
-            setStyle("-fx-background-color: whitesmoke; -fx-border-width: 0");
+            setStyle("-fx-background-color: "+ WINDOW_BACKGROUND_COLOR + "; -fx-border-width: 0");
             setCursor(Cursor.DEFAULT);
         }
     }

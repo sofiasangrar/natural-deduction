@@ -1,8 +1,10 @@
 package natded.exceptions;
 
+import natded.constants.Step;
+
 public class NothingIntroducedException extends RuntimeException {
 
-    public NothingIntroducedException(String expected){
-        super(expected.substring(0, 1).toUpperCase() + expected.substring(1) + " not introduced.");
+    public NothingIntroducedException(Step justification, String expected){
+        super(justification + " used as justification, but "  + expected + " not introduced.");
     }
 }

@@ -1,6 +1,5 @@
 package natded.exceptions;
 
-import natded.UI.Justification;
 import natded.constants.Step;
 
 public class PremiseNumberException extends RuntimeException {

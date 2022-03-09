@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import static natded.Main.DISPLAY_HEIGHT;
 
 public class LeafNode extends VBox {
-//public class LeafNode extends HBox {
-
 
     private StepTextField field;
     private HBox childrenBox;
@@ -27,81 +25,91 @@ public class LeafNode extends VBox {
     private LeafNode parent;
     private Justification justif;
     private ErrorSymbol error;
-    Tooltip t = new Tooltip();
-    double margin = DISPLAY_HEIGHT/100;
+    private Tooltip t = new Tooltip();
+    private final double MARGIN = DISPLAY_HEIGHT/100;
 
 
     LeafNode(){
         super();
         this.parent = null;
-        VBox textAndLine = new VBox();
         this.setAlignment(Pos.BOTTOM_CENTER);
         VBox.setVgrow(this, Priority.ALWAYS);
 
-        textAndLine.setAlignment(Pos.BOTTOM_CENTER);
-        VBox.setVgrow(textAndLine, Priority.ALWAYS);
-        textAndLine.setAlignment(Pos.BOTTOM_CENTER);
+        //container for subtrees
         childrenBox = new HBox();
-        HBox.setHgrow(childrenBox, Priority.ALWAYS);
-        fieldHbox = new HBox();
-        fieldHbox.setPrefHeight(DISPLAY_HEIGHT/30);
         childrenBox.setAlignment(Pos.CENTER);
         childrenBox.setAlignment(Pos.BOTTOM_CENTER);
-        fieldHbox.setStyle("-fx-border-style: solid hidden hidden hidden;");
-        fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
-        fieldHbox.setPadding(new Insets(margin,0.0,0.0,0.0));
-
-        VBox.setMargin(fieldHbox, new Insets(0, margin*2, margin,0));
-        HBox.setHgrow(fieldHbox, Priority.ALWAYS);
-
-        AddButton addButton = new AddButton(this);
-
+        HBox.setHgrow(childrenBox, Priority.ALWAYS);
         this.getChildren().add(childrenBox);
 
-        justif = new Justification(this);
-        justif.setPrefHeight(fieldHbox.getPrefHeight());
-        justif.setPrefWidth(1.75*fieldHbox.getPrefHeight());
+        //container for the text field, add/substract buttons and justification
+        fieldHbox = new HBox();
+        fieldHbox.setPrefHeight(DISPLAY_HEIGHT/30);
+        fieldHbox.setStyle("-fx-border-style: solid hidden hidden hidden;"); //add top border line to mimic natural deduction sequent
+        fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
+        fieldHbox.setPadding(new Insets(MARGIN,0.0,0.0,0.0));
+        VBox.setMargin(fieldHbox, new Insets(0, MARGIN*2, MARGIN,0));
+        HBox.setHgrow(fieldHbox, Priority.ALWAYS);
 
+        //add button
+        AddButton addButton = new AddButton(this);
         addButton.setPrefSize(fieldHbox.getPrefHeight(), fieldHbox.getPrefHeight());
-        //addButton.setMaxSize(fieldHbox.getPrefHeight(), fieldHbox.getPrefHeight());
-        field = new StepTextField(this);
 
+        //text field to qrite proof steps
+        field = new StepTextField();
         field.setAlignment(Pos.CENTER);
         field.selectPositionCaret(field.getLength());
         field.setPrefHeight(fieldHbox.getPrefHeight() + 3);
 
+        //justification dropdown
+        justif = new Justification();
+        justif.setPrefHeight(fieldHbox.getPrefHeight());
+        justif.setPrefWidth(1.75*fieldHbox.getPrefHeight());
+
+        //error symbol
         error = new ErrorSymbol();
 
         fieldHbox.getChildren().addAll(addButton, field, justif);
 
-        fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
-
         this.getChildren().add(fieldHbox);
-
-
     }
 
-    public void setFieldMinWidth(double width) {
+    /**
+     * assign a minimum width to the text field
+     * @param width desired minimum width
+     */
+    void setFieldMinWidth(double width) {
         field.setMinWidth(width);
     }
 
-    public void setText(String text){
+    /**
+     * set text
+     * @param text text to place into field
+     */
+    void setText(String text){
         field.setText(text);
     }
 
-    public void setPlaceHolder(String text) {
-        field.setPromptText(text);
+    /**
+     * set placeholder text when own goal is selected
+     */
+    void setPlaceHolder() {
+        field.setPromptText("Type goal here...");
     }
 
-    LeafNode(LeafNode parent){
+    /**
+     * create a new non-root node
+     */
+    private LeafNode(LeafNode parent){
         this();
         this.parent = parent;
-        field.setEditable(true);
+        setEditable(true);
         addSubButton();
-
-
     }
 
+    /**
+     * add a remove button for the current node into the correct place
+     */
     private void addSubButton(){
         SubtractButton s = new SubtractButton(this);
         s.setPrefSize(fieldHbox.getPrefHeight(), fieldHbox.getPrefHeight());
@@ -109,8 +117,11 @@ public class LeafNode extends VBox {
 
     }
 
-
-    public ArrayList<LeafNode> getChildNodes(){
+    /**
+     * get antecedent nodes from UI
+     * @return list of child nodes
+     */
+    ArrayList<LeafNode> getChildNodes(){
         ArrayList<LeafNode> fields = new ArrayList<>();
         if (hasChildren()) {
             ObservableList<Node> boxes = childrenBox.getChildren();
@@ -123,15 +134,26 @@ public class LeafNode extends VBox {
         return fields;
     }
 
+    /**
+     * determine whether the node has antecedents
+     * @return if node has child nodes
+     */
     private boolean hasChildren(){
         return childrenBox.getChildren().size()>0;
     }
 
+    /**
+     * add new antecedent to node
+     */
     void addChild(){
         childrenBox.getChildren().add(new LeafNode(this));
     }
 
 
+    /**
+     * retrieve text in each textfield and place into a proof tree
+     * @return unparsed proof tree
+     */
     StepNode getTree(){
         Step s;
         try {
@@ -141,7 +163,11 @@ public class LeafNode extends VBox {
         }
 
         resetError();
-        StepNode n = new StepNode(this.field.getText(), s, this);
+        String text = "";
+        if (this.field.getText()!=null) {
+         text = this.field.getText();
+        }
+        StepNode n = new StepNode(text, s, this);
 
         for (LeafNode child : getChildNodes()) {
             n.addChild(child.getTree());
@@ -149,47 +175,70 @@ public class LeafNode extends VBox {
         return n;
     }
 
+    /**
+     * delete a specified antecedent step from the tree
+     * @param node node to delete
+     */
     private void deleteChild(LeafNode node){
         childrenBox.getChildren().remove(node);
     }
 
+    /**
+     * delete this node from the tree
+     */
     public void delete() {
         parent.deleteChild(this);
     }
 
+    /**
+     * show the error symbol and assign it a tooltip detailing the issue
+     * @param e exception to display
+     */
     public void displayException(RuntimeException e) {
         t.setText(e.getMessage());
         t.setFont(new Font(field.getFont().getSize()));
         Tooltip.install(error, t);
+
+        //highlight the justification box if the error is to do with the justification
         if (e instanceof NoJustificationException || e instanceof JustificationMismatchException) {
             justif.setIncorrect();
         }
         error.setFitHeight(fieldHbox.getPrefHeight());
-
         fieldHbox.getChildren().add(error);
+
+        //animate the error each time it is shown
         error.animate();
-
-
-
     }
 
+    /**
+     * remove error signifiers from node
+     */
     public void resetError() {
-
         justif.resetStyle();
         Tooltip.uninstall(error, t);
         this.fieldHbox.getChildren().remove(error);
     }
 
-    public void deleteChildren() {
+    /**
+     * delete all antecedents of this node from ui
+     */
+    void deleteChildren() {
         for (int i = getChildNodes().size()-1; i >=0; i--) {
             getChildNodes().get(i).delete();
         }
     }
 
+    /**
+     * set text field to be editable
+     * @param editable whether or not the field should be editable
+     */
     public void setEditable(boolean editable){
         field.setEditableField(editable);
     }
 
+    /**
+     * clear the selection on the justification
+     */
     public void resetJustif(){
         this.justif.getSelectionModel().clearSelection();
     }

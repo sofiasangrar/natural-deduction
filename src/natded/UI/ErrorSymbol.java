@@ -8,9 +8,11 @@ import javafx.util.Duration;
 
 public class ErrorSymbol extends ImageView {
 
-    public ErrorSymbol() {
+    ErrorSymbol() {
         super(UserInterface.alert);
         setPreserveRatio(true);
+
+        //show different styles when mouse is hovering over
         setOnMouseEntered((e)->{
                     this.setStyle("-fx-opacity: 0.5");
                 }
@@ -21,29 +23,31 @@ public class ErrorSymbol extends ImageView {
         );
     }
 
+    /**
+     * a scaling animation to draw attention
+     */
     public void animate(){
-        // Defining the Durations of animations
+
         Duration start = Duration.ZERO;
         Duration mid = Duration.seconds(0.25);
         Duration end = Duration.seconds(0.5);
 
-        //Creating the keyFrames to use in timeline
-        double init = getFitWidth();
+        //at start, scale is normal
         KeyValue startValueW = new KeyValue(scaleXProperty(),1);
         KeyValue startValueH = new KeyValue(scaleYProperty(),1);
         KeyFrame startFrame = new KeyFrame(start, startValueW, startValueH);
+
+        //scales up to 1.5
         KeyValue midValueW = new KeyValue(scaleXProperty(), 1.5);
         KeyValue midValueH = new KeyValue(scaleYProperty(), 1.5);
         KeyFrame midFrame = new KeyFrame(mid, midValueW, midValueH);
+
+        //scale back to regular size at the end
         KeyFrame endFrame = new KeyFrame(end, startValueH, startValueW);
-// Creating a Timeline using above values
+
         Timeline t1 = new Timeline(startFrame, midFrame, endFrame);
-// Setting the cycle count of animation
         t1.setCycleCount(1);
-        //t1.setCycleCount(t1.INDEFINITE);
-//Setting the auto reverse property of animation
         t1.setAutoReverse(true);
-// Running the animation using play() method
         t1.play();
     }
 }

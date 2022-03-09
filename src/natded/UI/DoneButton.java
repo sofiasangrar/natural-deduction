@@ -12,9 +12,7 @@ public class DoneButton extends Button {
         setOnMouseClicked(event -> {StepNode root = view.getTree();
         Proof p = Proof.parse(root);
         if (p.isValid()) {
-            System.out.println("valid!");
-        } else {
-            System.out.println("invalid!");
+            view.showValid();
         }});
     }
 }

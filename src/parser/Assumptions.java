@@ -5,26 +5,29 @@ import lexer.tokens.CommaToken;
 import lexer.tokens.EmptyToken;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class Assumptions {
 
 	private List<Expr> assumptions;
 
-	public Assumptions(List<Expr> assumptions){
+	Assumptions(List<Expr> assumptions){
 		this.assumptions= new ArrayList<>(assumptions);
 	}
 
-	public Assumptions() {
+	Assumptions() {
 		this.assumptions = new ArrayList<>();
 	}
 
+	/**
+	 * parse consequent tokens as assumptions
+	 * @return new assumptions object from relevant tokens
+	 */
 	public static Assumptions parse(){
 		List<Expr> assumptions = new ArrayList<>();
 		assumptions.add(Expr.parse());
 
+		//comma signifies another assumption to add to the list
 		while (Parser.t instanceof CommaToken) {
 			Parser.t = Lexer.lex();
 			assumptions.add(Expr.parse());
@@ -33,6 +36,10 @@ public class Assumptions {
 		return new Assumptions(assumptions);
 	}
 
+	/**
+	 * get assumptions list
+	 * @return list of assumptions
+	 */
 	public List<Expr> getAssumptions() {
 		return assumptions;
 	}
@@ -62,6 +69,8 @@ public class Assumptions {
 		ArrayList<Expr> list1 = new ArrayList<>(this.getAssumptions());
 		ArrayList<Expr> list2 = new ArrayList<>(compare.getAssumptions());
 
+		//lists must be equal (in any order) for the assumption objects to be considered the same.
+		//check for set equality by checking if each set is contained in the other
 		for (Expr expr : list1) {
 			if (!list2.contains(expr)) {
 				return false;

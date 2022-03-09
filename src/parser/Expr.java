@@ -25,6 +25,10 @@ public class Expr {
 		hasright = true;
 	}
 
+	/**
+	 * parse he next tokens as an implication expression (or a disjunction if there is no RHS)
+	 * @return implication expression
+	 */
 	  public static Expr parse() {
 	  	Disj left = Disj.parse();
 	  	if (Parser.t instanceof ImpliesToken) {
@@ -48,19 +52,23 @@ public class Expr {
 		return left.equals(compare.left) && right.equals(compare.right);
 	}
 
-	public boolean isDisj(){
+	boolean isDisj(){
 		return this.unbracket() instanceof Disj	&& !(this.unbracket() instanceof Conj);
 	}
 
-	public boolean isConj(){
+	boolean isConj(){
 		return this.unbracket() instanceof Conj	&& !(this.unbracket() instanceof Factor);
 	}
 
-	public boolean isImpl(){
+	boolean isImpl(){
 		return !(this.unbracket() instanceof Disj);
 	}
 
-	public Expr unbracket(){
+	/**
+	 * remove brackets, since parse tree encapsulates precedence once sentences are parsed
+	 * @return expression without brackets
+	 */
+	Expr unbracket(){
 		Expr e = this;
 		while(e instanceof BracketedExpr) {
 			e = ((BracketedExpr) e).expr;

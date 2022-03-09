@@ -4,7 +4,7 @@ import natded.constants.Step;
 
 public class NothingToEliminateException extends RuntimeException {
 
-    public NothingToEliminateException(String expected){
-        super("No " + expected + " to eliminate.");
+    public NothingToEliminateException(Step justification, String expected){
+        super(justification + " used as justification, but no " + expected + " to eliminate.");
     }
 }

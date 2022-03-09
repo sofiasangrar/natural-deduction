@@ -15,7 +15,6 @@ import java.util.List;
 
 public class Justification extends ChoiceBox<Pair<String, Step>> {
 
-    private LeafNode parent;
     private String style = UserInterface.buttonStyle;
     private String wrongStyle = UserInterface.incorrectDropdownStyle;
 
@@ -27,14 +26,11 @@ public class Justification extends ChoiceBox<Pair<String, Step>> {
         this.setStyle(wrongStyle);
     }
 
-    Justification(LeafNode parent){
+    Justification(){
         super();
         this.setStyle(style);
-        this.parent = parent;
-        //this.setPadding(new Insets(0.0,0.0,0.0,0.0));
 
-        //this.setMaxSize(30,20);
-
+        //list of choices for justification
         List<Pair<String, Step>> choices = new ArrayList<>();
         choices.add(new Pair<>("Ass.", Step.ASSUMPTION));
         choices.add(new Pair<>(ImpliesToken.getString()+"-E", Step.IMP_ELIM));

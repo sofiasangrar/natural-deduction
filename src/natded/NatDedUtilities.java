@@ -31,6 +31,8 @@ public class NatDedUtilities {
     public static final String halfOfOr = "P " + or + " Q, " + not + "P " + nd + " Q";
     public static final String falseIsTrue = not + "P " + nd + " P " + impl + " Q";
 
+    public static final String[] proofs = {deMorgan, notPorQ, modusPonens, orAndAnd, halfOfOr, falseIsTrue};
+    public static final Class[] logicSymbols = {AndToken.class, OrToken.class, EmptyToken.class, ImpliesToken.class, NDToken.class, NotToken.class};
 
 
 

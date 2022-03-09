@@ -1,17 +1,20 @@
 package parser;
 
 import lexer.Lexer;
-import lexer.tokens.BooleanToken;
 import lexer.tokens.FalseToken;
 import lexer.tokens.TrueToken;
 
 public final class BooleanExpr extends Factor {
-    public boolean value;
+    boolean value;
 
-    public BooleanExpr(boolean value) {
+    private BooleanExpr(boolean value) {
         this.value = value;
     }
 
+    /**
+     * parse next token as a true or false
+     * @return new boolean expression, either a true or false token
+     */
     public static BooleanExpr parse(){
         if (Parser.t instanceof TrueToken) {
             Parser.t = Lexer.lex();
@@ -20,8 +23,7 @@ public final class BooleanExpr extends Factor {
             Parser.t = Lexer.lex();
             return new BooleanExpr(false);
         } else {
-            Parser.errorHandle(new BooleanToken());
-            //Parser.t = Lexer.lex();
+            Parser.errorHandle();
         }
         return new BooleanExpr(true);
     }

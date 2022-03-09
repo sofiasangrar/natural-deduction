@@ -1,7 +1,6 @@
 package parser;
 
 import lexer.Lexer;
-import lexer.tokens.NotToken;
 import lexer.tokens.RParenToken;
 
 public final class BracketedExpr extends Factor {
@@ -11,12 +10,17 @@ public final class BracketedExpr extends Factor {
         this.expr = expr;
     }
 
+    /**
+     * parse next tokens as a bracketed expression
+     * @return new bracketed expression with inner expression also parsed
+     */
     public static BracketedExpr parse(){
         Parser.t = Lexer.lex();
         Expr expr = Expr.parse();
+
+        //left bracke must be closed by right bracket
         if (!(Parser.t instanceof RParenToken)) {
-            Parser.errorHandle(new RParenToken());
-            //Parser.t = Lexer.lex();
+            Parser.errorHandle();
             return new BracketedExpr(expr);
         }
         Parser.t = Lexer.lex();

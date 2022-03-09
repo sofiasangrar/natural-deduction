@@ -1,7 +1,6 @@
 package parser;
 
 import lexer.Lexer;
-import lexer.tokens.ImpliesToken;
 import lexer.tokens.OrToken;
 
 import static natded.NatDedUtilities.or;
@@ -9,7 +8,6 @@ import static natded.NatDedUtilities.or;
 public class Disj extends Expr{
     public Conj left;
     public Disj right;
-    boolean hasright;
 
     Disj(){
 
@@ -18,9 +16,12 @@ public class Disj extends Expr{
     Disj(Conj left, Disj right){
         this.left = left;
         this.right = right;
-        hasright = true;
     }
 
+    /**
+     * parse disjunction expression
+     * @return parsed disjunction
+     */
     public static Disj parse() {
         Conj left = Conj.parse();
         if (Parser.t instanceof OrToken) {

@@ -1,17 +1,20 @@
 package parser;
 
 import lexer.Lexer;
-import lexer.tokens.NotToken;
 
 import static natded.NatDedUtilities.not;
 
 public class NotExpr extends Factor {
-    public Expr right;
+    Expr right;
 
-    public NotExpr(Expr right) {
+    private NotExpr(Expr right) {
         this.right = right;
     }
 
+    /**
+     * parse a negated expression
+     * @return parsed negation
+     */
     public static NotExpr parse(){
         Parser.t = Lexer.lex();
         return new NotExpr(Factor.parse());
