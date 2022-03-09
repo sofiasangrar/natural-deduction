@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 
 public class NDScene extends Scene {
     static final Color WINDOW_BACKGROUND_COLOR = Color.WHITESMOKE;
+    static final String BACKGROUND_COLOR_STRING = "whitesmoke";
 
     public NDScene(double width, double height){
         super(new UserInterface(), width, height, WINDOW_BACKGROUND_COLOR);

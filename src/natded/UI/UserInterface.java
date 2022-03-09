@@ -39,9 +39,9 @@ public class UserInterface extends VBox {
     static {
         try {
             alert = new Image(new FileInputStream("src/natded/UI/images/alert.png"));
-            instructionImages[1] = new Image(new FileInputStream("src/natded/UI/images/1.png"));
-            instructionImages[2] = new Image(new FileInputStream("src/natded/UI/images/2.png"));
-            instructionImages[3] = new Image(new FileInputStream("src/natded/UI/images/3.png"));
+            instructionImages[0] = new Image(new FileInputStream("src/natded/UI/images/1.png"));
+            instructionImages[1] = new Image(new FileInputStream("src/natded/UI/images/2.png"));
+            instructionImages[2] = new Image(new FileInputStream("src/natded/UI/images/3.png"));
             ruleImages[0] = new Image(new FileInputStream("src/natded/UI/images/andIntro.png"));
             ruleImages[1] = new Image(new FileInputStream("src/natded/UI/images/orIntro.png"));
             ruleImages[2] = new Image(new FileInputStream("src/natded/UI/images/impIntro.png"));

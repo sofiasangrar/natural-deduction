@@ -310,6 +310,16 @@ public class Proof{
 				}
 			}
 
+			//false intro
+			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject()) &&
+					clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject()) &&
+					((clause1.getExpression()instanceof NotExpr && clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right)) ||
+							(clause2.getExpression()instanceof NotExpr && clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right))) &&
+					conclusion.getExpression() instanceof BooleanExpr &&
+					!((BooleanExpr) conclusion.getExpression()).value){
+				return FALSE_INTRO;
+			}
+
 		} else if (premisses.size()==3) {
 			//or elim
 			Expr R = conclusion.getExpression();
@@ -664,6 +674,30 @@ public class Proof{
 						throw new RuleException(NEG_ELIM, "conclusion of one premise is not negation of the other");
 					}
 
+				}
+				break;
+
+			case FALSE_INTRO:
+				if (size!=2){
+					throw new PremiseNumberException(FALSE_INTRO, 2, size);
+				}
+				clause1 = premisses.get(0);
+				clause2 = premisses.get(1);
+
+				if (!clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject())){
+					throw new AssumptionsMismatchException();
+				}
+				if (!clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
+					throw new AssumptionsMismatchException();
+				}
+				if(!((clause1.getExpression()instanceof NotExpr && clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right)) ||
+								(clause2.getExpression()instanceof NotExpr && clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)))) {
+					throw new RuleException(FALSE_INTRO, "conclusion of one premise is not negation of the other");
+				}
+
+				if(!(conclusion.getExpression() instanceof BooleanExpr &&
+						!((BooleanExpr) conclusion.getExpression()).value)){
+					throw new NothingIntroducedException(FALSE_INTRO, "False");
 				}
 				break;
 

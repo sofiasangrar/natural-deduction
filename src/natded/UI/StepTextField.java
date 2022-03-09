@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import static natded.Main.DISPLAY_HEIGHT;
 import static natded.Main.DISPLAY_WIDTH;
 import static natded.NatDedUtilities.logicSymbols;
+import static natded.UI.NDScene.BACKGROUND_COLOR_STRING;
 import static natded.UI.NDScene.WINDOW_BACKGROUND_COLOR;
 
 public class StepTextField extends TextField {
@@ -77,7 +78,7 @@ public class StepTextField extends TextField {
             setCursor(Cursor.TEXT);
             setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1");
         } else {
-            setStyle("-fx-background-color: "+ WINDOW_BACKGROUND_COLOR + "; -fx-border-width: 0");
+            setStyle("-fx-background-color: "+ BACKGROUND_COLOR_STRING + "; -fx-border-width: 0");
             setCursor(Cursor.DEFAULT);
         }
     }
