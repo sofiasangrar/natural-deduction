@@ -5,7 +5,7 @@ import lexer.tokens.*;
 public class Factor extends Conj {
 
   /**
-   * parse a factor, which is a boolean, an identifier,  abracketed expression or a negated expression
+   * parse a factor, which is a boolean, an identifier,  a bracketed expression or a negated expression
    * @return parsed factor
    */
   public static Factor parse() {
@@ -18,7 +18,7 @@ public class Factor extends Conj {
     } else if (Parser.t instanceof LParenToken) {
       return BracketedExpr.parse();
     } else {
-      Parser.error = true;
+      Parser.errorHandle("a factor");
     }
     return new Factor();
 

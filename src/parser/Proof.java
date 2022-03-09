@@ -26,10 +26,13 @@ public class Proof{
 	 */
 	public static Proof parse(StepNode node){
 		Lexer.setLexString(node.getInput());
-		Parser.error = false;
+		Parser.clearError();
 		Parser.t = Lexer.lex();
 		node.setParsedInput(Clause.parse());
 		node.setIncorrectSyntax(Parser.error);
+		if (Parser.exception!=null){
+			displayException(node.getUIElement(), Parser.exception);
+		}
 
 		//parse subtrees
 		for (int i = 0; i < node.getChildren().size(); i++) {
@@ -53,7 +56,7 @@ public class Proof{
 	private boolean isValid(StepNode root) {
 		//do not bother parsing proof steps if the syntax is invalid
 		if (root.hasIncorrectSyntax()) {
-			displayException(root.getUIElement(), new SyntaxError());
+			//displayException(root.getUIElement(), new SyntaxError());
 			isValid=false;
 		} else if (!checkStep(root)) {
 			isValid = false;

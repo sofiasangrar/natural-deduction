@@ -32,19 +32,27 @@ public class Clause {
 			Parser.t= Lexer.lex();
 		} else {
 			assumptions = Assumptions.parse();
+			if (assumptions.getAssumptions() == null || assumptions.getAssumptions().size() == 0){
+				Parser.errorHandle("assumptions");
+			}
+
 		}
 
-		//assumptions musy be followed by turnstile
+		//assumptions must be followed by turnstile
 		if(Parser.t instanceof NDToken) {
 			Parser.t = Lexer.lex();
-			expression = Expr.parse();
 		} else {
-			Parser.errorHandle();
+			Parser.errorHandle(NDToken.getString());
+		}
+
+		expression = Expr.parse();
+		if (expression==null) {
+			Parser.errorHandle("an expression");
 		}
 
 		//if the sentence is not yet finished after parsing the conclusion, there is an error
 		if (!(Parser.t instanceof EOIToken)) {
-			Parser.errorHandle();
+			Parser.errorHandle(EOIToken.getString());
 		}
 
     	return new Clause(assumptions, expression);

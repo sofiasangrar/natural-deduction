@@ -9,13 +9,11 @@ import lexer.tokens.*;
 import parser.Clause;
 import parser.Parser;
 
-import java.lang.reflect.InvocationTargetException;
 
 import static natded.Main.DISPLAY_HEIGHT;
 import static natded.Main.DISPLAY_WIDTH;
 import static natded.NatDedUtilities.logicSymbols;
 import static natded.UI.NDScene.BACKGROUND_COLOR_STRING;
-import static natded.UI.NDScene.WINDOW_BACKGROUND_COLOR;
 
 public class StepTextField extends TextField {
 
@@ -28,7 +26,7 @@ public class StepTextField extends TextField {
         this.setEditableField(true);
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && StepTextField.this.getContent().length()>0){
-                Parser.error = false;
+                Parser.clearError();
                 Lexer.setLexString(StepTextField.this.getText());
                 Parser.t = Lexer.lex();
                 Clause.parse();

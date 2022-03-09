@@ -1,6 +1,7 @@
 package parser;
 
 import lexer.Lexer;
+import lexer.tokens.BooleanToken;
 import lexer.tokens.FalseToken;
 import lexer.tokens.TrueToken;
 
@@ -23,7 +24,7 @@ public final class BooleanExpr extends Factor {
             Parser.t = Lexer.lex();
             return new BooleanExpr(false);
         } else {
-            Parser.errorHandle();
+            Parser.errorHandle(BooleanToken.getString());
         }
         return new BooleanExpr(true);
     }
