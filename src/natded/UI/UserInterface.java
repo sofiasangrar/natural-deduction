@@ -46,7 +46,7 @@ public class UserInterface extends StackPane {
         try {
             tick = new Image(new FileInputStream("src/natded/UI/images/tick.png"));
             alert = new Image(new FileInputStream("src/natded/UI/images/alert.png"));
-            instructionImages[0] = new Image(new FileInputStream("src/natded/UI/images/1.png"));
+            instructionImages[0] = new Image(new FileInputStream("src/natded/UI/images/1v2.png"));
             instructionImages[1] = new Image(new FileInputStream("src/natded/UI/images/2.png"));
             instructionImages[2] = new Image(new FileInputStream("src/natded/UI/images/3.png"));
             ruleImages[0] = new Image(new FileInputStream("src/natded/UI/images/andIntro.png"));
