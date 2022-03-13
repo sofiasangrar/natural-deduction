@@ -6,7 +6,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import lexer.Lexer;
 import lexer.tokens.*;
-import parser.Clause;
+import parser.Sequent;
 import parser.Parser;
 
 
@@ -29,7 +29,7 @@ public class StepTextField extends TextField {
                 Parser.clearError();
                 Lexer.setLexString(StepTextField.this.getText());
                 Parser.t = Lexer.lex();
-                Clause.parse();
+                Sequent.parse();
                 if (Parser.error) {
                     StepTextField.this.setStyle("-fx-text-fill: darkred;");
                 } else {

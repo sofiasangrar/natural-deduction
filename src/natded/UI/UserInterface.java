@@ -237,7 +237,7 @@ public class UserInterface extends StackPane {
         textInstr.add(new Text(getKeys(EmptyToken.class)), 4, 1);
 
         textInstr.add(new Text("For turnstile:"), 5, 0);
-        textInstr.add(new Text(getKeys(NDToken.class)), 5, 1);
+        textInstr.add(new Text(getKeys(TurnstileToken.class)), 5, 1);
 
         box.getChildren().add(textInstr);
 

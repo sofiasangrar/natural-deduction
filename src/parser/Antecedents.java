@@ -7,15 +7,15 @@ import lexer.tokens.EmptyToken;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Assumptions {
+public class Antecedents {
 
 	private List<Expr> assumptions;
 
-	Assumptions(List<Expr> assumptions){
+	Antecedents(List<Expr> assumptions){
 		this.assumptions= new ArrayList<>(assumptions);
 	}
 
-	Assumptions() {
+	Antecedents() {
 		this.assumptions = new ArrayList<>();
 	}
 
@@ -23,7 +23,7 @@ public class Assumptions {
 	 * parse consequent tokens as assumptions
 	 * @return new assumptions object from relevant tokens
 	 */
-	public static Assumptions parse(){
+	public static Antecedents parse(){
 		List<Expr> assumptions = new ArrayList<>();
 		assumptions.add(Expr.parse());
 
@@ -33,7 +33,7 @@ public class Assumptions {
 			assumptions.add(Expr.parse());
 		}
 
-		return new Assumptions(assumptions);
+		return new Antecedents(assumptions);
 	}
 
 	/**
@@ -59,10 +59,10 @@ public class Assumptions {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Assumptions)) {
+		if (!(obj instanceof Antecedents)) {
 			return false;
 		}
-		Assumptions compare = (Assumptions) obj;
+		Antecedents compare = (Antecedents) obj;
 		if (compare.assumptions.size()!= this.assumptions.size()) {
 			return false;
 		}

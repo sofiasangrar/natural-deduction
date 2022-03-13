@@ -2,14 +2,14 @@ package natded;
 
 import natded.UI.LeafNode;
 import natded.constants.Step;
-import parser.Clause;
+import parser.Sequent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StepNode {
     private String input;
-    private Clause parsedInput;
+    private Sequent parsedInput;
     private List<StepNode> children;
     private Step step;
     private LeafNode node;
@@ -57,7 +57,7 @@ public class StepNode {
      * get a natural deduction step if the input has been parsed
      * @return parsed input step
      */
-    public Clause getParsedInput() {
+    public Sequent getParsedInput() {
         return parsedInput;
     }
 
@@ -65,7 +65,7 @@ public class StepNode {
      * set the parse tree
      * @param parsedInput a parsed natural deduction step
      */
-    public void setParsedInput(Clause parsedInput) {
+    public void setParsedInput(Sequent parsedInput) {
         this.parsedInput = parsedInput;
     }
 
@@ -81,12 +81,12 @@ public class StepNode {
      * get child nodes in their parsed format
      * @return list of parse trees of child nodes
      */
-    public ArrayList<Clause> getPremisses(){
-        ArrayList<Clause> clauses = new ArrayList<>();
+    public ArrayList<Sequent> getPremisses(){
+        ArrayList<Sequent> sequents = new ArrayList<>();
         for (StepNode node : children) {
-            clauses.add(node.parsedInput);
+            sequents.add(node.parsedInput);
         }
-        return clauses;
+        return sequents;
     }
 
     /**

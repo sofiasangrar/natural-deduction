@@ -9,35 +9,35 @@ public class LexerTests {
 
     @Test
     public void testWorkingSimple(){
-        String s = "P " + nd + "P";
+        String s = "P " + turnstile + "P";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c = Clause.parse();
+        Sequent c = Sequent.parse();
         assertNotNull(c);
         assertFalse(Parser.error);
     }
 
     @Test
     public void testBrackets(){
-        String s = "(P "+ and + not + "P) " + nd + " F";
+        String s = "(P "+ and + not + "P) " + turnstile + " F";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c = Clause.parse();
+        Sequent c = Sequent.parse();
         assertNotNull(c);
         assertFalse(Parser.error);
     }
 
     @Test
     public void testPrecedence(){
-        String s = "P " + and + not + "P " + nd + " A " + impl + " B " + or + " A " + and + " B";
+        String s = "P " + and + not + "P " + turnstile + " A " + impl + " B " + or + " A " + and + " B";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c = Clause.parse();
+        Sequent c = Sequent.parse();
         assertNotNull(c);
         assertFalse(Parser.error);
-        assertEquals(1, c.getAssumptions().size());
-        assertTrue(c.getAssumptions().get(0) instanceof Conj);
-        assertTrue(((Conj)(c.getAssumptions().get(0))).right instanceof NotExpr);
+        assertEquals(1, c.getAntecedents().size());
+        assertTrue(c.getAntecedents().get(0) instanceof Conj);
+        assertTrue(((Conj)(c.getAntecedents().get(0))).right instanceof NotExpr);
         assertTrue(c.getConclusion().hasright);
         assertTrue(c.getConclusion().right instanceof Disj);
         assertTrue(((Disj) c.getConclusion().right).right instanceof Conj);
@@ -46,14 +46,14 @@ public class LexerTests {
 
     @Test
     public void unbracketTest(){
-        String s = "P " + nd + " P";
+        String s = "P " + turnstile + " P";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c = Clause.parse();
-        s = "P " + nd + " (P)";
+        Sequent c = Sequent.parse();
+        s = "P " + turnstile + " (P)";
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
-        Clause c2 = Clause.parse();
+        Sequent c2 = Sequent.parse();
         assertEquals(c.getConclusion(), c.getConclusion());
         assertEquals(c.getConclusion(), c2.getConclusion());
     }

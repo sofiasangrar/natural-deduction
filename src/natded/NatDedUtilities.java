@@ -1,10 +1,5 @@
 package natded;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.scene.Node;
-import javafx.util.Duration;
 import lexer.tokens.*;
 
 public class NatDedUtilities {
@@ -21,22 +16,22 @@ public class NatDedUtilities {
 
     public static final String impl = ImpliesToken.getString();
 
-    public static final String nd = NDToken.getString();
+    public static final String turnstile = TurnstileToken.getString();
 
     public static final String not =  NotToken.getString();
 
-    public static final String deMorgan = empty + " " + nd + " " + not + "(P "
+    public static final String deMorgan = empty + " " + turnstile + " " + not + "(P "
             + or + " Q) " + impl + " (" + not + "P) "
             + and + " (" + not + "Q)";
 
     //following examples from https://www.danielclemente.com/logica/dn.en.pdf
-    public static final String notPorQ = not + "P " + or + " Q " + nd + " P " + impl + " Q";
-    public static final String modusPonens = "P " + impl + " Q, " + not + "Q "  + nd + " " + not + "P";
-    public static final String orAndAnd = "P " + or + " (Q " + and + " R) "  + nd + " P " + or + " Q";
-    public static final String halfOfOr = "P " + or + " Q, " + not + "P " + nd + " Q";
-    public static final String falseIsTrue = not + "P " + nd + " P " + impl + " Q";
+    public static final String notPorQ = not + "P " + or + " Q " + turnstile + " P " + impl + " Q";
+    public static final String modusPonens = "P " + impl + " Q, " + not + "Q "  + turnstile + " " + not + "P";
+    public static final String orAndAnd = "P " + or + " (Q " + and + " R) "  + turnstile + " P " + or + " Q";
+    public static final String halfOfOr = "P " + or + " Q, " + not + "P " + turnstile + " Q";
+    public static final String falseIsTrue = not + "P " + turnstile + " P " + impl + " Q";
 
     public static final String[] proofs = {deMorgan, notPorQ, modusPonens, orAndAnd, halfOfOr, falseIsTrue};
-    public static final Class[] logicSymbols = {AndToken.class, OrToken.class, EmptyToken.class, ImpliesToken.class, NDToken.class, NotToken.class};
+    public static final Class[] logicSymbols = {AndToken.class, OrToken.class, EmptyToken.class, ImpliesToken.class, TurnstileToken.class, NotToken.class};
 
 }

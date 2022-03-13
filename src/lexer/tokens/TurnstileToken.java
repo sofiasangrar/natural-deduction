@@ -1,11 +1,11 @@
 package lexer.tokens;
 
-public class NDToken extends Token {
+public class TurnstileToken extends Token {
 
     private static final String[] keys = new String[]{"|-", ":"};
     public static final char code = '\u22A2';
 
-    public NDToken() {
+    public TurnstileToken() {
         super();
     }
 
@@ -25,7 +25,7 @@ public class NDToken extends Token {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof NDToken || obj.toString().equals(this.toString());
+        return obj instanceof TurnstileToken || obj.toString().equals(this.toString());
     }
 
 

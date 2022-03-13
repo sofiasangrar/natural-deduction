@@ -72,9 +72,9 @@ public final class Lexer {
             case ImpliesToken.code:
                 getChar();
                 return new ImpliesToken();
-            case NDToken.code:
+            case TurnstileToken.code:
                 getChar();
-                return new NDToken();
+                return new TurnstileToken();
             case (char) -1: {
                 return new EOIToken();
             }
@@ -146,7 +146,7 @@ public final class Lexer {
             case  NotToken.code :
             case  ',' :
             case  ImpliesToken.code :
-            case  NDToken.code:
+            case  TurnstileToken.code:
                 return true;
         }
         return false;
