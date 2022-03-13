@@ -147,19 +147,19 @@ public class Proof{
 		if(premisses == null || premisses.size()==0){
 
 			//assumption
-			if (conclusion.getAssumptions().contains(conclusion.getExpression())) {
+			if (conclusion.getAssumptions().contains(conclusion.getConclusion())) {
 				return ASSUMPTION;
 			}
 
 			//true intro
-			if(conclusion.getExpression() instanceof BooleanExpr && ((BooleanExpr) conclusion.getExpression()).value) {
+			if(conclusion.getConclusion() instanceof BooleanExpr && ((BooleanExpr) conclusion.getConclusion()).value) {
 				return TRUE_INTRO;
 			}
 
 			//excluded middle
-			if(conclusion.getExpression().isDisj()){
-				Expr left = ((Disj) conclusion.getExpression()).left;
-				Expr right = ((Disj) conclusion.getExpression()).right;
+			if(conclusion.getConclusion().isDisj()){
+				Expr left = ((Disj) conclusion.getConclusion()).left;
+				Expr right = ((Disj) conclusion.getConclusion()).right;
 
 				if (right instanceof NotExpr && ((NotExpr)right).right.equals(left)) {
 					return EXCL_MIDDLE;
@@ -173,11 +173,11 @@ public class Proof{
 			Clause clause = premisses.get(0);
 
 			//and elim
-			if (clause.getExpression().isConj()) {
-				Expr left = ((Conj)clause.getExpression()).left;
-				Expr right = ((Conj)clause.getExpression()).right;
-				if ((conclusion.getExpression().equals(left)
-						|| conclusion.getExpression().equals(right))
+			if (clause.getConclusion().isConj()) {
+				Expr left = ((Conj)clause.getConclusion()).left;
+				Expr right = ((Conj)clause.getConclusion()).right;
+				if ((conclusion.getConclusion().equals(left)
+						|| conclusion.getConclusion().equals(right))
 						&& clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 					return AND_ELIM;
 				}
@@ -185,27 +185,27 @@ public class Proof{
 
 			//imp intro
 			if (clause.getAssumptions().size()!=0 &&
-					conclusion.getExpression().isImpl() &&
+					conclusion.getConclusion().isImpl() &&
 					clause.getAssumptions().size() - 1 == conclusion.getAssumptions().size()) {
 
-				Expr left = conclusion.getExpression().left;
+				Expr left = conclusion.getConclusion().left;
 				if (clause.getAssumptions().contains(left)
 						&& !conclusion.getAssumptions().contains(left)) {
 					ArrayList<Expr> assumptions = new ArrayList<>(conclusion.getAssumptions());
-					assumptions.add(conclusion.getExpression().left);
+					assumptions.add(conclusion.getConclusion().left);
 					Assumptions newAssumptions = new Assumptions(assumptions);
-					if (newAssumptions.equals(clause.getAssumptionsObject()) && conclusion.getExpression().right.equals(clause.getExpression())) {
+					if (newAssumptions.equals(clause.getAssumptionsObject()) && conclusion.getConclusion().right.equals(clause.getConclusion())) {
 						return IMP_INTRO;
 					}
 				}
 			}
 
 			//or intro
-			if (conclusion.getExpression().isDisj()) {
-				Expr left = ((Disj)conclusion.getExpression()).left;
-				Expr right = ((Disj)conclusion.getExpression()).right;
-				if ((clause.getExpression().equals(left)
-						|| clause.getExpression().equals(right))
+			if (conclusion.getConclusion().isDisj()) {
+				Expr left = ((Disj)conclusion.getConclusion()).left;
+				Expr right = ((Disj)conclusion.getConclusion()).right;
+				if ((clause.getConclusion().equals(left)
+						|| clause.getConclusion().equals(right))
 						&& clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 					return OR_INTRO;
 
@@ -213,21 +213,21 @@ public class Proof{
 			}
 
 			//false elim
-			if (clause.getExpression() instanceof BooleanExpr && !((BooleanExpr)clause.getExpression()).value && clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())){
+			if (clause.getConclusion() instanceof BooleanExpr && !((BooleanExpr)clause.getConclusion()).value && clause.getAssumptionsObject().equals(conclusion.getAssumptionsObject())){
 				return FALSE_ELIM;
 
 			}
 
 			//neg intro
-			if (clause.getExpression() instanceof BooleanExpr
-					&& !((BooleanExpr) clause.getExpression()).value
-					&& conclusion.getExpression() instanceof NotExpr
-					&& !conclusion.getAssumptions().contains(((NotExpr)conclusion.getExpression()).right)
-					&& clause.getAssumptions().contains(((NotExpr)conclusion.getExpression()).right)
+			if (clause.getConclusion() instanceof BooleanExpr
+					&& !((BooleanExpr) clause.getConclusion()).value
+					&& conclusion.getConclusion() instanceof NotExpr
+					&& !conclusion.getAssumptions().contains(((NotExpr)conclusion.getConclusion()).right)
+					&& clause.getAssumptions().contains(((NotExpr)conclusion.getConclusion()).right)
 					&& clause.getAssumptions().size() == conclusion.getAssumptions().size() + 1
 			) {
 				Assumptions newAssumptions = new Assumptions(conclusion.getAssumptions());
-				newAssumptions.getAssumptions().add(((NotExpr) conclusion.getExpression()).right);
+				newAssumptions.getAssumptions().add(((NotExpr) conclusion.getConclusion()).right);
 				if (clause.getAssumptionsObject().equals(newAssumptions)) {
 					return NEG_INTRO;
 				}
@@ -240,11 +240,11 @@ public class Proof{
 			//and intro
 			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject())
 					&& clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())
-					&& conclusion.getExpression().isConj()) {
+					&& conclusion.getConclusion().isConj()) {
 
-				Expr left = ((Conj) conclusion.getExpression()).left;
-				Expr right = ((Conj) conclusion.getExpression()).right;
-				if ((left.equals(clause1.getExpression()) && right.equals(clause2.getExpression())) || (left.equals(clause2.getExpression()) && right.equals(clause1.getExpression()))){
+				Expr left = ((Conj) conclusion.getConclusion()).left;
+				Expr right = ((Conj) conclusion.getConclusion()).right;
+				if ((left.equals(clause1.getConclusion()) && right.equals(clause2.getConclusion())) || (left.equals(clause2.getConclusion()) && right.equals(clause1.getConclusion()))){
 					return AND_INTRO;
 				}
 			}
@@ -252,15 +252,15 @@ public class Proof{
 			//imp elim
 			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject())
 					&& clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())
-					&& ((clause1.getExpression().isImpl())
-					|| clause2.getExpression().isImpl())
+					&& ((clause1.getConclusion().isImpl())
+					|| clause2.getConclusion().isImpl())
 
-					&& (( clause1.getExpression().isImpl()
-					&& clause1.getExpression().left.equals(clause2.getExpression())
-					&& clause1.getExpression().right.equals(conclusion.getExpression()))
-					|| (clause2.getExpression().isImpl()
-					&& clause2.getExpression().left.equals(clause1.getExpression())
-					&& clause2.getExpression().right.equals(conclusion.getExpression())))
+					&& (( clause1.getConclusion().isImpl()
+					&& clause1.getConclusion().left.equals(clause2.getConclusion())
+					&& clause1.getConclusion().right.equals(conclusion.getConclusion()))
+					|| (clause2.getConclusion().isImpl()
+					&& clause2.getConclusion().left.equals(clause1.getConclusion())
+					&& clause2.getConclusion().right.equals(conclusion.getConclusion())))
 			)
 			{
 				return IMP_ELIM;
@@ -270,10 +270,10 @@ public class Proof{
 			//neg elim
 			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject())
 					&& clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())
-					&& ((clause1.getExpression() instanceof NotExpr
-					&& clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right))
-					|| (clause2.getExpression() instanceof NotExpr
-					&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)))
+					&& ((clause1.getConclusion() instanceof NotExpr
+					&& clause2.getConclusion().equals(((NotExpr) clause1.getConclusion()).right))
+					|| (clause2.getConclusion() instanceof NotExpr
+					&& clause1.getConclusion().equals(((NotExpr) clause2.getConclusion()).right)))
 			){
 				return NEG_ELIM;
 			}
@@ -281,19 +281,19 @@ public class Proof{
 			//neg-intro
 			if (clause1.getAssumptions().size()!=0
 					&& clause2.getAssumptions().size()!=0
-					&& ((clause1.getExpression() instanceof NotExpr
-					&& clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right))
-					|| (clause2.getExpression() instanceof NotExpr
-					&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)
+					&& ((clause1.getConclusion() instanceof NotExpr
+					&& clause2.getConclusion().equals(((NotExpr) clause1.getConclusion()).right))
+					|| (clause2.getConclusion() instanceof NotExpr
+					&& clause1.getConclusion().equals(((NotExpr) clause2.getConclusion()).right)
 			))
-					&& conclusion.getExpression() instanceof NotExpr
-					&& clause1.getAssumptions().contains(((NotExpr) conclusion.getExpression()).right)
-					&& clause2.getAssumptions().contains(((NotExpr) conclusion.getExpression()).right)
-					&& !conclusion.getAssumptions().contains(((NotExpr) conclusion.getExpression()).right)
+					&& conclusion.getConclusion() instanceof NotExpr
+					&& clause1.getAssumptions().contains(((NotExpr) conclusion.getConclusion()).right)
+					&& clause2.getAssumptions().contains(((NotExpr) conclusion.getConclusion()).right)
+					&& !conclusion.getAssumptions().contains(((NotExpr) conclusion.getConclusion()).right)
 			) {
 
 				Assumptions newAssumptions = new Assumptions();
-				Expr P = ((NotExpr) conclusion.getExpression()).right;
+				Expr P = ((NotExpr) conclusion.getConclusion()).right;
 
 				for (Expr assumption : clause1.getAssumptions()) {
 					if (!assumption.equals(P)) {
@@ -316,16 +316,16 @@ public class Proof{
 			//false intro
 			if (clause1.getAssumptionsObject().equals(clause2.getAssumptionsObject()) &&
 					clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject()) &&
-					((clause1.getExpression()instanceof NotExpr && clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right)) ||
-							(clause2.getExpression()instanceof NotExpr && clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right))) &&
-					conclusion.getExpression() instanceof BooleanExpr &&
-					!((BooleanExpr) conclusion.getExpression()).value){
+					((clause1.getConclusion()instanceof NotExpr && clause2.getConclusion().equals(((NotExpr) clause1.getConclusion()).right)) ||
+							(clause2.getConclusion()instanceof NotExpr && clause1.getConclusion().equals(((NotExpr) clause2.getConclusion()).right))) &&
+					conclusion.getConclusion() instanceof BooleanExpr &&
+					!((BooleanExpr) conclusion.getConclusion()).value){
 				return FALSE_INTRO;
 			}
 
 		} else if (premisses.size()==3) {
 			//or elim
-			Expr R = conclusion.getExpression();
+			Expr R = conclusion.getConclusion();
 			Clause orClause;
 			Clause clauseP = null;
 			Clause clauseQ = null;
@@ -339,9 +339,9 @@ public class Proof{
 
 				if (premisses.get(i).getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 					orClause = premisses.get(i);
-					if (premisses.get(i).getExpression().isDisj()) {
-						P = ((Disj)orClause.getExpression()).left;
-						Q = ((Disj)orClause.getExpression()).right;
+					if (premisses.get(i).getConclusion().isDisj()) {
+						P = ((Disj)orClause.getConclusion()).left;
+						Q = ((Disj)orClause.getConclusion()).right;
 						Assumptions pa = new Assumptions(orClause.getAssumptions());
 						Assumptions qa = new Assumptions(orClause.getAssumptions());
 
@@ -364,7 +364,7 @@ public class Proof{
 			if (clauseP==null || clauseQ==null) {
 				return UNASSIGNED;
 			}
-			if (clauseP.getExpression().equals(R) && clauseQ.getExpression().equals(R)) {
+			if (clauseP.getConclusion().equals(R) && clauseQ.getConclusion().equals(R)) {
 				return OR_ELIM;
 			}
 
@@ -395,7 +395,7 @@ public class Proof{
 				if (size != 0) {
 					throw new PremiseNumberException(ASSUMPTION, 0, size);
 				}
-				if (!conclusion.getAssumptions().contains(conclusion.getExpression())) {
+				if (!conclusion.getAssumptions().contains(conclusion.getConclusion())) {
 					throw new RuleException(ASSUMPTION, "conclusion does not contain any antecedent expression");
 				}
 				break;
@@ -404,7 +404,7 @@ public class Proof{
 				if (size != 0) {
 					throw new PremiseNumberException(TRUE_INTRO, 0, size);
 				}
-				if(!(conclusion.getExpression() instanceof BooleanExpr && ((BooleanExpr) conclusion.getExpression()).value)) {
+				if(!(conclusion.getConclusion() instanceof BooleanExpr && ((BooleanExpr) conclusion.getConclusion()).value)) {
 					throw new NothingIntroducedException(TRUE_INTRO, "True");
 				}
 				break;
@@ -413,11 +413,11 @@ public class Proof{
 				if (size != 0) {
 					throw new PremiseNumberException(EXCL_MIDDLE, 0, size);
 				}
-				if(!conclusion.getExpression().isDisj()){
+				if(!conclusion.getConclusion().isDisj()){
 					throw new RuleException(EXCL_MIDDLE, "conclusion is not a disjunction");
 				} else {
-					right = ((Disj) conclusion.getExpression()).right;
-					left = ((Disj) conclusion.getExpression()).left;
+					right = ((Disj) conclusion.getConclusion()).right;
+					left = ((Disj) conclusion.getConclusion()).left;
 					if (!(right instanceof NotExpr && ((NotExpr)right).right.equals(left))) {
 						throw new RuleException(EXCL_MIDDLE, "RHS of disjunction is not a negation of LHS");
 					}
@@ -429,15 +429,15 @@ public class Proof{
 					throw new PremiseNumberException(AND_ELIM, 1, size);
 				}
 				clause1 = premisses.get(0);
-				if (!clause1.getExpression().isConj()) {
+				if (!clause1.getConclusion().isConj()) {
 					throw new NothingToEliminateException(AND_ELIM, "conjunction");
 				}
 				if (!clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 					throw new AssumptionsMismatchException();
 				}
-				left = ((Conj)clause1.getExpression()).left;
-				right = ((Conj)clause1.getExpression()).right;
-				if (!(conclusion.getExpression().equals(left) || conclusion.getExpression().equals(right))) {
+				left = ((Conj)clause1.getConclusion()).left;
+				right = ((Conj)clause1.getConclusion()).right;
+				if (!(conclusion.getConclusion().equals(left) || conclusion.getConclusion().equals(right))) {
 					throw new RuleException(AND_ELIM, "conclusion does not match either side of conjunction");
 
 				}
@@ -445,7 +445,7 @@ public class Proof{
 				break;
 
 			case IMP_INTRO:
-				if (!conclusion.getExpression().isImpl()) {
+				if (!conclusion.getConclusion().isImpl()) {
 					throw new NothingIntroducedException(IMP_INTRO, "implication");
 				}
 				if (size!=1) {
@@ -461,16 +461,16 @@ public class Proof{
 					if (clause1.getAssumptions().size() - 1 < conclusion.getAssumptions().size()) {
 						throw new RuleException(IMP_INTRO, "conclusion has too many antecedents");
 					}
-					if (conclusion.getExpression().isImpl()) {
-						if(!conclusion.getExpression().right.equals(clause1.getExpression())) {
+					if (conclusion.getConclusion().isImpl()) {
+						if(!conclusion.getConclusion().right.equals(clause1.getConclusion())) {
 							throw new RuleException(IMP_INTRO, "RHS of implication does not match conclusion of premise");
 						}
-						left = conclusion.getExpression().left;
+						left = conclusion.getConclusion().left;
 						if (!(clause1.getAssumptions().contains(left))) {
 							throw new RuleException(IMP_INTRO, "LHS of implication does not appear in premise's antecedents");
 						} else {
 							ArrayList<Expr> assumptions = new ArrayList<>(conclusion.getAssumptions());
-							assumptions.add(conclusion.getExpression().left);
+							assumptions.add(conclusion.getConclusion().left);
 							Assumptions newAssumptions = new Assumptions(assumptions);
 							if (!(newAssumptions.equals(clause1.getAssumptionsObject()))){
 								throw new AssumptionsMismatchException();
@@ -481,7 +481,7 @@ public class Proof{
 				break;
 
 			case OR_INTRO:
-				if (!conclusion.getExpression().isDisj()) {
+				if (!conclusion.getConclusion().isDisj()) {
 					throw new NothingIntroducedException(OR_INTRO, "disjunction");
 				}
 				if (size!=1) {
@@ -491,10 +491,10 @@ public class Proof{
 					if (!clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 						throw new AssumptionsMismatchException();
 					}
-					if (conclusion.getExpression().isDisj()) {
-						left = ((Disj)conclusion.getExpression()).left;
-						right = ((Disj)conclusion.getExpression()).right;
-						if (!(clause1.getExpression().equals(left) || clause1.getExpression().equals(right))) {
+					if (conclusion.getConclusion().isDisj()) {
+						left = ((Disj)conclusion.getConclusion()).left;
+						right = ((Disj)conclusion.getConclusion()).right;
+						if (!(clause1.getConclusion().equals(left) || clause1.getConclusion().equals(right))) {
 							throw new RuleException(OR_INTRO, "neither side of disjunction appears in premise's conclusion");
 						}
 					}
@@ -509,26 +509,26 @@ public class Proof{
 					if (!clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 						throw new AssumptionsMismatchException();
 					}
-					if(!(clause1.getExpression() instanceof BooleanExpr && !(((BooleanExpr) clause1.getExpression()).value))) {
+					if(!(clause1.getConclusion() instanceof BooleanExpr && !(((BooleanExpr) clause1.getConclusion()).value))) {
 						throw new NothingToEliminateException(FALSE_ELIM, "False");
 					}
 				}
 				break;
 
 			case NEG_INTRO:
-				if (!(conclusion.getExpression() instanceof NotExpr)) {
+				if (!(conclusion.getConclusion() instanceof NotExpr)) {
 					throw new NothingIntroducedException(NEG_INTRO, "negation");
 				}
 				if (size==1) {
 					clause1 = premisses.get(0);
-					if(!(clause1.getExpression() instanceof BooleanExpr && !(((BooleanExpr) clause1.getExpression()).value))) {
+					if(!(clause1.getConclusion() instanceof BooleanExpr && !(((BooleanExpr) clause1.getConclusion()).value))) {
 						throw new RuleException(NEG_INTRO, "RHS of premise is not 'F'");
 					}
-					if (!(clause1.getAssumptions().contains(((NotExpr)conclusion.getExpression()).right))) {
+					if (!(clause1.getAssumptions().contains(((NotExpr)conclusion.getConclusion()).right))) {
 						throw new RuleException(NEG_INTRO, "conclusion does not appear in premise's antecedents");
 					}
 					Assumptions newAssumptions = new Assumptions(conclusion.getAssumptions());
-					newAssumptions.getAssumptions().add(((NotExpr) conclusion.getExpression()).right);
+					newAssumptions.getAssumptions().add(((NotExpr) conclusion.getConclusion()).right);
 					if (!(clause1.getAssumptionsObject().equals(newAssumptions))) {
 						throw new AssumptionsMismatchException();
 					}
@@ -544,15 +544,15 @@ public class Proof{
 				} else if (size==2) {
 					clause1 = premisses.get(0);
 					clause2 = premisses.get(1);
-					if (!((clause1.getExpression() instanceof NotExpr
-							&& clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right))
-							|| (clause2.getExpression() instanceof NotExpr
-							&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)
+					if (!((clause1.getConclusion() instanceof NotExpr
+							&& clause2.getConclusion().equals(((NotExpr) clause1.getConclusion()).right))
+							|| (clause2.getConclusion() instanceof NotExpr
+							&& clause1.getConclusion().equals(((NotExpr) clause2.getConclusion()).right)
 					))) {
 						throw new RuleException(NEG_INTRO, "conclusions of premises are not negations of each other");
 					}
-					if (conclusion.getExpression() instanceof NotExpr) {
-						Expr P = ((NotExpr) conclusion.getExpression()).right;
+					if (conclusion.getConclusion() instanceof NotExpr) {
+						Expr P = ((NotExpr) conclusion.getConclusion()).right;
 						if(!(clause1.getAssumptions().contains(P))) {
 							throw new RuleException(NEG_INTRO, "premise 1 does not contain negation of conclusion as an antecedent");
 						}
@@ -583,7 +583,7 @@ public class Proof{
 				break;
 
 			case AND_INTRO:
-				if (!conclusion.getExpression().isConj()) {
+				if (!conclusion.getConclusion().isConj()) {
 					throw new NothingIntroducedException(AND_INTRO, "conjunction");
 				}
 				if (size!=2) {
@@ -600,10 +600,10 @@ public class Proof{
 					if (!clause2.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 						throw new AssumptionsMismatchException();
 					}
-					if (conclusion.getExpression().isConj()) {
-						left = ((Conj) conclusion.getExpression()).left;
-						right = ((Conj) conclusion.getExpression()).right;
-						if (!((left.equals(clause1.getExpression()) && right.equals(clause2.getExpression())) || left.equals(clause2.getExpression()) && right.equals(clause1.getExpression()))) {
+					if (conclusion.getConclusion().isConj()) {
+						left = ((Conj) conclusion.getConclusion()).left;
+						right = ((Conj) conclusion.getConclusion()).right;
+						if (!((left.equals(clause1.getConclusion()) && right.equals(clause2.getConclusion())) || left.equals(clause2.getConclusion()) && right.equals(clause1.getConclusion()))) {
 							throw new RuleException(AND_INTRO, "expressions in conjunction do not feature in premises");
 						}
 					}
@@ -625,28 +625,28 @@ public class Proof{
 					if (!clause2.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 						throw new AssumptionsMismatchException();
 					}
-					if (!((clause1.getExpression().isImpl()) || clause2.getExpression().isImpl())) {
+					if (!((clause1.getConclusion().isImpl()) || clause2.getConclusion().isImpl())) {
 						throw new NothingToEliminateException(IMP_ELIM, "implication");
 					} else {
-						if ( clause1.getExpression().isImpl()
-								&& clause1.getExpression().left.equals(clause2.getExpression())
-								&& !clause1.getExpression().right.equals(conclusion.getExpression())) {
+						if ( clause1.getConclusion().isImpl()
+								&& clause1.getConclusion().left.equals(clause2.getConclusion())
+								&& !clause1.getConclusion().right.equals(conclusion.getConclusion())) {
 							throw new RuleException(IMP_ELIM, "conclusion does not match RHS of implication");
 						}
-						if ( clause1.getExpression().isImpl()
-								&& !clause1.getExpression().left.equals(clause2.getExpression())
-								&& clause1.getExpression().right.equals(conclusion.getExpression())) {
+						if ( clause1.getConclusion().isImpl()
+								&& !clause1.getConclusion().left.equals(clause2.getConclusion())
+								&& clause1.getConclusion().right.equals(conclusion.getConclusion())) {
 							throw new RuleException(IMP_ELIM, "LHS of implication does not match other premise");
 						}
-						if (clause2.getExpression().isImpl()
-								&& clause2.getExpression().left.equals(clause1.getExpression())
-								&& !clause2.getExpression().right.equals(conclusion.getExpression())) {
+						if (clause2.getConclusion().isImpl()
+								&& clause2.getConclusion().left.equals(clause1.getConclusion())
+								&& !clause2.getConclusion().right.equals(conclusion.getConclusion())) {
 							throw new RuleException(IMP_ELIM, "conclusion does not match RHS of implication");
 
 						}
-						if (clause2.getExpression().isImpl()
-								&& !clause2.getExpression().left.equals(clause1.getExpression())
-								&& clause2.getExpression().right.equals(conclusion.getExpression())) {
+						if (clause2.getConclusion().isImpl()
+								&& !clause2.getConclusion().left.equals(clause1.getConclusion())
+								&& clause2.getConclusion().right.equals(conclusion.getConclusion())) {
 							throw new RuleException(IMP_ELIM, "LHS of implication does not match other premise");
 						}
 					}
@@ -668,12 +668,12 @@ public class Proof{
 					if (!clause2.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 						throw new AssumptionsMismatchException();
 					}
-					if (!(clause1.getExpression() instanceof NotExpr || clause2.getExpression() instanceof NotExpr)) {
+					if (!(clause1.getConclusion() instanceof NotExpr || clause2.getConclusion() instanceof NotExpr)) {
 						throw new NothingToEliminateException(NEG_ELIM,"negation");
-					} else if (!((clause1.getExpression() instanceof NotExpr
-								&& clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right))
-								|| (clause2.getExpression() instanceof NotExpr
-								&& clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)))) {
+					} else if (!((clause1.getConclusion() instanceof NotExpr
+								&& clause2.getConclusion().equals(((NotExpr) clause1.getConclusion()).right))
+								|| (clause2.getConclusion() instanceof NotExpr
+								&& clause1.getConclusion().equals(((NotExpr) clause2.getConclusion()).right)))) {
 						throw new RuleException(NEG_ELIM, "conclusion of one premise is not negation of the other");
 					}
 
@@ -693,13 +693,13 @@ public class Proof{
 				if (!clause1.getAssumptionsObject().equals(conclusion.getAssumptionsObject())) {
 					throw new AssumptionsMismatchException();
 				}
-				if(!((clause1.getExpression()instanceof NotExpr && clause2.getExpression().equals(((NotExpr) clause1.getExpression()).right)) ||
-								(clause2.getExpression()instanceof NotExpr && clause1.getExpression().equals(((NotExpr) clause2.getExpression()).right)))) {
+				if(!((clause1.getConclusion()instanceof NotExpr && clause2.getConclusion().equals(((NotExpr) clause1.getConclusion()).right)) ||
+								(clause2.getConclusion()instanceof NotExpr && clause1.getConclusion().equals(((NotExpr) clause2.getConclusion()).right)))) {
 					throw new RuleException(FALSE_INTRO, "conclusion of one premise is not negation of the other");
 				}
 
-				if(!(conclusion.getExpression() instanceof BooleanExpr &&
-						!((BooleanExpr) conclusion.getExpression()).value)){
+				if(!(conclusion.getConclusion() instanceof BooleanExpr &&
+						!((BooleanExpr) conclusion.getConclusion()).value)){
 					throw new NothingIntroducedException(FALSE_INTRO, "False");
 				}
 				break;
@@ -710,7 +710,7 @@ public class Proof{
 				} else {
 
 					//or elim
-					Expr R = conclusion.getExpression();
+					Expr R = conclusion.getConclusion();
 					Clause orClause = null;
 					Clause clauseP = null;
 					Clause clauseQ = null;
@@ -726,11 +726,11 @@ public class Proof{
 					if (orClause==null) {
 						throw new AssumptionsMismatchException();
 					}
-					if (!orClause.getExpression().isDisj()) {
+					if (!orClause.getConclusion().isDisj()) {
 						throw new NothingToEliminateException(OR_ELIM, "disjunction");
 					} else {
-						P = ((Disj)orClause.getExpression()).left;
-						Q = ((Disj)orClause.getExpression()).right;
+						P = ((Disj)orClause.getConclusion()).left;
+						Q = ((Disj)orClause.getConclusion()).right;
 						Assumptions pa = new Assumptions(orClause.getAssumptions());
 						Assumptions qa = new Assumptions(orClause.getAssumptions());
 
@@ -752,7 +752,7 @@ public class Proof{
 							throw new AssumptionsMismatchException();
 						}
 
-						if (!(clauseP.getExpression().equals(R) && clauseQ.getExpression().equals(R))) {
+						if (!(clauseP.getConclusion().equals(R) && clauseQ.getConclusion().equals(R))) {
 							throw new RuleException(OR_ELIM, "conclusion does not match conclusions of premises");
 						}
 

@@ -12,11 +12,11 @@ import static natded.NatDedUtilities.nd;
 public class Clause {
 
 	private Assumptions assumptions;
-	private Expr expression;
+	private Expr conclusion;
 
 	private Clause(Assumptions assumptions, Expr expression) {
 		this.assumptions = assumptions;
-		this.expression = expression;
+		this.conclusion = expression;
 	}
 
 	/**
@@ -78,17 +78,17 @@ public class Clause {
 	 * get the conclusion of the logical sentence with extraneous brackets removed
 	 * @return unbracketed conclusion
 	 */
-	public Expr getExpression() {
-		return expression.unbracket();
+	public Expr getConclusion() {
+		return conclusion.unbracket();
 	}
 
 	@Override
 	public String toString() {
-		return assumptions.toString() + " " + nd + " " + expression.toString();
+		return assumptions.toString() + " " + nd + " " + conclusion.toString();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof Clause && ((Clause)obj).getAssumptionsObject().equals(this.assumptions) && ((Clause)obj).getExpression().equals(this.expression);
+		return obj instanceof Clause && ((Clause)obj).getAssumptionsObject().equals(this.assumptions) && ((Clause)obj).getConclusion().equals(this.conclusion);
 	}
 }

@@ -38,9 +38,9 @@ public class LexerTests {
         assertEquals(1, c.getAssumptions().size());
         assertTrue(c.getAssumptions().get(0) instanceof Conj);
         assertTrue(((Conj)(c.getAssumptions().get(0))).right instanceof NotExpr);
-        assertTrue(c.getExpression().hasright);
-        assertTrue(c.getExpression().right instanceof Disj);
-        assertTrue(((Disj) c.getExpression().right).right instanceof Conj);
+        assertTrue(c.getConclusion().hasright);
+        assertTrue(c.getConclusion().right instanceof Disj);
+        assertTrue(((Disj) c.getConclusion().right).right instanceof Conj);
 
     }
 
@@ -54,7 +54,7 @@ public class LexerTests {
         Lexer.setLexString(s);
         Parser.t = Lexer.lex();
         Clause c2 = Clause.parse();
-        assertEquals(c.getExpression(), c.getExpression());
-        assertEquals(c.getExpression(), c2.getExpression());
+        assertEquals(c.getConclusion(), c.getConclusion());
+        assertEquals(c.getConclusion(), c2.getConclusion());
     }
 }
