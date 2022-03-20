@@ -2,6 +2,7 @@ package natded.UI;
 
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import natded.StepNode;
 
 
 public class NDScene extends Scene {
@@ -18,6 +19,10 @@ public class NDScene extends Scene {
 
     public void setGoal(String goal) {
         getUI().setGoal(goal);
+    }
+
+    public void setProof(StepNode proof) {
+        getUI().setProof(proof);
     }
 
 }

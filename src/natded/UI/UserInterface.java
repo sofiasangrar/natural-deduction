@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lexer.tokens.*;
+import natded.NatDedUtilities;
 import natded.StepNode;
 
 import java.io.FileInputStream;
@@ -34,40 +35,42 @@ public class UserInterface extends StackPane {
     private static final String lightGrad = "whitesmoke";
     private static final String borderColor = "gray";
     private static final int borderRadius = 1;
-    static String buttonStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", darkgray); -fx-border-color: " + borderColor + "; -fx-border-radius: " + borderRadius;
+    public static String buttonStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", darkgray); -fx-border-color: " + borderColor + "; -fx-border-radius: " + borderRadius;
+    static String greenButtonStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", lightgreen); -fx-border-color: " + borderColor + "; -fx-border-radius: " + borderRadius;
     static String incorrectDropdownStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", #eb6651); -fx-border-color: "+ borderColor +"; -fx-border-radius: " + borderRadius;
     static Image alert;
     private static Image tick;
     private static Image[] instructionImages = new Image[3];
     private static Image[] ruleImages = new Image[12];
-
+    private static Image deMorgan;
+    private static String imgDir = "src/natded/UI/images/";
     //get images
     static {
         try {
-            tick = new Image(new FileInputStream("src/natded/UI/images/tick.png"));
-            alert = new Image(new FileInputStream("src/natded/UI/images/alert.png"));
-            instructionImages[0] = new Image(new FileInputStream("src/natded/UI/images/1v3.png"));
-            instructionImages[1] = new Image(new FileInputStream("src/natded/UI/images/2.png"));
-            instructionImages[2] = new Image(new FileInputStream("src/natded/UI/images/3.png"));
-            ruleImages[0] = new Image(new FileInputStream("src/natded/UI/images/andIntro.png"));
-            ruleImages[1] = new Image(new FileInputStream("src/natded/UI/images/orIntro.png"));
-            ruleImages[2] = new Image(new FileInputStream("src/natded/UI/images/impIntro.png"));
-            ruleImages[3] = new Image(new FileInputStream("src/natded/UI/images/trueintro.png"));
-            ruleImages[4] = new Image(new FileInputStream("src/natded/UI/images/notIntro.png"));
-            ruleImages[5] = new Image(new FileInputStream("src/natded/UI/images/andElim.png"));
-            ruleImages[6] = new Image(new FileInputStream("src/natded/UI/images/orElim.png"));
-            ruleImages[7] = new Image(new FileInputStream("src/natded/UI/images/impElim.png"));
-            ruleImages[8] = new Image(new FileInputStream("src/natded/UI/images/falseelim.png"));
-            ruleImages[9] = new Image(new FileInputStream("src/natded/UI/images/notElim.png"));
-            ruleImages[10] = new Image(new FileInputStream("src/natded/UI/images/LEM.png"));
-            ruleImages[11] = new Image(new FileInputStream("src/natded/UI/images/ass.png"));
-
+            tick = new Image(new FileInputStream(imgDir + "tick.png"));
+            alert = new Image(new FileInputStream(imgDir + "alert.png"));
+            instructionImages[0] = new Image(new FileInputStream(imgDir + "1v3.png"));
+            instructionImages[1] = new Image(new FileInputStream(imgDir + "2.png"));
+            instructionImages[2] = new Image(new FileInputStream(imgDir + "3.png"));
+            ruleImages[0] = new Image(new FileInputStream(imgDir + "andIntro.png"));
+            ruleImages[1] = new Image(new FileInputStream(imgDir + "orIntro.png"));
+            ruleImages[2] = new Image(new FileInputStream(imgDir + "impIntro.png"));
+            ruleImages[3] = new Image(new FileInputStream(imgDir + "trueintro.png"));
+            ruleImages[4] = new Image(new FileInputStream(imgDir + "notIntro.png"));
+            ruleImages[5] = new Image(new FileInputStream(imgDir + "andElim.png"));
+            ruleImages[6] = new Image(new FileInputStream(imgDir + "orElim.png"));
+            ruleImages[7] = new Image(new FileInputStream(imgDir + "impElim.png"));
+            ruleImages[8] = new Image(new FileInputStream(imgDir + "falseelim.png"));
+            ruleImages[9] = new Image(new FileInputStream(imgDir + "notElim.png"));
+            ruleImages[10] = new Image(new FileInputStream(imgDir + "LEM.png"));
+            ruleImages[11] = new Image(new FileInputStream(imgDir + "ass.png"));
+            deMorgan = new Image(new FileInputStream(imgDir + "deMorganSmall.png"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private static final String TITLE = "Natural Deduction";
+    public static final String TITLE = "Natural Deduction";
 
     /**
      * set the goal of the root
@@ -147,7 +150,7 @@ public class UserInterface extends StackPane {
      */
     private void drawTop(){
         VBox box = new VBox ();
-        box.getChildren().addAll(getRules(), getInstructions());
+        box.getChildren().addAll(getRules(), getInstructions(), getExample());
         space.getChildren().add(box);
     }
 
@@ -251,6 +254,21 @@ public class UserInterface extends StackPane {
     }
 
     /**
+     * create example pane
+     * @return pane containing example
+     */
+    private TitledPane getExample(){
+        ImageView imView = new ImageView(deMorgan);
+        imView.setPreserveRatio(true);
+        imView.setFitWidth(DISPLAY_WIDTH - DISPLAY_WIDTH/5);
+        TitledPane tp = new TitledPane("Example", imView);
+        tp.setAlignment(Pos.CENTER);
+        tp.setExpanded(false);
+
+        return tp;
+    }
+
+    /**
      * draw elements at bottom of page, including reset button, choose goal choicebox, and check button
      */
     private void drawBottom(){
@@ -262,7 +280,7 @@ public class UserInterface extends StackPane {
         Label label = new Label("Choose goal:");
         label.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
 
-        bottomBar.getChildren().addAll(label, getChooseBox(), getCheckButton());
+        bottomBar.getChildren().addAll(label, getChooseBox(), getButtons());
         space.getChildren().add(bottomBar);
     }
 
@@ -291,12 +309,15 @@ public class UserInterface extends StackPane {
     }
 
     /**
-     * get a check button ot draw
+     * get save and check buttons
      * @return styled check button
      */
-    private HBox getCheckButton(){
+    private HBox getButtons(){
         DoneButton button = new DoneButton(this);
-        HBox doneBox = new HBox(button);
+        SaveButton s = new SaveButton(this, false);
+        SaveButton sq = new SaveButton(this, true);
+        HBox doneBox = new HBox(s, sq, button);
+        doneBox.setSpacing(5);
         doneBox.setAlignment(Pos.BOTTOM_RIGHT);
         HBox.setHgrow(doneBox, ALWAYS);
         return doneBox;
@@ -397,6 +418,14 @@ public class UserInterface extends StackPane {
         t1.setCycleCount(1);
         t1.setAutoReverse(true);
         t1.play();
+    }
+
+    /**
+     * load proof to scene
+     * @param proof proof to load
+     */
+    public void setProof(StepNode proof){
+        setGoal(NatDedUtilities.randomGoal());
     }
 
 

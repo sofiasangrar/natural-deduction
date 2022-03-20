@@ -1,6 +1,7 @@
 package natded;
 
 import lexer.tokens.*;
+import natded.constants.Step;
 
 public class NatDedUtilities {
 
@@ -33,5 +34,9 @@ public class NatDedUtilities {
 
     public static final String[] proofs = {deMorgan, notPorQ, modusPonens, orAndAnd, halfOfOr, falseIsTrue};
     public static final Class[] logicSymbols = {AndToken.class, OrToken.class, EmptyToken.class, ImpliesToken.class, TurnstileToken.class, NotToken.class};
+
+    public static StepNode load(){
+        return new StepNode(randomGoal(), Step.UNASSIGNED);
+    }
 
 }

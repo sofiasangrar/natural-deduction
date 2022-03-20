@@ -7,7 +7,7 @@ import parser.Proof;
 public class DoneButton extends Button {
 
     DoneButton(UserInterface view) {
-        this.setStyle(UserInterface.buttonStyle);
+        this.setStyle(UserInterface.greenButtonStyle);
         this.setText("Check");
         setOnMouseClicked(event -> {StepNode root = view.getTree();
         view.removeValid();
