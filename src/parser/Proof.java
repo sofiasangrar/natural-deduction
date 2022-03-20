@@ -56,7 +56,6 @@ public class Proof{
 	private boolean isValid(StepNode root) {
 		//do not bother parsing proof steps if the syntax is invalid
 		if (root.hasIncorrectSyntax()) {
-			//displayException(root.getUIElement(), new SyntaxError());
 			isValid=false;
 		} else if (!checkStep(root)) {
 			isValid = false;
@@ -313,6 +312,7 @@ public class Proof{
 				}
 			}
 
+			/*
 			//false intro
 			if (sequent1.getAntecedentsObject().equals(sequent2.getAntecedentsObject()) &&
 					sequent1.getAntecedentsObject().equals(conclusion.getAntecedentsObject()) &&
@@ -321,7 +321,9 @@ public class Proof{
 					conclusion.getConclusion() instanceof BooleanExpr &&
 					!((BooleanExpr) conclusion.getConclusion()).value){
 				return FALSE_INTRO;
+
 			}
+			*/
 
 		} else if (premisses.size()==3) {
 			//or elim
@@ -680,6 +682,8 @@ public class Proof{
 				}
 				break;
 
+				/*
+
 			case FALSE_INTRO:
 				if (size!=2){
 					throw new PremiseNumberException(FALSE_INTRO, 2, size);
@@ -703,7 +707,7 @@ public class Proof{
 					throw new NothingIntroducedException(FALSE_INTRO, "False");
 				}
 				break;
-
+*/
 			case OR_ELIM:
 				if (size!=3) {
 					throw new PremiseNumberException(OR_ELIM, 3, size);

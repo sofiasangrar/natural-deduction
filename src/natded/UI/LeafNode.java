@@ -14,6 +14,7 @@ import natded.exceptions.NoJustificationException;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static natded.Main.DISPLAY_HEIGHT;
 
@@ -143,7 +144,7 @@ public class LeafNode extends VBox {
     }
 
     /**
-     * add new antecedent to node
+     * add new premise to node
      */
     void addChild(){
         childrenBox.getChildren().add(new LeafNode(this));
@@ -187,7 +188,13 @@ public class LeafNode extends VBox {
      * delete this node from the tree
      */
     public void delete() {
+        int index = parent.getChildNodes().indexOf(this);
+        List<LeafNode> children = this.getChildNodes();
         parent.deleteChild(this);
+        parent.childrenBox.getChildren().addAll(index, children);
+        for (LeafNode child : children){
+            child.parent = parent;
+        }
     }
 
     /**

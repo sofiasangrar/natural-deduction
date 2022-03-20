@@ -18,7 +18,7 @@ public final class BracketedExpr extends Factor {
         Parser.t = Lexer.lex();
         Expr expr = Expr.parse();
 
-        //left bracke must be closed by right bracket
+        //left bracket must be closed by right bracket
         if (!(Parser.t instanceof RParenToken)) {
             Parser.errorHandle(RParenToken.getString());
             return new BracketedExpr(expr);

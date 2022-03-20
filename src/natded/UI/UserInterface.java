@@ -39,20 +39,20 @@ public class UserInterface extends StackPane {
     static Image alert;
     private static Image tick;
     private static Image[] instructionImages = new Image[3];
-    private static Image[] ruleImages = new Image[13];
+    private static Image[] ruleImages = new Image[12];
 
     //get images
     static {
         try {
             tick = new Image(new FileInputStream("src/natded/UI/images/tick.png"));
             alert = new Image(new FileInputStream("src/natded/UI/images/alert.png"));
-            instructionImages[0] = new Image(new FileInputStream("src/natded/UI/images/1v2.png"));
+            instructionImages[0] = new Image(new FileInputStream("src/natded/UI/images/1v3.png"));
             instructionImages[1] = new Image(new FileInputStream("src/natded/UI/images/2.png"));
             instructionImages[2] = new Image(new FileInputStream("src/natded/UI/images/3.png"));
             ruleImages[0] = new Image(new FileInputStream("src/natded/UI/images/andIntro.png"));
             ruleImages[1] = new Image(new FileInputStream("src/natded/UI/images/orIntro.png"));
             ruleImages[2] = new Image(new FileInputStream("src/natded/UI/images/impIntro.png"));
-            ruleImages[3] = new Image(new FileInputStream("src/natded/UI/images/Falseintro.png"));
+            ruleImages[3] = new Image(new FileInputStream("src/natded/UI/images/trueintro.png"));
             ruleImages[4] = new Image(new FileInputStream("src/natded/UI/images/notIntro.png"));
             ruleImages[5] = new Image(new FileInputStream("src/natded/UI/images/andElim.png"));
             ruleImages[6] = new Image(new FileInputStream("src/natded/UI/images/orElim.png"));
@@ -61,7 +61,6 @@ public class UserInterface extends StackPane {
             ruleImages[9] = new Image(new FileInputStream("src/natded/UI/images/notElim.png"));
             ruleImages[10] = new Image(new FileInputStream("src/natded/UI/images/LEM.png"));
             ruleImages[11] = new Image(new FileInputStream("src/natded/UI/images/ass.png"));
-            ruleImages[12] = new Image(new FileInputStream("src/natded/UI/images/trueintro.png"));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -161,6 +160,7 @@ public class UserInterface extends StackPane {
         g.setAlignment(Pos.CENTER);
         GridPane.setHalignment(g, HPos.CENTER);
         g.setVgap(DISPLAY_HEIGHT/200);
+        g.setVgap(DISPLAY_WIDTH/50);
 
         //fill images one by onw from left to right into the grid
         int noColumns = 5;
@@ -213,7 +213,8 @@ public class UserInterface extends StackPane {
         box.getChildren().add(g);
 
         //draw keyboard usage instructions
-        Label label = new Label("Keyboard Usage:");
+        Label label = new Label("Keyboard Usage:");;
+        label.setStyle("-fx-text-fill: #2f2f2f");
         label.setFont(new Font(18));
         label.setPadding(new Insets(DISPLAY_HEIGHT/50, 0.0,DISPLAY_HEIGHT/200,0.0));
         box.getChildren().add(label);
@@ -221,23 +222,24 @@ public class UserInterface extends StackPane {
         textInstr.setVgap(DISPLAY_HEIGHT/200);
         textInstr.setHgap(DISPLAY_WIDTH/50);
 
-        textInstr.add(new Text("For conjunction:"), 0, 0);
-        textInstr.add(new Text(getKeys(OrToken.class)), 0, 1);
+        Label[] instrs = new Label[12];
+        instrs[0]=new Label("For conjunction:");
+        instrs[1] = new Label("For disjunction:");
+        instrs[2]=new Label("For implication:");
+        instrs[3] = new Label("For negation:");
+        instrs[4]=new Label("For empty set of assumptions:");
+        instrs[5] = new Label("For turnstile:");
+        instrs[6]=new Label(getKeys(AndToken.class));
+        instrs[7] = new Label(getKeys(OrToken.class));
+        instrs[8] =new Label(getKeys(ImpliesToken.class));
+        instrs[9]=new Label(getKeys(NotToken.class));
+        instrs[10]=new Label(getKeys(EmptyToken.class));
+        instrs[11] = new Label(getKeys(TurnstileToken.class));
 
-        textInstr.add(new Text("For disjunction:"), 1, 0);
-        textInstr.add(new Text(getKeys(OrToken.class)), 1, 1);
-
-        textInstr.add(new Text("For implication:"), 2, 0);
-        textInstr.add(new Text(getKeys(ImpliesToken.class)), 2, 1);
-
-        textInstr.add(new Text("For negation:"), 3, 0);
-        textInstr.add(new Text(getKeys(NotToken.class)), 3, 1);
-
-        textInstr.add(new Text("For empty set of assumptions:"), 4, 0);
-        textInstr.add(new Text(getKeys(EmptyToken.class)), 4, 1);
-
-        textInstr.add(new Text("For turnstile:"), 5, 0);
-        textInstr.add(new Text(getKeys(TurnstileToken.class)), 5, 1);
+        for (int i = 0; i < instrs.length; i++){
+            instrs[i].setStyle("-fx-text-fill: gray");
+            textInstr.add(instrs[i], i % (int)(instrs.length/2), (int)(i/(instrs.length/2)));
+        }
 
         box.getChildren().add(textInstr);
 
