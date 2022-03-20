@@ -58,11 +58,7 @@ public class StepTextField extends TextField {
                 }
             }
 
-            // set field width to be based on current text in box
-            Text text = new Text(StepTextField.this.getText());
-            text.setFont(StepTextField.this.getFont());
-            StepTextField.this.setPrefWidth(text.getLayoutBounds().getWidth()+ 2 * StepTextField.this.getPadding().getLeft() + 2d);
-
+            adjustSize();
         });
     }
 
@@ -79,6 +75,15 @@ public class StepTextField extends TextField {
             setStyle("-fx-background-color: "+ BACKGROUND_COLOR_STRING + "; -fx-border-width: 0");
             setCursor(Cursor.DEFAULT);
         }
+    }
+
+    /**
+     * set field width to be based on current text in box
+     */
+    public void adjustSize(){
+        Text text = new Text(StepTextField.this.getText());
+        text.setFont(StepTextField.this.getFont());
+        StepTextField.this.setPrefWidth(text.getLayoutBounds().getWidth()+ 2 * StepTextField.this.getPadding().getLeft() + 2d);
     }
 
 

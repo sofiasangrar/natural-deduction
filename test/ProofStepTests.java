@@ -1,3 +1,4 @@
+import natded.exceptions.AntecedentsMismatchException;
 import parser.Proof;
 import natded.StepNode;
 import org.junit.Test;
@@ -8,13 +9,14 @@ import static natded.NatDedUtilities.*;
 import static natded.constants.Step.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProofStepTests {
 
     StepNode root;
 
     @Test
-    public void testProof(){
+    public void testDeMorganProof(){
         StepNode l4 = new StepNode(
                 not + "(P " + or + " Q), P " + turnstile + " P",
                 ASSUMPTION);
@@ -62,7 +64,74 @@ public class ProofStepTests {
         l1.addChildren(l2);
 
         root = new StepNode(
-                empty + turnstile + not + "(P " + or + " Q) " + impl + not + "P" + and + not + "Q",
+                deMorgan,
+                IMP_INTRO);
+        root.addChild(l1);
+
+        Proof p = Proof.parse(root);
+        assertTrue(p.isValid());
+    }
+
+    @Test
+    public void testModusPonensProof(){
+
+        StepNode l21 = new StepNode(
+                "P " + impl + " Q, P, "+ not + "Q" + turnstile + "P" + impl + "Q",
+                ASSUMPTION);
+        StepNode l22 = new StepNode(
+                "P " + impl + " Q, P, "+ not + "Q" + turnstile + "P",
+                ASSUMPTION);
+        ArrayList<StepNode> l2 = new ArrayList<>();
+        l2.add(l21);
+        l2.add(l22);
+
+        StepNode l1 = new StepNode(
+                "P " + impl + " Q, P, "+ not + "Q" + turnstile +  "Q",
+                IMP_ELIM);
+        l1.addChildren(l2);
+
+        StepNode l12 = new StepNode(
+                "P " + impl + " Q, P, "+ not + "Q" + turnstile + not + "Q",
+                ASSUMPTION);
+
+        root = new StepNode(
+                modusPonens,
+                NEG_INTRO);
+        root.addChild(l1);
+        root.addChild(l12);
+
+        Proof p = Proof.parse(root);
+        assertTrue(p.isValid());
+    }
+
+    @Test
+    public void testNotPOrQProof(){
+        StepNode l31 = new StepNode(not + "P " + or + " Q, P, " + not + "P" + turnstile +  "P", ASSUMPTION);
+        StepNode l32 = new StepNode(not + "P " + or + " Q, P, " + not + "P" + turnstile + not +  "P", ASSUMPTION);
+
+        StepNode l21 = new StepNode(
+                not + "P " + or + " Q, P" + turnstile +  not + "P" + or + "Q",
+                ASSUMPTION);
+        StepNode l22 = new StepNode(
+                not + "P " + or + " Q, P, " + not + "P" + turnstile +  "Q",
+                NEG_ELIM);
+        l22.addChild(l31);
+        l22.addChild(l32);
+        StepNode l23 = new StepNode(
+                not + "P " + or + " Q, P, Q" + turnstile + "Q",
+                ASSUMPTION);
+        ArrayList<StepNode> l2 = new ArrayList<>();
+        l2.add(l21);
+        l2.add(l22);
+        l2.add(l23);
+
+        StepNode l1 = new StepNode(
+                not + "P " + or + " Q, P" + turnstile +  "Q",
+                OR_ELIM);
+        l1.addChildren(l2);
+
+        root = new StepNode(
+                notPorQ,
                 IMP_INTRO);
         root.addChild(l1);
 

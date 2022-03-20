@@ -18,7 +18,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lexer.tokens.*;
-import natded.NatDedUtilities;
 import natded.StepNode;
 
 import java.io.FileInputStream;
@@ -36,7 +35,7 @@ public class UserInterface extends StackPane {
     private static final String borderColor = "gray";
     private static final int borderRadius = 1;
     public static String buttonStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", darkgray); -fx-border-color: " + borderColor + "; -fx-border-radius: " + borderRadius;
-    static String greenButtonStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", lightgreen); -fx-border-color: " + borderColor + "; -fx-border-radius: " + borderRadius;
+    static String greenButtonStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", #50C878); -fx-border-color: " + borderColor + "; -fx-border-radius: " + borderRadius;
     static String incorrectDropdownStyle = "-fx-background-color: linear-gradient("+ lightGrad + ", #eb6651); -fx-border-color: "+ borderColor +"; -fx-border-radius: " + borderRadius;
     static Image alert;
     private static Image tick;
@@ -427,7 +426,7 @@ public class UserInterface extends StackPane {
     public void setProof(StepNode proof){
         root.setText(proof.getInput());
         root.setJustif(proof.getStep());
-
+        root.adjustFieldSize();
         for (StepNode child : proof.getChildren()){
             root.addChild(constructProof(child));
         }
@@ -442,6 +441,7 @@ public class UserInterface extends StackPane {
             LeafNode n = new LeafNode(null);
             n.setText(child.getInput());
             n.setJustif(child.getStep());
+            n.adjustFieldSize();
             for (StepNode childNode : child.getChildren()){
                 n.addChild(constructProof(childNode));
             }

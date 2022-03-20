@@ -267,4 +267,11 @@ public class LeafNode extends VBox {
         justif.set(step);
     }
 
+    /**
+     * fit field to width of text
+     */
+    public void adjustFieldSize(){
+        field.adjustSize();
+    }
+
 }
