@@ -425,7 +425,28 @@ public class UserInterface extends StackPane {
      * @param proof proof to load
      */
     public void setProof(StepNode proof){
-        setGoal(NatDedUtilities.randomGoal());
+        root.setText(proof.getInput());
+        root.setJustif(proof.getStep());
+
+        for (StepNode child : proof.getChildren()){
+            root.addChild(constructProof(child));
+        }
+    }
+
+    /**
+     * recursive step to get proof
+     * @param child node being processed
+     * @return ui element for current node
+     */
+    private LeafNode constructProof(StepNode child){
+            LeafNode n = new LeafNode(null);
+            n.setText(child.getInput());
+            n.setJustif(child.getStep());
+            for (StepNode childNode : child.getChildren()){
+                n.addChild(constructProof(childNode));
+            }
+            return n;
+
     }
 
 

@@ -101,7 +101,7 @@ public class LeafNode extends VBox {
     /**
      * create a new non-root node
      */
-    private LeafNode(LeafNode parent){
+    public LeafNode(LeafNode parent){
         this();
         this.parent = parent;
         setEditable(true);
@@ -148,6 +148,15 @@ public class LeafNode extends VBox {
      */
     void addChild(){
         childrenBox.getChildren().add(new LeafNode(this));
+    }
+
+    /**
+     * add new pre-defined child for loading
+     * @param node node being written
+     */
+    void addChild(LeafNode node){
+        childrenBox.getChildren().add(node);
+        node.parent = this;
     }
 
 
@@ -248,6 +257,14 @@ public class LeafNode extends VBox {
      */
     public void resetJustif(){
         this.justif.getSelectionModel().clearSelection();
+    }
+
+    /**
+     * set step for justification
+     * @param step step to select
+     */
+    public void setJustif(Step step){
+        justif.set(step);
     }
 
 }
