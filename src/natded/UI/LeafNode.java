@@ -236,11 +236,11 @@ public class LeafNode extends VBox {
     }
 
     /**
-     * delete all antecedents of this node from ui
+     * delete all premisses of this node from ui
      */
     void deleteChildren() {
-        for (int i = getChildNodes().size()-1; i >=0; i--) {
-            getChildNodes().get(i).delete();
+        if (getChildNodes().size() > 0) {
+            childrenBox.getChildren().clear();
         }
     }
 
