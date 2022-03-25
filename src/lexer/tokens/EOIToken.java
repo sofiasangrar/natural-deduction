@@ -20,4 +20,8 @@ public final class EOIToken extends Token {
         return "End of Input";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof EOIToken || obj.toString().equals(this.toString());
+    }
 }

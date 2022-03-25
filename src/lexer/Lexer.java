@@ -16,6 +16,7 @@ public final class Lexer {
     public static void setLexString(String s){
             lexString = s;
             column =0;
+            tokenColumn=0;
             ch = ' ';
         }
 

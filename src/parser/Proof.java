@@ -1,8 +1,7 @@
 package parser;
 
-import lexer.Lexer;
 import natded.StepNode;
-import natded.UI.LeafNode;
+import natded.UI.Node;
 import natded.constants.Step;
 import natded.exceptions.*;
 
@@ -25,10 +24,10 @@ public class Proof{
 	 * @return parsed proof
 	 */
 	public static Proof parse(StepNode node){
-		Lexer.setLexString(node.getInput());
-		Parser.clearError();
-		Parser.t = Lexer.lex();
-		node.setParsedInput(Sequent.parse());
+		//Lexer.setLexString(node.getInput());
+		//Parser.clearError();
+		//Parser.t = Lexer.lex();
+		node.setParsedInput(Sequent.parse(node.getInput()));
 		node.setIncorrectSyntax(Parser.error);
 		if (Parser.exception!=null){
 			displayException(node.getUIElement(), Parser.exception);
@@ -75,7 +74,7 @@ public class Proof{
 	 * @param ui ui element of node
 	 * @param e exception to display
 	 */
-	private static void displayException(LeafNode ui, RuntimeException e) {
+	private static void displayException(Node ui, RuntimeException e) {
 		if (ui!=null) {
 			ui.displayException(e);
 		}
@@ -110,7 +109,7 @@ public class Proof{
 	 * @param actual type of step that the proof actually performs
 	 * @return whether or not the step is valid
 	 */
-	public static boolean handleStep(LeafNode ui, ArrayList<Sequent> premises, Sequent conclusion, Step expected, Step actual) {
+	public static boolean handleStep(Node ui, ArrayList<Sequent> premises, Sequent conclusion, Step expected, Step actual) {
 		//if the proof step actually being performed is unassigned, if means the step is invalid
 		if (actual.equals(UNASSIGNED)) {
 			try {
@@ -226,7 +225,7 @@ public class Proof{
 					&& sequent.getAntecedents().size() == conclusion.getAntecedents().size() + 1
 			) {
 				Antecedents newAntecedents = new Antecedents(conclusion.getAntecedents());
-				newAntecedents.getAssumptions().add(((NotExpr) conclusion.getConclusion()).right);
+				newAntecedents.getAntecedents().add(((NotExpr) conclusion.getConclusion()).right);
 				if (sequent.getAntecedentsObject().equals(newAntecedents)) {
 					return NEG_INTRO;
 				}
@@ -296,13 +295,13 @@ public class Proof{
 
 				for (Expr assumption : sequent1.getAntecedents()) {
 					if (!assumption.equals(P)) {
-						newAntecedents.getAssumptions().add(assumption);
+						newAntecedents.getAntecedents().add(assumption);
 					}
 				}
 
 				for (Expr assumption : sequent2.getAntecedents()) {
-					if (!assumption.equals(P) && !newAntecedents.getAssumptions().contains(assumption)) {
-						newAntecedents.getAssumptions().add(assumption);
+					if (!assumption.equals(P) && !newAntecedents.getAntecedents().contains(assumption)) {
+						newAntecedents.getAntecedents().add(assumption);
 					}
 				}
 
@@ -347,8 +346,8 @@ public class Proof{
 						Antecedents pa = new Antecedents(orSequent.getAntecedents());
 						Antecedents qa = new Antecedents(orSequent.getAntecedents());
 
-						pa.getAssumptions().add(P);
-						qa.getAssumptions().add(Q);
+						pa.getAntecedents().add(P);
+						qa.getAntecedents().add(Q);
 
 						if (premisses.get(j).getAntecedentsObject().equals(pa) && premisses.get(k).getAntecedentsObject().equals(qa)) {
 							sequentP = premisses.get(j);
@@ -530,7 +529,7 @@ public class Proof{
 						throw new RuleException(NEG_INTRO, "conclusion does not appear in premise's antecedents");
 					}
 					Antecedents newAntecedents = new Antecedents(conclusion.getAntecedents());
-					newAntecedents.getAssumptions().add(((NotExpr) conclusion.getConclusion()).right);
+					newAntecedents.getAntecedents().add(((NotExpr) conclusion.getConclusion()).right);
 					if (!(sequent1.getAntecedentsObject().equals(newAntecedents))) {
 						throw new AntecedentsMismatchException();
 					}
@@ -565,13 +564,13 @@ public class Proof{
 
 						for (Expr assumption : sequent1.getAntecedents()) {
 							if (!assumption.equals(P)) {
-								newAntecedents.getAssumptions().add(assumption);
+								newAntecedents.getAntecedents().add(assumption);
 							}
 						}
 
 						for (Expr assumption : sequent2.getAntecedents()) {
-							if (!assumption.equals(P) && !newAntecedents.getAssumptions().contains(assumption)) {
-								newAntecedents.getAssumptions().add(assumption);
+							if (!assumption.equals(P) && !newAntecedents.getAntecedents().contains(assumption)) {
+								newAntecedents.getAntecedents().add(assumption);
 							}
 						}
 
@@ -738,8 +737,8 @@ public class Proof{
 						Antecedents pa = new Antecedents(orSequent.getAntecedents());
 						Antecedents qa = new Antecedents(orSequent.getAntecedents());
 
-						pa.getAssumptions().add(P);
-						qa.getAssumptions().add(Q);
+						pa.getAntecedents().add(P);
+						qa.getAntecedents().add(Q);
 
 						for (int i = 0; i < 3; i++) {
 							int j = (i + 1) % 3;

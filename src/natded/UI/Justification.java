@@ -44,7 +44,6 @@ public class Justification extends ChoiceBox<Pair<String, Step>> {
         values.put(Step.NEG_ELIM, new Pair<>(NotToken.getString()+"-E", Step.NEG_ELIM));
         values.put( Step.NEG_INTRO, new Pair<>(NotToken.getString()+"-I", Step.NEG_INTRO));
         values.put(Step.FALSE_ELIM, new Pair<>("F-E", Step.FALSE_ELIM));
-        //values.put(new Pair<>("F-I", Step.FALSE_INTRO));
         values.put(Step.TRUE_INTRO, new Pair<>("T-I", Step.TRUE_INTRO));
         values.put( Step.EXCL_MIDDLE, new Pair<>("LEM", Step.EXCL_MIDDLE));
 

@@ -6,7 +6,7 @@ import javafx.scene.paint.Paint;
 public class SubtractButton extends Button {
 
 
-    SubtractButton(LeafNode parent) {
+    SubtractButton(Node parent) {
         this.setStyle(UserInterface.buttonStyle);
         this.setText("-");
         this.setTextFill(Paint.valueOf("red"));

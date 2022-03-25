@@ -1,6 +1,6 @@
 package natded;
 
-import natded.UI.LeafNode;
+import natded.UI.Node;
 import natded.constants.Step;
 import parser.Sequent;
 
@@ -12,7 +12,7 @@ public class StepNode {
     private Sequent parsedInput;
     private List<StepNode> children;
     private Step step;
-    private LeafNode node;
+    private Node node;
     private boolean incorrectSyntax; //true if syntax is incorrect
 
     public StepNode(String input, Step step) {
@@ -24,7 +24,7 @@ public class StepNode {
         this.incorrectSyntax = false;
     }
 
-    public StepNode(String input, Step step, LeafNode node) {
+    public StepNode(String input, Step step, Node node) {
         this(input, step);
         this.node = node;
     }
@@ -117,7 +117,7 @@ public class StepNode {
      * get coupled ui element
      * @return UI element that the input to this node came from
      */
-    public LeafNode getUIElement(){
+    public Node getUIElement(){
         return node;
     }
 

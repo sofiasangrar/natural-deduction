@@ -3,7 +3,6 @@ package natded.UI;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -18,19 +17,19 @@ import java.util.List;
 
 import static natded.Main.DISPLAY_HEIGHT;
 
-public class LeafNode extends VBox {
+public class Node extends VBox {
 
     private StepTextField field;
     private HBox childrenBox;
     private HBox fieldHbox;
-    private LeafNode parent;
+    private Node parent;
     private Justification justif;
     private ErrorSymbol error;
     private Tooltip t = new Tooltip();
     private final double MARGIN = DISPLAY_HEIGHT/100;
 
 
-    LeafNode(){
+    Node(){
         super();
         this.parent = null;
         this.setAlignment(Pos.BOTTOM_CENTER);
@@ -46,7 +45,7 @@ public class LeafNode extends VBox {
         //container for the text field, add/substract buttons and justification
         fieldHbox = new HBox();
         fieldHbox.setPrefHeight(DISPLAY_HEIGHT/30);
-        fieldHbox.setStyle("-fx-border-style: solid hidden hidden hidden;"); //add top border line to mimic natural deduction sequent
+        fieldHbox.setStyle("-fx-border-style: solid hidden hidden hidden;"); //add top border line
         fieldHbox.setAlignment(Pos.BOTTOM_CENTER);
         fieldHbox.setPadding(new Insets(MARGIN,0.0,0.0,0.0));
         VBox.setMargin(fieldHbox, new Insets(0, MARGIN*2, MARGIN,0));
@@ -56,7 +55,7 @@ public class LeafNode extends VBox {
         AddButton addButton = new AddButton(this);
         addButton.setPrefSize(fieldHbox.getPrefHeight(), fieldHbox.getPrefHeight());
 
-        //text field to qrite proof steps
+        //text field to write proof steps
         field = new StepTextField();
         field.setAlignment(Pos.CENTER);
         field.selectPositionCaret(field.getLength());
@@ -101,7 +100,7 @@ public class LeafNode extends VBox {
     /**
      * create a new non-root node
      */
-    public LeafNode(LeafNode parent){
+    public Node(Node parent){
         this();
         this.parent = parent;
         setEditable(true);
@@ -122,13 +121,13 @@ public class LeafNode extends VBox {
      * get antecedent nodes from UI
      * @return list of child nodes
      */
-    ArrayList<LeafNode> getChildNodes(){
-        ArrayList<LeafNode> fields = new ArrayList<>();
+    ArrayList<Node> getChildNodes(){
+        ArrayList<Node> fields = new ArrayList<>();
         if (hasChildren()) {
-            ObservableList<Node> boxes = childrenBox.getChildren();
+            ObservableList<javafx.scene.Node> boxes = childrenBox.getChildren();
 
-            for (Node box : boxes) {
-                LeafNode node = (LeafNode) box;
+            for (javafx.scene.Node box : boxes) {
+                Node node = (Node) box;
                 fields.add(node);
             }
         }
@@ -147,14 +146,14 @@ public class LeafNode extends VBox {
      * add new premise to node
      */
     void addChild(){
-        childrenBox.getChildren().add(new LeafNode(this));
+        childrenBox.getChildren().add(new Node(this));
     }
 
     /**
      * add new pre-defined child for loading
      * @param node node being written
      */
-    void addChild(LeafNode node){
+    void addChild(Node node){
         childrenBox.getChildren().add(node);
         node.parent = this;
     }
@@ -179,7 +178,7 @@ public class LeafNode extends VBox {
         }
         StepNode n = new StepNode(text, s, this);
 
-        for (LeafNode child : getChildNodes()) {
+        for (Node child : getChildNodes()) {
             n.addChild(child.getTree());
         }
         return n;
@@ -189,7 +188,7 @@ public class LeafNode extends VBox {
      * delete a specified antecedent step from the tree
      * @param node node to delete
      */
-    private void deleteChild(LeafNode node){
+    private void deleteChild(Node node){
         childrenBox.getChildren().remove(node);
     }
 
@@ -198,10 +197,10 @@ public class LeafNode extends VBox {
      */
     public void delete() {
         int index = parent.getChildNodes().indexOf(this);
-        List<LeafNode> children = this.getChildNodes();
+        List<Node> children = this.getChildNodes();
         parent.deleteChild(this);
         parent.childrenBox.getChildren().addAll(index, children);
-        for (LeafNode child : children){
+        for (Node child : children){
             child.parent = parent;
         }
     }

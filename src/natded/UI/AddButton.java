@@ -7,7 +7,7 @@ import javafx.scene.paint.Paint;
 
 public class AddButton extends Button {
 
-    AddButton(LeafNode parent) {
+    AddButton(Node parent) {
         this.setStyle(UserInterface.buttonStyle);
         this.setWrapText(false);
         this.setText("+");

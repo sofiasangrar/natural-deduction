@@ -9,19 +9,19 @@ import java.util.List;
 
 public class Antecedents {
 
-	private List<Expr> assumptions;
+	private List<Expr> antecedents;
 
-	Antecedents(List<Expr> assumptions){
-		this.assumptions= new ArrayList<>(assumptions);
+	Antecedents(List<Expr> antecedents){
+		this.antecedents = new ArrayList<>(antecedents);
 	}
 
 	Antecedents() {
-		this.assumptions = new ArrayList<>();
+		this.antecedents = new ArrayList<>();
 	}
 
 	/**
-	 * parse consequent tokens as assumptions
-	 * @return new assumptions object from relevant tokens
+	 * parse consequent tokens as antecedents
+	 * @return new antecedents object from relevant tokens
 	 */
 	public static Antecedents parse(){
 		List<Expr> assumptions = new ArrayList<>();
@@ -37,21 +37,21 @@ public class Antecedents {
 	}
 
 	/**
-	 * get assumptions list
-	 * @return list of assumptions
+	 * get antecedents list
+	 * @return list of antecedents
 	 */
-	public List<Expr> getAssumptions() {
-		return assumptions;
+	public List<Expr> getAntecedents() {
+		return antecedents;
 	}
 
 	@Override
 	public String toString() {
-		if (assumptions.size()==0) {
+		if (antecedents.size()==0) {
 			return EmptyToken.getString();
 		} else {
-			String returnstring = assumptions.get(0).toString();
-			for (int i = 1; i < assumptions.size(); i ++) {
-				returnstring += ", " + assumptions.get(i).toString();
+			String returnstring = antecedents.get(0).toString();
+			for (int i = 1; i < antecedents.size(); i ++) {
+				returnstring += ", " + antecedents.get(i).toString();
 			}
 			return returnstring;
 		}
@@ -63,11 +63,11 @@ public class Antecedents {
 			return false;
 		}
 		Antecedents compare = (Antecedents) obj;
-		if (compare.assumptions.size()!= this.assumptions.size()) {
+		if (compare.antecedents.size()!= this.antecedents.size()) {
 			return false;
 		}
-		ArrayList<Expr> list1 = new ArrayList<>(this.getAssumptions());
-		ArrayList<Expr> list2 = new ArrayList<>(compare.getAssumptions());
+		ArrayList<Expr> list1 = new ArrayList<>(this.getAntecedents());
+		ArrayList<Expr> list2 = new ArrayList<>(compare.getAntecedents());
 
 		//lists must be equal (in any order) for the assumption objects to be considered the same.
 		//check for set equality by checking if each set is contained in the other

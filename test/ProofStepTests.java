@@ -140,6 +140,100 @@ public class ProofStepTests {
     }
 
     @Test
+    public void testFalseIsTrueProof(){
+
+        StepNode l21 = new StepNode(
+                not + "P, P" + turnstile + "P",
+                ASSUMPTION);
+        StepNode l22 = new StepNode(
+                not + "P, P" + turnstile + not + "P",
+                ASSUMPTION);
+        ArrayList<StepNode> l2 = new ArrayList<>();
+        l2.add(l21);
+        l2.add(l22);
+
+        StepNode l1 = new StepNode(
+                not + "P, P" + turnstile +  "Q",
+                NEG_ELIM);
+        l1.addChildren(l2);
+
+        root = new StepNode(
+                falseIsTrue,
+                IMP_INTRO);
+        root.addChild(l1);
+
+        Proof p = Proof.parse(root);
+        assertTrue(p.isValid());
+    }
+    @Test
+    public void testHalfOfOrProof(){
+        StepNode l31 = new StepNode("P " + or + " Q, P, " + not + "P" + turnstile +  "P", ASSUMPTION);
+        StepNode l32 = new StepNode("P " + or + " Q, P, " + not + "P" + turnstile + not +  "P", ASSUMPTION);
+
+        StepNode l21 = new StepNode(
+                "P " + or + " Q, " + not + "P" + turnstile + "P" + or + "Q",
+                ASSUMPTION);
+        StepNode l22 = new StepNode(
+                "P " + or + " Q, " + not + "P, P" + turnstile + "Q",
+                NEG_ELIM);
+        l22.addChild(l31);
+        l22.addChild(l32);
+        StepNode l23 = new StepNode(
+                "P " + or + " Q, " + not + "P, Q" + turnstile + "Q",
+                ASSUMPTION);
+        ArrayList<StepNode> l2 = new ArrayList<>();
+        l2.add(l21);
+        l2.add(l22);
+        l2.add(l23);
+
+        root = new StepNode(
+                halfOfOr,
+                OR_ELIM);
+        root.addChildren(l2);
+
+        Proof p = Proof.parse(root);
+        assertTrue(p.isValid());
+    }
+    @Test
+    public void testOrAndAndProof(){
+        StepNode l4 = new StepNode(
+                "P " + or + " (Q " + and+  " R), Q " + and + " R" + turnstile +  "Q" + and + "R",
+                ASSUMPTION);
+
+
+        StepNode l32 = new StepNode("P " + or + " (Q " + and+  " R), Q " + and + " R" + turnstile +  "Q",
+                AND_ELIM);
+        StepNode l31 = new StepNode("P " + or + " (Q " + and+  " R), P " + turnstile +  "P"
+                , ASSUMPTION);
+        l32.addChild(l4);
+
+        StepNode l21 = new StepNode(
+                "P " + or + " (Q " + and+  " R)" + turnstile +  "P" + or + "(Q "+ and + "R)",
+                ASSUMPTION);
+        StepNode l22 = new StepNode(
+                "P " + or + " (Q " + and+  " R), P" + turnstile +  "P" + or + "Q",
+                OR_INTRO);
+        l22.addChild(l31);
+        StepNode l23 = new StepNode(
+                "P " + or + " (Q " + and+  " R), Q " + and + " R" + turnstile +  "P" + or + "Q",
+                OR_INTRO);
+        l23.addChild(l32);
+        ArrayList<StepNode> l2 = new ArrayList<>();
+        l2.add(l21);
+        l2.add(l22);
+        l2.add(l23);
+
+
+        root = new StepNode(
+                orAndAnd,
+                OR_ELIM);
+        root.addChildren(l2);
+
+        Proof p = Proof.parse(root);
+        assertTrue(p.isValid());
+    }
+
+    @Test
     public void assumptionWorks(){
         root = new StepNode("P" + and + "Q, " + not + "(R " + and + " S)" + turnstile + " P" + and + "Q", ASSUMPTION);
         Proof p = Proof.parse(root);

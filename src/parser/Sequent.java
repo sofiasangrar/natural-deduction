@@ -23,7 +23,10 @@ public class Sequent {
 	 * parse the next tokens as a valid sentence in natural deduction, i.e. <antecedents> <turnstile> <conclusion>
 	 * @return sentence of natural deduction
 	 */
-  	public static Sequent parse() {
+  	public static Sequent parse(String sequentString) {
+  		Lexer.setLexString(sequentString);
+  		Parser.clearError();
+  		Parser.t = Lexer.lex();
   		Antecedents antecedents = new Antecedents();
 		Expr expression = new Expr();
 
@@ -32,7 +35,7 @@ public class Sequent {
 			Parser.t= Lexer.lex();
 		} else {
 			antecedents = Antecedents.parse();
-			if (antecedents.getAssumptions() == null || antecedents.getAssumptions().size() == 0){
+			if (antecedents.getAntecedents() == null || antecedents.getAntecedents().size() == 0){
 				Parser.errorHandle("antecedents");
 			}
 
@@ -63,7 +66,7 @@ public class Sequent {
 	 * @return list of expressions in antecedents object
 	 */
 	public List<Expr> getAntecedents() {
-		return antecedents.getAssumptions();
+		return antecedents.getAntecedents();
 	}
 
 	/**

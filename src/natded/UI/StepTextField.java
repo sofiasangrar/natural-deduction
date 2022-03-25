@@ -26,10 +26,10 @@ public class StepTextField extends TextField {
         this.setEditableField(true);
         this.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && StepTextField.this.getContent().length()>0){
-                Parser.clearError();
-                Lexer.setLexString(StepTextField.this.getText());
-                Parser.t = Lexer.lex();
-                Sequent.parse();
+                //Parser.clearError();
+                //Lexer.setLexString(StepTextField.this.getText());
+                //Parser.t = Lexer.lex();
+                Sequent.parse(StepTextField.this.getText());
                 if (Parser.error) {
                     StepTextField.this.setStyle("-fx-text-fill: darkred;");
                 } else {

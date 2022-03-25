@@ -6,7 +6,6 @@ import javafx.animation.Timeline;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
@@ -30,7 +29,7 @@ import static natded.Main.DISPLAY_WIDTH;
 public class UserInterface extends StackPane {
 
     VBox space = new VBox();
-    LeafNode root;
+    Node root;
     private static final String lightGrad = "whitesmoke";
     private static final String borderColor = "gray";
     private static final int borderRadius = 1;
@@ -121,7 +120,7 @@ public class UserInterface extends StackPane {
         wrapper.setAlignment(Pos.CENTER);
 
         //create starting root
-        root = new LeafNode();
+        root = new Node();
         root.setEditable(false);
         root.setFieldMinWidth(DISPLAY_WIDTH/10);
 
@@ -333,9 +332,9 @@ public class UserInterface extends StackPane {
      * recursively remove errors in tree and subtrees, stating from a specified node
      * @param node tree node where error formatting removal should start from
      */
-    private void resetErrors(LeafNode node) {
+    private void resetErrors(Node node) {
         node.resetError();
-        for (LeafNode child: node.getChildNodes()){
+        for (Node child: node.getChildNodes()){
             resetErrors(child);
         }
     }
@@ -395,7 +394,7 @@ public class UserInterface extends StackPane {
     /**
      * a scaling animation to draw attention
      */
-    public static void animate(Node node) {
+    public static void animate(javafx.scene.Node node) {
         Duration start = Duration.ZERO;
         Duration mid = Duration.seconds(0.25);
         Duration end = Duration.seconds(0.5);
@@ -421,7 +420,7 @@ public class UserInterface extends StackPane {
 
     /**
      * load proof to scene
-     * @param proof proof to load
+     * @param proof root node of proof to load
      */
     public void setProof(StepNode proof){
         root.setText(proof.getInput());
@@ -433,12 +432,12 @@ public class UserInterface extends StackPane {
     }
 
     /**
-     * recursive step to get proof
+     * recursive step to set loaded proof to scene
      * @param child node being processed
      * @return ui element for current node
      */
-    private LeafNode constructProof(StepNode child){
-            LeafNode n = new LeafNode(null);
+    private Node constructProof(StepNode child){
+            Node n = new Node(null);
             n.setText(child.getInput());
             n.setJustif(child.getStep());
             n.adjustFieldSize();
