@@ -4,18 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AntecedentsTest {
+class ConjTest {
 
     @Test
     void parse() {
-
     }
 
     @Test
-    void getAssumptions() {
-    }
-
-    @Test
-    void equalsTest() {
+    void equals() {
     }
 }

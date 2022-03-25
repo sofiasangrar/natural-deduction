@@ -16,6 +16,10 @@ public class IdentExpr extends Factor {
      * @return parsed identifier
      */
     public static IdentExpr parse() {
+        if (!(Parser.t instanceof IdentToken)){
+            Parser.errorHandle("an identifier");
+            return new IdentExpr("");
+        }
         String s = ((IdentToken)Parser.t).getAttr();
         Parser.t = Lexer.lex();
         return new IdentExpr(s);

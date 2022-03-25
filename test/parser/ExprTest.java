@@ -4,18 +4,29 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AntecedentsTest {
+class ExprTest {
 
     @Test
     void parse() {
-
     }
 
     @Test
-    void getAssumptions() {
+    void equals() {
     }
 
     @Test
-    void equalsTest() {
+    void isDisj() {
+    }
+
+    @Test
+    void isConj() {
+    }
+
+    @Test
+    void isImpl() {
+    }
+
+    @Test
+    void unbracket() {
     }
 }
