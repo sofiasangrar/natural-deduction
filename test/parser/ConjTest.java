@@ -4,9 +4,7 @@ import lexer.Lexer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static natded.NatDedUtilities.and;
-import static natded.NatDedUtilities.not;
-import static natded.NatDedUtilities.or;
+import static natded.NatDedUtilities.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,7 +44,7 @@ class ConjTest {
     @Test
     void parseNotAndTest() {
         assertFalse(Parser.error);
-        Lexer.setLexString("P " + or + " Q");
+        Lexer.setLexString(turnstile);
         Parser.t = Lexer.lex();
         Conj.parse();
         assertTrue(Parser.error);

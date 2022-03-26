@@ -43,7 +43,7 @@ class DisjTest {
     @Test
     void parseNotOrTest() {
         assertFalse(Parser.error);
-        Lexer.setLexString("P " + impl + " Q");
+        Lexer.setLexString(turnstile);
         Parser.t = Lexer.lex();
         Disj.parse();
         assertTrue(Parser.error);
