@@ -2,6 +2,7 @@ package natded;
 
 import natded.UI.Node;
 import natded.constants.Step;
+import parser.Parser;
 import parser.Sequent;
 
 import java.util.ArrayList;
@@ -63,10 +64,10 @@ public class StepNode {
 
     /**
      * set the parse tree
-     * @param parsedInput a parsed natural deduction step
      */
-    public void setParsedInput(Sequent parsedInput) {
-        this.parsedInput = parsedInput;
+    public void parse() {
+        this.parsedInput = Sequent.parse(input);
+        setIncorrectSyntax(Parser.error);
     }
 
     /**

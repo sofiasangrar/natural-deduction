@@ -27,8 +27,8 @@ public class Proof{
 		//Lexer.setLexString(node.getInput());
 		//Parser.clearError();
 		//Parser.t = Lexer.lex();
-		node.setParsedInput(Sequent.parse(node.getInput()));
-		node.setIncorrectSyntax(Parser.error);
+		node.parse();
+
 		if (Parser.exception!=null){
 			displayException(node.getUIElement(), Parser.exception);
 		}
@@ -60,7 +60,7 @@ public class Proof{
 			isValid = false;
 		}
 
-		//check validity of antecedent steps
+		//check validity of premises
 		for (int i = 0; i < root.getChildren().size(); i++) {
 			if (!isValid(root.getChildren().get(i))) {
 				isValid = false;
@@ -86,7 +86,7 @@ public class Proof{
 	 * @return whether or not the step is valid
 	 */
 	public static boolean checkStep(StepNode node){
-		//a step is defined as the node and itc children (the antecedents)
+		//a step is defined as the node and itc children (the premises)
 		for (StepNode child : node.getChildren()) {
 			//if any child has incorrect syntax, do not check the step
 			if (child.hasIncorrectSyntax()) {
