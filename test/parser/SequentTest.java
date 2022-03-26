@@ -1,6 +1,7 @@
 package parser;
 
 import lexer.Lexer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static junit.framework.TestCase.assertEquals;
@@ -12,6 +13,12 @@ import static natded.NatDedUtilities.turnstile;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SequentTest {
+    @BeforeEach
+    void setUp() {
+        Lexer.setLexString("");
+        Parser.clearError();
+    }
+
 
     @Test
     void getAntecedentsTest() {

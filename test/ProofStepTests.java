@@ -1,4 +1,7 @@
+import lexer.Lexer;
 import natded.exceptions.AntecedentsMismatchException;
+import org.junit.jupiter.api.BeforeEach;
+import parser.Parser;
 import parser.Proof;
 import natded.StepNode;
 import org.junit.Test;
@@ -14,6 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ProofStepTests {
 
     StepNode root;
+
+    @BeforeEach
+    void setUp() {
+        Lexer.setLexString("");
+        Parser.clearError();
+    }
 
     @Test
     public void testDeMorganProof(){
