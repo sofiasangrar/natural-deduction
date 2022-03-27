@@ -311,19 +311,6 @@ public class Proof{
 				}
 			}
 
-			/*
-			//false intro
-			if (sequent1.getAntecedentsObject().equals(sequent2.getAntecedentsObject()) &&
-					sequent1.getAntecedentsObject().equals(conclusion.getAntecedentsObject()) &&
-					((sequent1.getConclusion()instanceof NotExpr && sequent2.getConclusion().equals(((NotExpr) sequent1.getConclusion()).right)) ||
-							(sequent2.getConclusion()instanceof NotExpr && sequent1.getConclusion().equals(((NotExpr) sequent2.getConclusion()).right))) &&
-					conclusion.getConclusion() instanceof BooleanExpr &&
-					!((BooleanExpr) conclusion.getConclusion()).value){
-				return FALSE_INTRO;
-
-			}
-			*/
-
 		} else if (premisses.size()==3) {
 			//or elim
 			Expr R = conclusion.getConclusion();
