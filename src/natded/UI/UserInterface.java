@@ -20,7 +20,7 @@ import lexer.tokens.*;
 import natded.StepNode;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static javafx.scene.layout.Priority.ALWAYS;
 import static natded.Main.DISPLAY_HEIGHT;
@@ -41,9 +41,10 @@ public class UserInterface extends StackPane {
     private static Image[] instructionImages = new Image[3];
     private static Image[] ruleImages = new Image[12];
     private static Image deMorgan;
-    private static String imgDir = "src/natded/UI/images/";
+    private static String imgDir = "resources/images/";
+
     //get images
-    static {
+    private void getImages() {
         try {
             tick = new Image(new FileInputStream(imgDir + "tick.png"));
             alert = new Image(new FileInputStream(imgDir + "alert.png"));
@@ -63,7 +64,7 @@ public class UserInterface extends StackPane {
             ruleImages[10] = new Image(new FileInputStream(imgDir + "LEM.png"));
             ruleImages[11] = new Image(new FileInputStream(imgDir + "ass.png"));
             deMorgan = new Image(new FileInputStream(imgDir + "deMorganSmall.png"));
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -83,6 +84,7 @@ public class UserInterface extends StackPane {
         this.getChildren().add(space);
         space.setAlignment(Pos.TOP_CENTER);
         space.setBackground(new Background(new BackgroundFill(NDScene.WINDOW_BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+        getImages();
         initializeUserInterface();
     }
 
@@ -284,7 +286,7 @@ public class UserInterface extends StackPane {
 
     /**
      * get a choicebox to draw
-     * @return chociebox
+     * @return choicebox
      */
     private ChooseGoal getChooseBox(){
         ChooseGoal c = new ChooseGoal();

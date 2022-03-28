@@ -28,7 +28,7 @@ public class SaveButton extends Button {
     }
 
     public void saveTree(StepNode root){
-        File saveFile = new File("src/IO/save.txt");
+        File saveFile = new File("resources/IO/save.txt");
         String saveString = getStringTree(root, 0);
         try {
             FileWriter writer = new FileWriter(saveFile);

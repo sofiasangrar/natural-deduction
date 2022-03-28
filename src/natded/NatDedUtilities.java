@@ -44,7 +44,7 @@ public class NatDedUtilities {
     public static final Class[] logicSymbols = {AndToken.class, OrToken.class, EmptyToken.class, ImpliesToken.class, TurnstileToken.class, NotToken.class};
 
     public static StepNode load(){
-        File saveFile = new File("src/IO/save.txt");
+        File saveFile = new File("resources/IO/save.txt");
         ArrayList<StepNode> stack = new ArrayList<>();
         try {
             Scanner reader = new Scanner(saveFile);

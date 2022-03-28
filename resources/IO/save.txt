@@ -1,0 +1,6 @@
+∅ ⊢ ¬(P ∨ Q) ⇒ (¬P) ∧ (¬Q),IMP_INTRO
+	¬(P ∨ Q) ⊢ ¬P∧ ¬Q,AND_INTRO
+		¬(P ∨ Q) ⊢ ¬P,NEG_INTRO
+			,UNASSIGNED
+		¬(P ∨ Q) ⊢ ¬Q,NEG_INTRO
+			,UNASSIGNED
