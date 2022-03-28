@@ -12,6 +12,7 @@ import natded.constants.Step;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Justification extends ChoiceBox<Pair<String, Step>> {
@@ -33,7 +34,7 @@ public class Justification extends ChoiceBox<Pair<String, Step>> {
         this.setStyle(style);
 
         //list of choices for justification
-        values = new HashMap<>();
+        values = new LinkedHashMap<>();
         values.put(Step.ASSUMPTION, new Pair<>("Ass.", Step.ASSUMPTION));
         values.put(Step.IMP_ELIM, new Pair<>(ImpliesToken.getString()+"-E", Step.IMP_ELIM));
         values.put(Step.IMP_INTRO, new Pair<>(ImpliesToken.getString()+"-I", Step.IMP_INTRO));
@@ -62,6 +63,10 @@ public class Justification extends ChoiceBox<Pair<String, Step>> {
         this.getItems().addAll( values.values() );
     }
 
+    /**
+     * assign step
+     * @param step step to place as choice
+     */
     public void set(Step step){
         if (step==Step.UNASSIGNED){
             this.getSelectionModel().clearSelection();

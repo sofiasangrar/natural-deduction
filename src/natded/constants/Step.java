@@ -13,6 +13,5 @@ public enum Step {
     FALSE_ELIM,
     TRUE_INTRO,
     EXCL_MIDDLE,
-    //FALSE_INTRO,
     UNASSIGNED
 }

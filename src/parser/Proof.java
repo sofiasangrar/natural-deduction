@@ -24,9 +24,6 @@ public class Proof{
 	 * @return parsed proof
 	 */
 	public static Proof parse(StepNode node){
-		//Lexer.setLexString(node.getInput());
-		//Parser.clearError();
-		//Parser.t = Lexer.lex();
 		node.parse();
 
 		if (Parser.exception!=null){
@@ -668,32 +665,6 @@ public class Proof{
 				}
 				break;
 
-				/*
-
-			case FALSE_INTRO:
-				if (size!=2){
-					throw new PremiseNumberException(FALSE_INTRO, 2, size);
-				}
-				sequent1 = premisses.get(0);
-				sequent2 = premisses.get(1);
-
-				if (!sequent1.getAntecedentsObject().equals(sequent2.getAntecedentsObject())){
-					throw new AntecedentsMismatchException();
-				}
-				if (!sequent1.getAntecedentsObject().equals(conclusion.getAntecedentsObject())) {
-					throw new AntecedentsMismatchException();
-				}
-				if(!((sequent1.getConclusion()instanceof NotExpr && sequent2.getConclusion().equals(((NotExpr) sequent1.getConclusion()).right)) ||
-								(sequent2.getConclusion()instanceof NotExpr && sequent1.getConclusion().equals(((NotExpr) sequent2.getConclusion()).right)))) {
-					throw new RuleException(FALSE_INTRO, "conclusion of one premise is not negation of the other");
-				}
-
-				if(!(conclusion.getConclusion() instanceof BooleanExpr &&
-						!((BooleanExpr) conclusion.getConclusion()).value)){
-					throw new NothingIntroducedException(FALSE_INTRO, "False");
-				}
-				break;
-*/
 			case OR_ELIM:
 				if (size!=3) {
 					throw new PremiseNumberException(OR_ELIM, 3, size);

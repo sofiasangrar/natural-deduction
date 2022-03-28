@@ -1,14 +1,12 @@
 package natded;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import natded.UI.NDScene;
 import natded.UI.StartScene;
 import natded.UI.UserInterface;
-import natded.UI.Window;
 
 public class Main extends Application {
 
@@ -23,11 +21,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Proof Checker");
-        //primaryStage.setFullScreen(true);
         StartScene start = new StartScene(DISPLAY_WIDTH/3, DISPLAY_HEIGHT/3);
         NDScene ui = new NDScene(primaryStage.widthProperty().doubleValue(), primaryStage.heightProperty().doubleValue());
 
 
+        //start button
         Button b = new Button("Start");
         b.setStyle(UserInterface.buttonStyle);
         b.setOnMouseClicked(event -> {
@@ -38,6 +36,8 @@ public class Main extends Application {
         });
         start.addElement(b);
 
+
+        //load button - when clicked loads saved proof to screen
         Button load = new Button("Load");
         load.setStyle(UserInterface.buttonStyle);
         load.setOnMouseClicked(event -> {

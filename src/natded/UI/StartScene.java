@@ -17,7 +17,7 @@ import static natded.Main.DISPLAY_WIDTH;
 
 public class StartScene extends Scene {
     static final Color WINDOW_BACKGROUND_COLOR = Color.WHITESMOKE;
-    HBox elements;
+    private HBox elements;
 
     public StartScene(double width, double height){
         super(new StackPane(), width, height, WINDOW_BACKGROUND_COLOR);

@@ -255,7 +255,7 @@ public class Node extends VBox {
      * clear the selection on the justification
      */
     public void resetJustif(){
-        this.justif.getSelectionModel().clearSelection();
+        this.justif.set(Step.UNASSIGNED);
     }
 
     /**

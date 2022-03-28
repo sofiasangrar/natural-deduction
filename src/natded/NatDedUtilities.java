@@ -5,8 +5,6 @@ import lexer.tokens.*;
 import natded.constants.Step;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -91,6 +89,11 @@ public class NatDedUtilities {
         return new StepNode(randomGoal(), Step.UNASSIGNED);
     }
 
+    /**
+     * turn comma delimited text into a node with a srtep
+     * @param string node string
+     * @return a proof step
+     */
     private static StepNode getNodeFromString(String string){
         String newString = string.trim();
         String[] vals = newString.split(",");
