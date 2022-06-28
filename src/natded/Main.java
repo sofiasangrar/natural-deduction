@@ -42,7 +42,7 @@ public class Main extends Application {
         load.setStyle(UserInterface.buttonStyle);
         load.setOnMouseClicked(event -> {
             primaryStage.setScene(ui);
-            ui.setProof(NatDedUtilities.load());
+            ui.setProof(NatDedUtilities.load(primaryStage));
             primaryStage.setFullScreen(true);
 
         });

@@ -1,6 +1,8 @@
 package natded;
 
 import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import lexer.tokens.*;
 import natded.constants.Step;
 
@@ -43,11 +45,15 @@ public class NatDedUtilities {
     public static final String[] proofs = {deMorgan, notPorQ, modusPonens, orAndAnd, halfOfOr, falseIsTrue};
     public static final Class[] logicSymbols = {AndToken.class, OrToken.class, EmptyToken.class, ImpliesToken.class, TurnstileToken.class, NotToken.class};
 
-    public static StepNode load(){
-        File saveFile = new File("resources/IO/save.txt");
+    public static StepNode load(Stage window){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
+        File openFile = fileChooser.showOpenDialog(window);
+
         ArrayList<StepNode> stack = new ArrayList<>();
         try {
-            Scanner reader = new Scanner(saveFile);
+            Scanner reader = new Scanner(openFile);
             if (!reader.hasNextLine()){
                 return new StepNode(randomGoal(), Step.UNASSIGNED);
             }
@@ -87,7 +93,10 @@ public class NatDedUtilities {
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, "No load file found.");
             alert.showAndWait();
+        } catch (NullPointerException ignored){
+
         }
+
         return new StepNode(randomGoal(), Step.UNASSIGNED);
     }
 

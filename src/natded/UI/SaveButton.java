@@ -2,6 +2,8 @@ package natded.UI;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import natded.NatDedUtilities;
 import natded.StepNode;
 import natded.constants.Step;
@@ -13,7 +15,10 @@ import java.io.IOException;
 
 public class SaveButton extends Button {
 
+    UserInterface view;
+
     SaveButton(UserInterface view, boolean quit) {
+        this.view = view;
         this.setStyle(UserInterface.buttonStyle);
         this.setText("Save");
         if (quit){
@@ -29,8 +34,12 @@ public class SaveButton extends Button {
     }
 
     public void saveTree(StepNode root){
-        File saveFile = new File("resources/IO/save.txt");
         String saveString = getStringTree(root, 0);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
+        File saveFile = fileChooser.showSaveDialog(view.getScene().getWindow());
+
         try {
             FileWriter writer = new FileWriter(saveFile);
             writer.write(saveString);
@@ -38,6 +47,8 @@ public class SaveButton extends Button {
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Nowhere to save file.");
             alert.showAndWait();
+        } catch (NullPointerException ignored){
+
         }
     }
 
