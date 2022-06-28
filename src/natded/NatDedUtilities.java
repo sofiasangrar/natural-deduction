@@ -31,6 +31,8 @@ public class NatDedUtilities {
             + or + " Q) " + impl + " (" + not + "P) "
             + and + " (" + not + "Q)";
 
+    public static final String del =  "/";
+
     //following examples from https://www.danielclemente.com/logica/dn.en.pdf
     public static final String notPorQ = not + "P " + or + " Q " + turnstile + " P " + impl + " Q";
     public static final String modusPonens = "P " + impl + " Q, " + not + "Q "  + turnstile + " " + not + "P";
@@ -96,7 +98,7 @@ public class NatDedUtilities {
      */
     private static StepNode getNodeFromString(String string){
         String newString = string.trim();
-        String[] vals = newString.split(",");
+        String[] vals = newString.split(del);
         String content="";
         for (int i = 0; i < vals.length-1; i++){
             content+=vals[i];

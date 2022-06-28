@@ -2,6 +2,7 @@ package natded.UI;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import natded.NatDedUtilities;
 import natded.StepNode;
 import natded.constants.Step;
 import parser.Proof;
@@ -41,7 +42,7 @@ public class SaveButton extends Button {
     }
 
     private String getString(StepNode node){
-        return node.getInput() + "," + node.getStep() + "\n";
+        return node.getInput() + NatDedUtilities.del + node.getStep() + "\n";
     }
 
     private String getStringTree(StepNode node, int level){
