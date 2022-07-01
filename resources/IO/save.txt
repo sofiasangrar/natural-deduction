@@ -1,4 +1,0 @@
-¬P ⊢ P ⇒ Q/IMP_INTRO
-	¬P, P ⊢ Q/NEG_ELIM
-		¬P, P ⊢¬P/ASSUMPTION
-		¬P, P ⊢P/ASSUMPTION
