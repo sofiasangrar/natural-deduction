@@ -26,14 +26,14 @@ public class SaveButton extends Button {
         }
         setOnMouseClicked(event -> {
             StepNode root = view.getTree();
-            saveTree(root);
-            if (quit){
+            boolean saved = saveTree(root);
+            if (saved && quit){
                 System.exit(0);
             }
         });
     }
 
-    public void saveTree(StepNode root){
+    private boolean saveTree(StepNode root){
         String saveString = getStringTree(root, 0);
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save");
@@ -44,11 +44,13 @@ public class SaveButton extends Button {
             FileWriter writer = new FileWriter(saveFile);
             writer.write(saveString);
             writer.close();
+            return true;
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Nowhere to save file.");
             alert.showAndWait();
+            return false;
         } catch (NullPointerException ignored){
-
+            return false;
         }
     }
 
