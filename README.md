@@ -1,2 +1,2 @@
 # natural-deduction
-A proof checker for tree-sale natural deduction proofs
+A proof checker for tree-style natural deduction proofs
